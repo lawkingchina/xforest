@@ -1,2 +1,2 @@
 # xforest
-High Performance and Scalable Machine Learning Package for Tree Ensemble
+High-Performance, Easy-to-Use, and Scalable Tree Ensemble ML Library
