@@ -63,7 +63,7 @@ link_directories(
 )
 
 #-------------------------------------------------------------------------------
-# Declare packages in xLearn project.
+# Declare packages in xForest project.
 #-------------------------------------------------------------------------------
 add_subdirectory(gtest)
 add_subdirectory(demo)
