@@ -145,7 +145,7 @@ inline size_t ThreadPool::ThreadNumber() {
   return workers.size();
 }
 
-// the destructor joins all threads
+// The destructor joins all threads
 inline ThreadPool::~ThreadPool() {
   {
     std::unique_lock<std::mutex> lock(queue_mutex);

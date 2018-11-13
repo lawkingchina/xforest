@@ -68,7 +68,7 @@ int StrSimilar::ldistance(const std::string& source,
   if (m == 0) return n;
   if (n == 0) return m;
   //Construct a matrix
-  typedef std::vector<std::vector<int> >  Tmatrix;
+  typedef std::vector<std::vector<int> > Tmatrix;
   Tmatrix matrix(n + 1);
   for (int i = 0; i <= n; i++)  { matrix[i].resize(m + 1); }
   //step 2 Initialize

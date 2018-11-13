@@ -37,7 +37,7 @@ messages by their severities.
 //     InitializeLogger("/tmp/info.log", "/tmp/warn.log", "/tmp/erro.log");
 //     LOG(INFO)    << "An info message going into /tmp/info.log";
 //     LOG(WARNING) << "An warn message going into /tmp/warn.log";
-//     LOG(ERR)     << "An erro message going into /tmp/erro.log";
+//     LOG(ERROR)   << "An erro message going into /tmp/erro.log";
 //     LOG(FATAL)   << "An fatal message going into /tmp/erro.log, "
 //                  << "and kills current process by a segmentation fault.";
 //     return 0;
@@ -48,7 +48,7 @@ void InitializeLogger(const std::string& info_log_filename,
                       const std::string& warn_log_filename,
                       const std::string& erro_log_filename);
 
-enum LogSeverity { INFO, WARNING, ERR, FATAL };
+enum LogSeverity { INFO, WARNING, ERROR, FATAL };
 
 class Logger {
   friend void InitializeLogger(const std::string& info_log_filename,

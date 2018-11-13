@@ -37,39 +37,15 @@ void InitializeLogger(const std::string& info_log_filename,
   Logger::info_log_file_.open(info_log_filename.c_str());
   Logger::warn_log_file_.open(warn_log_filename.c_str());
   Logger::erro_log_file_.open(erro_log_filename.c_str());
-  // check if the file has been open
-  bool bo = false;
-  if (Logger::info_log_file_.is_open() == 0) {
-    std::cout << "Cannot create file: " << info_log_filename << ". "
-              << "Please check that wether you need to "
-              << "create a new directory. \n";
-    bo = true;
-  }
-  if (Logger::warn_log_file_.is_open() == 0) {
-    std::cout << "Cannot create file: " << warn_log_filename << ". "
-              << "Please check that wether you need to "
-              << "create a new directory. \n";
-    bo = true;
-  }
-  if (Logger::erro_log_file_.is_open() == 0) {
-    std::cout << "Cannot create file:  " << erro_log_filename << ". "
-              << "Please check that wether you need to "
-              << "create a new directory. \n";
-    bo = true;
-  }
-  if (bo) { exit(0); }
 }
 
 /*static*/
 std::ostream& Logger::GetStream(LogSeverity severity) {
-  if (severity == INFO) {
-    return info_log_file_.is_open() ? info_log_file_ : std::cout;
-  } else if (severity == WARNING) {
-    return warn_log_file_.is_open() ? warn_log_file_ : std::cerr;
-  } else if (severity == ERR || severity == FATAL) {
-    return erro_log_file_.is_open() ? erro_log_file_ : std::cerr;
-  }
-  return std::cout; // Print message
+  return (severity == INFO) ?
+      (info_log_file_.is_open() ? info_log_file_ : std::cout) :
+       (severity == WARNING ?
+        (warn_log_file_.is_open() ? warn_log_file_ : std::cerr) :
+         (erro_log_file_.is_open() ? erro_log_file_ : std::cerr));
 }
 
 /*static*/

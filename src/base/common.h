@@ -50,86 +50,86 @@ make programming convenient.
 // The GDB command 'where' will show you the stack trace.
 //------------------------------------------------------------------------------
 
-#define CHECK(a) if (!(a)) {                            \
-    LOG(ERR) << "CHECK failed "                         \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK(a) if (!(a)) {                              \
+    LOG(ERROR) << "CHECK failed "                         \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_NOTNULL(a) if ((a) == NULL) {             \
-    LOG(ERR) << "CHECK failed "                         \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " == NULL \n";                  \
-    abort();                                            \
-  }                                                     \
+#define CHECK_NOTNULL(a) if ((a) == NULL) {               \
+    LOG(ERROR) << "CHECK failed "                         \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " == NULL \n";                    \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_NULL(a) if ((a) != NULL) {                \
-    LOG(ERR) << "CHECK failed "                         \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK_NULL(a) if ((a) != NULL) {                  \
+    LOG(ERROR) << "CHECK failed "                         \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_EQ(a, b) if (!((a) == (b))) {             \
-    LOG(ERR) << "CHECK_EQ failed "                      \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n"            \
-               << #b << " = " << (b) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK_EQ(a, b) if (!((a) == (b))) {               \
+    LOG(ERROR) << "CHECK_EQ failed "                      \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n"              \
+               << #b << " = " << (b) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_NE(a, b) if (!((a) != (b))) {             \
-    LOG(ERR) << "CHECK_NE failed "                      \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n"            \
-               << #b << " = " << (b) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK_NE(a, b) if (!((a) != (b))) {               \
+    LOG(ERROR) << "CHECK_NE failed "                      \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n"              \
+               << #b << " = " << (b) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_GT(a, b) if (!((a) > (b))) {              \
-    LOG(ERR) << "CHECK_GT failed "                      \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n"            \
-               << #b << " = " << (b) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK_GT(a, b) if (!((a) > (b))) {                \
+    LOG(ERROR) << "CHECK_GT failed "                      \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n"              \
+               << #b << " = " << (b) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_LT(a, b) if (!((a) < (b))) {              \
-    LOG(ERR) << "CHECK_LT failed "                      \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n"            \
-               << #b << " = " << (b) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK_LT(a, b) if (!((a) < (b))) {                \
+    LOG(ERROR) << "CHECK_LT failed "                      \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n"              \
+               << #b << " = " << (b) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_GE(a, b) if (!((a) >= (b))) {             \
-    LOG(ERR) << "CHECK_GE failed "                      \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n"            \
-               << #b << " = " << (b) << "\n";           \
-    abort();                                            \
-  }                                                     \
+#define CHECK_GE(a, b) if (!((a) >= (b))) {               \
+    LOG(ERROR) << "CHECK_GE failed "                      \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n"              \
+               << #b << " = " << (b) << "\n";             \
+    abort();                                              \
+  }                                                       \
 
-#define CHECK_LE(a, b) if (!((a) <= (b))) {             \
-    LOG(ERR) << "CHECK_LE failed "                      \
-               << __FILE__ << ":" << __LINE__ << "\n"   \
-               << #a << " = " << (a) << "\n"            \
-               << #b << " = " << (b) << "\n";           \
-    abort();                                            \
-  }                                                     \
-                                                        \
+#define CHECK_LE(a, b) if (!((a) <= (b))) {               \
+    LOG(ERROR) << "CHECK_LE failed "                      \
+               << __FILE__ << ":" << __LINE__ << "\n"     \
+               << #a << " = " << (a) << "\n"              \
+               << #b << " = " << (b) << "\n";             \
+    abort();                                              \
+  }                                                       \
+                                                          \
 // Copied from glog.h
-#define CHECK_DOUBLE_EQ(a, b)                           \
-  do {                                                  \
-    CHECK_LE((a), (b)+0.000000000000001L);              \
-    CHECK_GE((a), (b)-0.000000000000001L);              \
+#define CHECK_DOUBLE_EQ(a, b)                             \
+  do {                                                    \
+    CHECK_LE((a), (b)+0.000000000000001L);                \
+    CHECK_GE((a), (b)-0.000000000000001L);                \
   } while (0)
 
-#define CHECK_NEAR(a, b, margin)                        \
-  do {                                                  \
-    CHECK_LE((a), (b)+(margin));                        \
-    CHECK_GE((a), (b)-(margin));                        \
+#define CHECK_NEAR(a, b, margin)                          \
+  do {                                                    \
+    CHECK_LE((a), (b)+(margin));                          \
+    CHECK_GE((a), (b)-(margin));                          \
   } while (0)
 
 //------------------------------------------------------------------------------
@@ -150,8 +150,8 @@ make programming convenient.
 // };
 //------------------------------------------------------------------------------
 
-#define DISALLOW_COPY_AND_ASSIGN(TypeName)              \
-  TypeName(const TypeName&);                            \
+#define DISALLOW_COPY_AND_ASSIGN(TypeName)                \
+  TypeName(const TypeName&);                              \
   void operator=(const TypeName&)
 
 //------------------------------------------------------------------------------

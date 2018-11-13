@@ -57,7 +57,7 @@ link_directories(
   "${PROJECT_BINARY_DIR}/src/tree"
   "${PROJECT_BINARY_DIR}/src/reader"
   "${PROJECT_BINARY_DIR}/src/bootstrap"
-  "${PROJECT_BINARY_DIR}/src/communication"
+  "${PROJECT_BINARY_DIR}/src/network"
   "${PROJECT_BINARY_DIR}/src/solver"
   "${PROJECT_BINARY_DIR}/src/c_api"
 )
@@ -72,7 +72,7 @@ add_subdirectory(src/base)
 add_subdirectory(src/tree)
 add_subdirectory(src/reader)
 add_subdirectory(src/bootstrap)
-add_subdirectory(src/communication)
+add_subdirectory(src/network)
 add_subdirectory(src/solver)
 add_subdirectory(src/c_api)
 add_subdirectory(python-package)
