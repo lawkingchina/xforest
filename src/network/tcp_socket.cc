@@ -41,7 +41,7 @@ TCPSocket::TCPSocket() {
   }
 }
 
-TCPSocket::TCPSocket(int socket) {
+TCPSocket::TCPSocket(SOCKET socket) {
   socket_ = socket;
   if (socket_ < 0) {
   	LOG(FATAL) << "Passed socket error.";
@@ -140,6 +140,11 @@ bool TCPSocket::SetBlocking(bool flag) {
   }
 
   return true;
+}
+
+void TCPSocket::SetTimeout(int timeout) {
+  setsockopt(socket_, SOL_SOCKET, SO_RCVTIMEO, 
+  	reinterpret_cast<char*>(&timeout), sizeof(timeout));
 }
 
 bool TCPSocket::ShutDown(int ways) {

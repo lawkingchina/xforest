@@ -28,6 +28,8 @@ This file defines the TCPSocket class.
 
 namespace xforest {
 
+typedef int SOCKET;
+
 //------------------------------------------------------------------------------
 // TCPSocket is a simple wrapper around a socket. It supports
 // only TCP connections.
@@ -36,7 +38,7 @@ class TCPSocket {
  public:
   // ctor and dctor
   TCPSocket();
-  explicit TCPSocket(int socket);
+  explicit TCPSocket(SOCKET socket);
   ~TCPSocket();
 
   // Return value of following functions:
@@ -60,6 +62,9 @@ class TCPSocket {
   // http://www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html
   bool SetBlocking(bool flag);
 
+  // Set timeout for socket
+  void SetTimeout(int timeout);
+
   // Shut down one or both halves of the connection.
   // If ways is SHUT_RD, further receives are disallowed.
   // If ways is SHUT_WR, further sends are disallowed.
@@ -80,7 +85,7 @@ class TCPSocket {
   int Socket() const;
 
  private:
-  int socket_;
+  SOCKET socket_;
 
   DISALLOW_COPY_AND_ASSIGN(TCPSocket);
 };
