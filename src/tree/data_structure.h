@@ -56,3 +56,40 @@ struct DMatrix {
   size_t dim_1;  // col size
   std::vector<std::vector<Feat> > data;
 }
+
+//---------------------------------------------------
+// Decision tree node
+//---------------------------------------------------
+struct DTNode {
+  // Layer of the tree
+  size_t level;
+  // If it is leaf node
+  bool is_leaf = false;
+  // Value in leaf
+  real_t leaf_val;
+  // Best gini value (1.0 is maximal)
+  real_t best_gini = 1.0;
+  // Best feature
+  size_t best_feat_id;
+  // Best value on best feature
+  real_t best_feat_val;
+  // Best row index for split
+  size_t best_row_idx;
+  // Data size in current node
+  size_t data_size;
+  // Ptr for left child
+  struct DTNode* l_node = nullptr;
+  // Ptr for right child
+  struct DTNode* r_node = nullptr;
+  // Ptr to the data matrix
+  DMatrix* data = nullptr;
+};
+
+//---------------------------------------------------
+// Compare the data size in DTNode
+//---------------------------------------------------
+struct DTNodeCmp {
+  bool operator()(const DTNode* lhs, const DTNode* rhs) const {
+    return lhs->data_size < rhs->data_size;
+  }
+};
