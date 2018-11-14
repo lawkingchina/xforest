@@ -36,6 +36,7 @@ class TCPSocket {
  public:
   // ctor and dctor
   TCPSocket();
+  explicit TCPSocket(int socket);
   ~TCPSocket();
 
   // Return value of following functions:

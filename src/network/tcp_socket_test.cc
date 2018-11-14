@@ -60,10 +60,6 @@ TEST(TCPSocket, SendRecieve) {
       ASSERT_GE(tmp, 0);
       sent_bytes += tmp;
     }
-    server.ShutDown(SHUT_RDWR);
-    client.ShutDown(SHUT_RDWR);
-    server.Close();
-    client.Close();
   } else {  // child: client
     sleep(3);   // wait for server
     TCPSocket client;
@@ -86,8 +82,6 @@ TEST(TCPSocket, SendRecieve) {
       recieved_bytes += tmp;
     }
     ASSERT_EQ(string("0123456789"), string(clibuff, 10));
-    client.ShutDown(SHUT_RDWR);
-    client.Close();
   }
   wait(0);
 }

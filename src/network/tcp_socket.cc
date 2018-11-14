@@ -15,7 +15,7 @@
 //------------------------------------------------------------------------------
 
 /*
-This file is the implementation the TCPSocket class.
+This file is the implementation of TCPSocket class.
 */
 
 #include "src/network/tcp_socket.h"
@@ -35,9 +35,16 @@ typedef struct sockaddr SA;
 // ctor
 TCPSocket::TCPSocket() {
   // init socket
-  socket_ = socket(AF_INET, SOCK_STREAM, 0);
+  socket_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (socket_ < 0) {
     LOG(FATAL) << "Can't create new socket.";
+  }
+}
+
+TCPSocket::TCPSocket(int socket) {
+  socket_ = socket;
+  if (socket_ < 0) {
+  	LOG(FATAL) << "Passed socket error.";
   }
 }
 
