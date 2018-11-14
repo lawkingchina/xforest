@@ -42,7 +42,7 @@ TEST(TCPSocket, SendRecieve) {
     char serbuff[10];
     memset(serbuff, '\0', 10);
 
-    ASSERT_TRUE(server.Bind("127.0.0.1", 11225));
+    ASSERT_TRUE(server.Bind("127.0.0.1", 11230));
     ASSERT_TRUE(server.Listen(3));
     ASSERT_TRUE(server.Accept(&client, &cl_ip, &cl_port));
 
@@ -60,12 +60,14 @@ TEST(TCPSocket, SendRecieve) {
       ASSERT_GE(tmp, 0);
       sent_bytes += tmp;
     }
+    server.ShutDown(SHUT_RDWR);
+    client.ShutDown(SHUT_RDWR);
     server.Close();
     client.Close();
   } else {  // child: client
     sleep(3);   // wait for server
     TCPSocket client;
-    ASSERT_TRUE(client.Connect("127.0.0.1", 11225));
+    ASSERT_TRUE(client.Connect("127.0.0.1", 11230));
     char clibuff[10];
     memset(clibuff, '\0', 10);
 
@@ -84,6 +86,7 @@ TEST(TCPSocket, SendRecieve) {
       recieved_bytes += tmp;
     }
     ASSERT_EQ(string("0123456789"), string(clibuff, 10));
+    client.ShutDown(SHUT_RDWR);
     client.Close();
   }
   wait(0);
