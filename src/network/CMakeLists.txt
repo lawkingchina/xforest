@@ -2,7 +2,7 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/test/network)
 
 # Build static library
-add_library(network STATIC tcp_socket.cc)
+add_library(network STATIC tcp_socket.cc communicator.cc)
 
 # Build unittests.
 set(LIBS base network gtest)

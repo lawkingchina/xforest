@@ -37,6 +37,9 @@ class SocketCommunicator : public Communicator {
   SocketCommunicator();
   ~SocketCommunicator();
 
+  // Initialized
+  void Initialize(const NetConfig config);
+
   // Recv data
   // Recv method will block until recv len size of data
   void Recv(int rank, char* data, int len);
@@ -53,26 +56,13 @@ class SocketCommunicator : public Communicator {
   // Thread for listening
   void ListenThread(int incoming_cnt);
 
-  // Construct network topo
-  void Construct();
-
-  // Parse machine informachine from file
-  void ParseMachineList(const std::string& machines, 
-  	                    const std::string& filename);
-
-  // Check linker is connected or not
-  bool CheckLinker(int rank);
-
-  // Print connected linkers
-  void PrintLinkers();
-
  private:
-   std::vector<std::string> client_ips_;  // store client ips
-   std::vector<int> client_ports_;   // store client ports
-   int socket_timeout_;     // timeout for socket, in mimutes
-   int local_listen_port_;  // local listen ports
+   int socket_timeout_;                     // timeout for socket, in mimutes
+   int local_listen_port_;                  // local listen ports
+   std::vector<std::string> client_ips_;    // store client ips
+   std::vector<int> client_ports_;          // store client ports
+   std::unique_ptr<TCPSocket> listener_;    // local socket listener
    std::vector<std::unique_ptr<TCPSocket> > linkers_; // linkers
-   std::unique_ptr<TCPSocket> listener_;  // local socket listener
 };
 
 }  // namespace xforest

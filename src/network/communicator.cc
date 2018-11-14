@@ -15,23 +15,16 @@
 //------------------------------------------------------------------------------
 
 /*
-This file is the implementation of SocketCommunicator class.
+This file is the implementation of Communicator class.
 */
 
-#include "src/network/socket_communicator.h"
+#include "src/network/communicator.h"
 
 namespace xforest {
 
-void SocketCommunicator::Recv(int rank, char* data, int len) {
+// Parse network configure from file
+void NetConfig::ParseFromFile(const std::string& filename) {
 
 }
 
-void SocketCommunicator::Send(int rank, char* data, int len) {
-
-}
-
-void SocketCommunicator::ListenThread(int incoming_cnt) {
-
-}
-
-}  // namespace xforest
+}  // xforest
