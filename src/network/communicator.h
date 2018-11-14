@@ -60,7 +60,6 @@ class NetConfig {
   	return worker_addr_list_;
   }
 
-
  private:
   std::pair<std::string, /* ip */
             int          /* port */>        master_addr_;
