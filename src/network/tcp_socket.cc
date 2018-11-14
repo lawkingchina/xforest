@@ -70,7 +70,7 @@ bool TCPSocket::Connect(const char * ip, uint16 port) {
 
 bool TCPSocket::Bind(const char * ip, uint16 port) {
   // Avoid TIME_WAIT for last connection
-  const int on=1;
+  const int on = 1;
   setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
 
   SAI sa_server;
