@@ -50,15 +50,15 @@ TEST(TCPSocket, SendRecieve) {
       int tmp;
       int recieved_bytes = 0;
       while (recieved_bytes < 10) {
-        tmp = client.Receive(&serbuff[recieved_bytes], 10);
+      	int max_len = 10 - recieved_bytes;
+        tmp = client.Receive(&serbuff[recieved_bytes], max_len);
         ASSERT_GE(tmp, 0);
         recieved_bytes += tmp;
       }
-      //sleep(1);
       ASSERT_EQ(string("0123456789"), string(serbuff, 10));
       int sent_bytes = 0;
       while (sent_bytes < 10) {
-      	int max_len = (10-sent_bytes) > 3 ? 3 : (10-sent_bytes);
+      	int max_len = 10 - sent_bytes;
         tmp = client.Send(&msg[sent_bytes], max_len);
         ASSERT_GE(tmp, 0);
         sent_bytes += tmp;
@@ -75,14 +75,15 @@ TEST(TCPSocket, SendRecieve) {
       int tmp;
       int sent_bytes = 0;
       while (sent_bytes < 10) {
-      	int max_len = (10-sent_bytes) > 3 ? 3 : (10-sent_bytes);
+      	int max_len = 10 - sent_bytes;
         tmp = client.Send(&msg[sent_bytes], max_len);
         ASSERT_GE(tmp, 0);
         sent_bytes += tmp;
       }
       int recieved_bytes = 0;
       while (recieved_bytes < 10) {
-        tmp = client.Receive(&clibuff[recieved_bytes], 10);
+      	int max_len = 10 - recieved_bytes;
+        tmp = client.Receive(&clibuff[recieved_bytes], max_len);
         ASSERT_GE(tmp, 0);
         recieved_bytes += tmp;
       }
