@@ -30,6 +30,8 @@ This file tests the TCPSocket class.
 using std::string;
 using xforest::TCPSocket;
 
+const size_t kDataLength = 9999999;
+
 TEST(TCPSocket, SendRecieve) {
   int pid = fork();
   const char * msg = "0123456789";
@@ -46,6 +48,7 @@ TEST(TCPSocket, SendRecieve) {
     ASSERT_TRUE(server.Listen(3));
     ASSERT_TRUE(server.Accept(&client, &cl_ip, &cl_port));
 
+    // small block
     for (int i = 0; i < 99999; ++i) {
       int tmp;
       int recieved_bytes = 0;
@@ -64,6 +67,29 @@ TEST(TCPSocket, SendRecieve) {
         sent_bytes += tmp;
       }
     }
+
+    // Big block
+    char* bigdata = new char[kDataLength];
+    char* bigbuff = new char[kDataLength];
+    memset(bigdata, 'x', kDataLength);
+    memset(bigbuff, '\0', kDataLength);
+    int recieved_bytes = 0;
+    while (recieved_bytes < kDataLength) {
+      int max_len = kDataLength - recieved_bytes;
+      int tmp = client.Receive(&bigbuff[recieved_bytes], max_len);
+      ASSERT_GE(tmp, 0);
+      recieved_bytes += tmp;
+    }
+    for (size_t i = 0; i < kDataLength; ++i) {
+      ASSERT_EQ(bigbuff[i], 'x');
+    }
+    int sent_bytes = 0;
+    while (sent_bytes < kDataLength) {
+      int max_len = kDataLength - sent_bytes;
+      int tmp = client.Send(&bigdata[sent_bytes], max_len);
+      ASSERT_GE(tmp, 0);
+      sent_bytes += tmp;
+    }
   } else {  // child: client
     sleep(3);   // wait for server
     TCPSocket client;
@@ -71,6 +97,7 @@ TEST(TCPSocket, SendRecieve) {
     char clibuff[10];
     memset(clibuff, '\0', 10);
 
+    // small block
     for (int i = 0; i < 99999; ++i) {
       int tmp;
       int sent_bytes = 0;
@@ -88,6 +115,29 @@ TEST(TCPSocket, SendRecieve) {
         recieved_bytes += tmp;
       }
       ASSERT_EQ(string("0123456789"), string(clibuff, 10));
+    }
+
+    // Big block
+    char* bigdata = new char[kDataLength];
+    char* bigbuff = new char[kDataLength];
+    memset(bigdata, 'x', kDataLength);
+    memset(bigbuff, '\0', kDataLength);
+    int sent_bytes = 0;
+    while (sent_bytes < kDataLength) {
+      int max_len = kDataLength - sent_bytes;
+      int tmp = client.Send(&bigdata[sent_bytes], max_len);
+      ASSERT_GE(tmp, 0);
+      sent_bytes += tmp;
+    }
+    int recieved_bytes = 0;
+    while (recieved_bytes < kDataLength) {
+      int max_len = kDataLength - recieved_bytes;
+      int tmp = client.Receive(&bigbuff[recieved_bytes], max_len);
+      ASSERT_GE(tmp, 0);
+      recieved_bytes += tmp;
+    }
+    for (size_t i = 0; i < kDataLength; ++i) {
+      ASSERT_EQ(bigbuff[i], 'x');
     }
   }
   wait(0);
