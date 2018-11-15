@@ -50,6 +50,9 @@ class NetConfig {
   // Parse configure from file
   void ParseFromFile(const std::string& filename);
 
+  // If current process is master node
+  bool AmIMaster() const;
+
   // Get a copy the master address
   inline std::pair<std::string, int> GetMasterAddr() {
   	return master_addr_;
@@ -92,12 +95,13 @@ class Communicator {
   inline int rank() { return rank_; }
 
   // Get total number of machines
-  inline num_machines() { return num_machines_; }
+  inline int num_machines() { return num_machines_; }
 
  private:
   int rank_;          // rank of local machine
   int num_machines_;  // total number of machines 
   bool is_init_;      // if Communicator is intialized
+  bool is_master_;    // If current process is master
 
   DISALLOW_COPY_AND_ASSIGN(Communicator);
 };
