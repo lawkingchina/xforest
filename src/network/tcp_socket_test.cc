@@ -48,7 +48,7 @@ TEST(TCPSocket, SendRecieve) {
     ASSERT_TRUE(server.Listen(3));
     ASSERT_TRUE(server.Accept(&client, &cl_ip, &cl_port));
 
-    // small block
+    // Small block
     for (int i = 0; i < 99999; ++i) {
       int tmp;
       int recieved_bytes = 0;
@@ -97,7 +97,7 @@ TEST(TCPSocket, SendRecieve) {
     char clibuff[10];
     memset(clibuff, '\0', 10);
 
-    // small block
+    // Small block
     for (int i = 0; i < 99999; ++i) {
       int tmp;
       int sent_bytes = 0;
