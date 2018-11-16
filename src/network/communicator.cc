@@ -22,9 +22,4 @@ This file is the implementation of Communicator class.
 
 namespace xforest {
 
-// Parse network configure from file
-void NetConfig::ParseFromFile(const std::string& filename) {
-
-}
-
 }  // xforest
