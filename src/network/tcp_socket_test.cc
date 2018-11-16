@@ -30,9 +30,10 @@ This file tests the TCPSocket class.
 using std::string;
 using xforest::TCPSocket;
 
-const size_t kDataLength = 9999999;
+const size_t kDataLength = 9999999; // 9.5 MB
 
 TEST(TCPSocket, SendRecieve) {
+  std::cout << "Send and Recv ...\n";
   int pid = fork();
   const char * msg = "0123456789";
   ASSERT_GE(pid, 0);
