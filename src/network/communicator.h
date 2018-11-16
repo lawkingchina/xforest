@@ -36,7 +36,7 @@ class Communicator {
   ~Communicator();
 
   // Initialize Communicator
-  virtual void Initialize(const NetConfig& config);
+  virtual void Initialize();
 
   // Recv data
   // Recv method will block until recv len size of data

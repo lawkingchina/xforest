@@ -141,5 +141,4 @@ TEST(TCPSocket, SendRecieve) {
       ASSERT_EQ(bigbuff[i], 'x');
     }
   }
-  wait(0);
 }
