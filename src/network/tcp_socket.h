@@ -53,7 +53,8 @@ class TCPSocket {
   bool Listen(int max_connection);
 
   // wait for a new connection
-  // new SOCKET, IP and PORT will be stored to socket, ip_client and port_client
+  // new SOCKET, IP and PORT will be stored to socket, 
+  // ip_client and port_client
   bool Accept(TCPSocket * socket,
               std::string * ip_client,
               uint16 * port_client);

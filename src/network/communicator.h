@@ -21,7 +21,7 @@ This file defines the Communicator class.
 #ifndef XFOREST_NETWORK_COMMUNICATOR_H_
 #define XFOREST_NETWORK_COMMUNICATOR_H_
 
-#include "src/network/tcp_socket.h"
+#include "src/base/common.h"
 
 namespace xforest {
 
@@ -36,26 +36,24 @@ class Communicator {
   ~Communicator();
 
   // Initialize Communicator
-  virtual void Initialize();
+  virtual void Initialize(int rank, /* master is rank_0 */
+  	                      int num_workers, 
+  	                      const std::string& master_addr) = 0;
 
   // Recv data
-  // Recv method will block until recv len size of data
-  virtual void Recv(int rank, char* data, int len);
+  virtual void Recv(int rank, char* data, int len) = 0;
 
   // Send data
-  virtual void Send(int rank, char* data, int len);
+  virtual void Send(int rank, char* data, int len) = 0;
 
-  // Get rank of local machine
-  inline int rank() { return rank_; }
-
-  // Get total number of machines
-  inline int num_machines() { return num_machines_; }
+  // Finalize Communicator
+  virtual void Finalize() = 0;
 
  private:
-  int rank_;          // rank of local machine
-  int num_machines_;  // total number of machines 
-  bool is_init_;      // if Communicator is intialized
-  bool is_master_;    // If current process is master
+  int rank;           // rank of local machine
+  int num_workers_;   // total number of workers 
+  bool is_init_;      // Communicator is intialized
+  std::string master_addr_; // Address of master node
 
   DISALLOW_COPY_AND_ASSIGN(Communicator);
 };
