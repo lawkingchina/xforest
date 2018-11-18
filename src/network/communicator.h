@@ -45,9 +45,6 @@ class Communicator {
 
   // Send data
   virtual void Send(int rank, char* data, int len) = 0;
-
-  // Finalize Communicator
-  virtual void Finalize() = 0;
 };
 
 }  // namespace xforest

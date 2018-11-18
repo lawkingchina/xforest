@@ -49,9 +49,6 @@ class SocketCommunicator : public Communicator {
   // Send data
   virtual void Send(int rank, char* data, int len);
 
-  // Finalize Communicator
-  virtual void Finalize();
-
  private:
   void InitMaster();  // Initialize master node
   void InitWorker();  // Initialize worker node

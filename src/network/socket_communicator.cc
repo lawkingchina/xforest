@@ -72,22 +72,40 @@ void SocketCommunicator::InitMaster() {
 
 // Initialize worker node
 void SocketCommunicator::InitWorker() {
-
+  // Only a client socket
+  sockets_.resize(1);
+  std::vector<std::string> ip_and_port;
+  SplitStringUsing(master_addr_, ":", &ip_and_port);
+  CHECK_EQ(2, ip_and_port.size());
+  TCPSocket* client = sockets_[0];
+  client->Connect(ip_and_port[0].c_str(), 
+  	         atoi(ip_and_port[1].c_str()));
+  LOG(INFO) << "Connect to master node " 
+            << ip_and_port[0] << ":" << ip_and_port[1];
 }
 
 // Recv data
 void SocketCommunicator::Recv(int rank, char* data, int len) {
-
+  TCPSocket* socket = sockets_[rank];
+  int recieved_bytes = 0;
+  while (recieved_bytes < len) {
+  	int max_len = len - recieved_bytes;
+    int tmp = socket->Receive(data+recieved_bytes, max_len);
+    CHECK_GE(tmp, 0);
+    recieved_bytes += tmp;
+  }
 }
 
 // Send data
 void SocketCommunicator::Send(int rank, char* data, int len) {
-
-}
-
-// Finalize Communicator
-void SocketCommunicator::Finalize() {
-
+  TCPSocket* socket = sockets_[rank];
+  int sent_bytes = 0;
+  while (sent_bytes < len) {
+  	int max_len = len - sent_bytes;
+    int tmp = socket->Send(data+sent_bytes, max_len);
+    CHECK_GE(tmp, 0);
+    sent_bytes += tmp;
+  }
 }
 
 }  // namespace xforest
