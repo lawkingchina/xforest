@@ -35,8 +35,8 @@ namespace xforest {
 //------------------------------------------------------------------------------	
 class SocketCommunicator : public Communicator {
  public:
-  SocketCommunicator();
-  ~SocketCommunicator();
+  SocketCommunicator() {};
+  ~SocketCommunicator() {};
 
   // Initialize Communicator
   virtual void Initialize(int rank, /* master is rank_0 */
@@ -47,7 +47,7 @@ class SocketCommunicator : public Communicator {
   virtual void Recv(int rank, char* data, int len);
 
   // Send data
-  virtual void Send(int rank, char* data, int len);
+  virtual void Send(int rank, const char* data, int len);
 
  private:
   void InitMaster();  // Initialize master node

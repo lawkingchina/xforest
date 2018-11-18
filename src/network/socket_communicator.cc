@@ -59,6 +59,7 @@ void SocketCommunicator::InitMaster() {
                   atoi(ip_and_port[1].c_str())));
   // Listen socket
   CHECK(server->Listen(1024));
+  LOG(INFO) << "Wait worker connect ...";
   // Accept all workers
   std::string accept_ip;
   uint16 accept_port;
@@ -77,6 +78,7 @@ void SocketCommunicator::InitWorker() {
   std::vector<std::string> ip_and_port;
   SplitStringUsing(master_addr_, ":", &ip_and_port);
   CHECK_EQ(2, ip_and_port.size());
+  sockets_[0] = new TCPSocket();
   TCPSocket* client = sockets_[0];
   client->Connect(ip_and_port[0].c_str(), 
   	         atoi(ip_and_port[1].c_str()));
@@ -97,7 +99,7 @@ void SocketCommunicator::Recv(int rank, char* data, int len) {
 }
 
 // Send data
-void SocketCommunicator::Send(int rank, char* data, int len) {
+void SocketCommunicator::Send(int rank, const char* data, int len) {
   TCPSocket* socket = sockets_[rank];
   int sent_bytes = 0;
   while (sent_bytes < len) {

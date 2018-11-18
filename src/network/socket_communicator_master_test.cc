@@ -23,6 +23,24 @@ This file tests the SocketCommunicator class.
 #include "src/base/common.h"
 #include "gtest/gtest.h"
 
-TEST(SocketCommunicator, MasterSide) {
+const int kNumWorker = 2;
 
+TEST(SocketCommunicator, MasterSide) {
+  xforest::SocketCommunicator master;
+  master.Initialize(0, kNumWorker, "127.0.0.1:12334");
+  char* buffer = new char[5];
+  int count = 0;
+  for (;;) {
+  	for (int rank = 1; rank <= kNumWorker; ++rank) {
+  	  master.Recv(rank, buffer, 5);
+  	  std::cout << "Recv " << rank << ":" << buffer << std::endl;
+  	  if (strcmp(buffer, "endIO") == 0) {
+  	  	count++;
+  	  }
+  	}
+  	if (count == kNumWorker) {
+  	  	break;
+  	}
+  }
+  std::cout << "Master closed()" << std::endl;
 }

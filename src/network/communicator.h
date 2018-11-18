@@ -32,8 +32,8 @@ namespace xforest {
 class Communicator {
  public:
   // ctor and dctor
-  Communicator();
-  ~Communicator();
+  Communicator() {};
+  ~Communicator() {};
 
   // Initialize Communicator
   virtual void Initialize(int rank, /* master is rank_0 */
@@ -44,7 +44,7 @@ class Communicator {
   virtual void Recv(int rank, char* data, int len) = 0;
 
   // Send data
-  virtual void Send(int rank, char* data, int len) = 0;
+  virtual void Send(int rank, const char* data, int len) = 0;
 };
 
 }  // namespace xforest
