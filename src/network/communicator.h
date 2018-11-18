@@ -32,12 +32,12 @@ namespace xforest {
 class Communicator {
  public:
   // ctor and dctor
-  Communicator() { is_init_ = false; }
+  Communicator();
   ~Communicator();
 
   // Initialize Communicator
   virtual void Initialize(int rank, /* master is rank_0 */
-  	                      int num_workers, 
+  	                      int num_workers,
   	                      const std::string& master_addr) = 0;
 
   // Recv data
@@ -48,14 +48,6 @@ class Communicator {
 
   // Finalize Communicator
   virtual void Finalize() = 0;
-
- private:
-  int rank;           // rank of local machine
-  int num_workers_;   // total number of workers 
-  bool is_init_;      // Communicator is intialized
-  std::string master_addr_; // Address of master node
-
-  DISALLOW_COPY_AND_ASSIGN(Communicator);
 };
 
 }  // namespace xforest

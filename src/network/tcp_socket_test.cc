@@ -44,6 +44,7 @@ TEST(TCPSocket, SendRecieve) {
     uint16 cl_port;
     char serbuff[10];
     memset(serbuff, '\0', 10);
+    server.SetTimeout(5 * 60 * 1000);
 
     ASSERT_TRUE(server.Bind("127.0.0.1", 11223));
     ASSERT_TRUE(server.Listen(3));
@@ -141,4 +142,5 @@ TEST(TCPSocket, SendRecieve) {
       ASSERT_EQ(bigbuff[i], 'x');
     }
   }
+  wait(0);
 }

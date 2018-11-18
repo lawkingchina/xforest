@@ -24,6 +24,7 @@ This file defines the SocketCommunicator class.
 #include <vector>
 #include <string>
 
+#include "src/base/scoped_ptr.h"
 #include "src/network/communicator.h"
 #include "src/network/tcp_socket.h"
 
@@ -37,32 +38,33 @@ class SocketCommunicator : public Communicator {
   SocketCommunicator();
   ~SocketCommunicator();
 
-  // Initialized
-  void Initialize(const NetConfig config);
+  // Initialize Communicator
+  virtual void Initialize(int rank, /* master is rank_0 */
+  	                      int num_workers, 
+  	                      const std::string& master_addr);
 
   // Recv data
-  // Recv method will block until recv len size of data
-  void Recv(int rank, char* data, int len);
+  virtual void Recv(int rank, char* data, int len);
 
   // Send data
-  void Send(int rank, char* data, int len);
+  virtual void Send(int rank, char* data, int len);
 
-  // Bind local listen to port
-  void TryBind(int port);
-
-  // Set socket to rank
-  void SetLinker(int rank, const TCPSocket& socket);
-
-  // Thread for listening
-  void ListenThread(int incoming_cnt);
+  // Finalize Communicator
+  virtual void Finalize();
 
  private:
-   int socket_timeout_;                     // timeout for socket, in mimutes
-   int local_listen_port_;                  // local listen ports
-   std::vector<std::string> client_ips_;    // store client ips
-   std::vector<int> client_ports_;          // store client ports
-   std::unique_ptr<TCPSocket> listener_;    // local socket listener
-   std::vector<std::unique_ptr<TCPSocket> > linkers_; // linkers
+  void InitMaster();  // Initialize master node
+  void InitWorker();  // Initialize worker node
+
+  int rank_;          // rank of local machine
+  int num_workers_;   // total number of workers 
+  bool is_master_;    // Node is master node
+  bool is_init_;      // Communicator is intialized
+  std::string master_addr_; // Address of master node
+
+  std::vector<TCPSocket*> sockets_;  // sockets
+
+  DISALLOW_COPY_AND_ASSIGN(SocketCommunicator);
 };
 
 }  // namespace xforest
