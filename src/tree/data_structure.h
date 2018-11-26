@@ -38,7 +38,7 @@ struct Feat {
   // Label y
   real_t y;
   // Original idx before sorting
-  size_t ori_idx;
+  index_t ori_idx;
 };
 
 //------------------------------------------------------------------------------
