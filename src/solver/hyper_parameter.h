@@ -25,5 +25,8 @@ This file defines the basic hyper-parameters used by xForest.
 // We use a single data structure - HyperParam to handle all of
 // the hyper parameters used by xForest.
 //------------------------------------------------------------------------------
+struct HyperParam {
+
+};
 
 #endif  // XFOREST_SOLVER_HYPER_PARAMETER_H_
