@@ -26,7 +26,10 @@ This file defines the basic hyper-parameters used by xForest.
 // the hyper parameters used by xForest.
 //------------------------------------------------------------------------------
 struct HyperParam {
-
+  uint32 max_leaf;
+  uint32 max_depth;
+  uint32 min_example_node;
+  uint32 min_gini;
 };
 
 #endif  // XFOREST_SOLVER_HYPER_PARAMETER_H_
