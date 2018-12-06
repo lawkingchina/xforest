@@ -21,6 +21,12 @@ This file defines the SafeQueue class.
 #ifndef XFOREST_BASE_SAFE_QUEUE_H_
 #define XFOREST_BASE_SAFE_QUEUE_H_
 
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+
+#include "src/base/common.h"
+
 //------------------------------------------------------------------------------
 // SafeQueue is a message queue that is thread-safe
 //------------------------------------------------------------------------------
@@ -32,19 +38,19 @@ class SafeQueue {
   ~SafeQueue() {}
 
   // Push data to queue
-  inline void push(DType* node) {
+  inline void push(DType node) {
     std::lock_guard<std::mutex> lock(m_mutex);
     queue_.push(node);
     m_condition.notify_one();
   }
 
   // Pop data
-  inline DType* pop() {
+  inline DType pop() {
     std::unique_lock<std::mutex> lock(m_mutex);
     m_condition.wait(lock, [this]() {
       return !queue_.empty();
     });
-    DTNode* node = queue_.front();
+    DType node = queue_.front();
     queue_.pop();
     return node;
   }
@@ -62,9 +68,11 @@ class SafeQueue {
   }
 
  private:
-  std::queue<DType*> queue_;
+  std::queue<DType> queue_;
   std::condition_variable m_condition;
   mutable std::mutex m_mutex;
+
+  DISALLOW_COPY_AND_ASSIGN(SafeQueue);
 };
 
 #endif  // XFOREST_BASE_SAFE_QUEUE_H_
