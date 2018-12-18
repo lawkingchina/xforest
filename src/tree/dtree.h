@@ -32,8 +32,8 @@ namespace xforest {
 
 //------------------------------------------------------------------------------
 // The Deicision Tree class is an abstract class, which will be implemented
-// by real decision tree, such as CTree (Classification Tree) and RTree 
-// (Regression Tree).
+// by real decision tree, such as BCTree (Binary Classification Tree) and 
+// MCRTree (Multi-Class Tree) and RTree (Regression Tree).
 //------------------------------------------------------------------------------
 class DTree {
  public:
