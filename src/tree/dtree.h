@@ -31,23 +31,20 @@ This file defines the DTree class.
 namespace xforest {
 
 typedef float real_t;
+typedef uint32 index_t;
 
 //--------------------------------------------------------
 // Find max and min value in every column data
 //--------------------------------------------------------
 struct MaxMin {
-  float gap = 0.0;
-  float max_feat = std::numeric_limits<float>::min();
-  float min_feat = std::numeric_limits<float>::max();
+  real_t gap = 0.0;
+  real_t max_feat = kFloatMin;
+  real_t min_feat = kFloatMax;
 };
 
 //--------------------------------------------------------
 // Histogram data structure
 //--------------------------------------------------------
-struct Count {
-  uint32_t count_0 = 0;
-  uint32_t count_1 = 0;
-};
 
 struct Histogram {
   ~Histogram() {
@@ -57,15 +54,57 @@ struct Histogram {
       }
     }
   }
-  uint32_t total_0 = 0;
-  uint32_t total_1 = 0;
+  uint32 total_0 = 0;
+  uint32 total_1 = 0;
   std::vector<Count*> bin_count;
+};
+
+struct DTNode;  // Decision tree node
+
+//---------------------------------------------------
+// Tmp info during training
+//---------------------------------------------------
+struct TInfo {
+  ~TInfo() {
+    delete histo;
+  }
+  // left or right
+  char l_or_r;
+  // node layer
+  uint32 level = 1;
+  // start postion
+  uint32 start_pos = 0;
+  // end position
+  uint32 end_pos = 0;
+  // split position
+  uint32 mid_pos = 0;
+  // Best gini value
+  real_t best_gini = 1.0;
+  // Parent node
+  DTNode* parent = nullptr;
+  // Brother node
+  DTNode* brother = nullptr;
+  // Histogram
+  Histogram* histo = nullptr;
+  // Init histogram
+  void InitHistoGram(const uint32 col_size, const uint8 max_bin) {
+    histo->bin_count.resize(col_size);
+    for (uint32_t i = 0; i < col_size; ++i) {
+      histo->bin_count[i] = new Count[max_bin+1];
+      for (uint32_t j = 0; j <= max_bin; ++j) {
+        histo->bin_count[i][j].count_0 = 0;
+        histo->bin_count[i][j].count_1 = 0;
+      }
+    }
+    histo->total_1 = 0;
+    histo->total_0 = 0;
+  }
 };
 
 //------------------------------------------------------------------------------
 // The Deicision Tree class is an abstract class, which will be implemented
-// by real decision tree, such as BCTree (Binary Classification Tree) and 
-// MCRTree (Multi-Class Tree) and RTree (Regression Tree).
+// by real decision tree, such as CTree (Classification Tree) and RTree 
+// (Regression Tree).
 //------------------------------------------------------------------------------
 class DTree {
  public:
@@ -118,15 +157,10 @@ class DTree {
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
-// Binary Classification Tree
-class BCTree : public DTree {
+// Classification Tree
+class CTree : public DTree {
 
 };
-
-// Binary Classification Tree
-class MCtree : public DTree {
-
-}
 
 // Regression Tree
 class RTree : public DTree {
