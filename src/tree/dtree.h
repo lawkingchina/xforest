@@ -102,7 +102,7 @@ struct TInfo {
 };
 
 //------------------------------------------------------------------------------
-// The Deicision Tree class is an abstract class, which will be implemented
+// The DTree class is an abstract class, which will be implemented
 // by real decision tree, such as CTree (Classification Tree) and RTree 
 // (Regression Tree).
 //------------------------------------------------------------------------------
