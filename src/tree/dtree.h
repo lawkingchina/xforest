@@ -59,8 +59,6 @@ struct Histogram {
   std::vector<Count*> bin_count;
 };
 
-struct DTNode;  // Decision tree node
-
 //---------------------------------------------------
 // Tmp info during training
 //---------------------------------------------------
