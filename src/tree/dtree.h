@@ -22,7 +22,6 @@ This file defines the DTree class.
 #define XFOREST_TREE_DTREE_H_
 
 #include "src/base/common.h"
-#include "src/base/thread_pool.h"
 
 #include <queue>
 #include <vector>
