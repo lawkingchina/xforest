@@ -37,7 +37,6 @@ struct HyperParam {
   real_t min_impurity_split;
   uint32 n_jobs;
   int random_state;
-
 };
 
 #endif  // XFOREST_SOLVER_HYPER_PARAMETER_H_
