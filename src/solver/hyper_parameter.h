@@ -40,7 +40,7 @@ struct HyperParam {
   int max_depth = -1
   // integer, optional (default=2)
   // The minimum number of samples required to split an internal node.
-  int min_samples_split;
+  int min_samples_split = 2;
   // float, optional (default=1.0)
   // A fraction and ceil(min_samples_split * n_samples) are the minimum 
   // number of samples for each split.
@@ -50,14 +50,15 @@ struct HyperParam {
   // A split point at any depth will only be considered if it leaves at least 
   // min_samples_leaf training samples in each of the left and right branches. 
   // This may have the effect of smoothing the model, especially in regression.
-  int min_samples_leaf;
+  int min_samples_leaf = 1;
   // float, optional (default=1.0)
   // A fraction and ceil(min_samples_leaf * n_samples) are the minimum 
   // number of samples for each node.
   float min_fraction_leaf = 1.0;
   // The number of features to consider when looking for the best split.
   // If int, then consider max_features features at each split.
-  int max_features;
+  // -1 means use all features
+  int max_features = -1;
   // If float, then max_features is a fraction and int(max_features * n_features) 
   // features are considered at each split.
   float max_fraction_features = 1.0;
@@ -74,7 +75,7 @@ struct HyperParam {
   // float, optional (default=0.0)
   // A node will be split if this split induces a decrease of the 
   // impurity greater than or equal to this value.
-  real_t min_impurity_decrease;
+  real_t min_impurity_decrease = 0.0;
   // float, (default=1e-7)
   // Threshold for early stopping in tree growth. A node will split 
   // if its impurity is above the threshold, otherwise it is a leaf.
@@ -85,10 +86,10 @@ struct HyperParam {
   // int or None, optional (default=None, -1)
   // The number of jobs to run in parallel for both fit and predict.
   // -1 means using all processors.
-  int n_jobs;
+  int n_jobs = -1;
   // int, optional (default=1990)
   // random_state is the seed used by the random number generator.
-  int random_state;
+  int random_state = 1990;
 };
 
 #endif  // XFOREST_SOLVER_HYPER_PARAMETER_H_
