@@ -87,9 +87,9 @@ struct HyperParam {
   // The number of jobs to run in parallel for both fit and predict.
   // -1 means using all processors.
   int n_jobs = -1;
-  // int, optional (default=1990)
+  // int, optional (default=1231)
   // random_state is the seed used by the random number generator.
-  int random_state = 1990;
+  int random_state = 1231;
 };
 
 #endif  // XFOREST_SOLVER_HYPER_PARAMETER_H_
