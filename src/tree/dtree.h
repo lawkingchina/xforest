@@ -61,6 +61,8 @@ struct Histogram {
 //---------------------------------------------------
 // Tmp info during training
 //---------------------------------------------------
+struct DTNode;
+
 struct TInfo {
   ~TInfo() {
     delete histo;
