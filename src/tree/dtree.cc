@@ -22,4 +22,31 @@ This file is the implementation of DTree class.
 
 namespace xforest {
 
+// Build decision tree
+void DTree::BuildTree() {
+
+}
+
+// Given data x, predict y 
+real_t DTree::Predict(const uint8* x) {
+  real_t y = 0;
+
+  return y;
+}
+
+// Serilize tree to string
+void DTree::Serilize(std::string* str) {
+
+}
+
+// Deserilize tree from string
+void DTree::Deserilize(const std::string& str) {
+
+}
+
+// Print decision to human-readable txt format
+void DTree::PrintToTXT(std::string* str) {
+
+}
+
 }  // namespace xforest
