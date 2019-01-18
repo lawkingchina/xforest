@@ -53,9 +53,8 @@ struct Histogram {
       }
     }
   }
-  uint32 total_0 = 0;
-  uint32 total_1 = 0;
-  std::vector<Count*> bin_count;
+  index_t count_len = 0;
+  index_t* count = nullptr;
 };
 
 //---------------------------------------------------
