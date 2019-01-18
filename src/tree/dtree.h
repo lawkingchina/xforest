@@ -80,7 +80,7 @@ class DTree {
 // Binary Tree
 class BTree : public DTree {
 
-}
+};
 
 // Multi-class Tree
 class MCTree : public DTree {
@@ -90,7 +90,7 @@ class MCTree : public DTree {
 // Regression Tree
 class RTree : public DTree {
 
-}
+};
 
 }  // xforest
 
