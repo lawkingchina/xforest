@@ -19,7 +19,7 @@
 #
 # $> make install
 #
-project ("xForest")
+project ("xforest")
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -36,12 +36,7 @@ add_definitions("-Wall -Wno-sign-compare -O3 -std=c++11
 #-------------------------------------------------------------------------------
 # Declare where our project will be installed.
 #-------------------------------------------------------------------------------
-set(CMAKE_INSTALL_PREFIX "xForest")
-
-#-------------------------------------------------------------------------------
-# For Mac OSX
-#-------------------------------------------------------------------------------
-set(CMAKE_MACOSX_RPATH TRUE)
+set(CMAKE_INSTALL_PREFIX "xforest")
 
 #-------------------------------------------------------------------------------
 # Set include paths and library paths.
@@ -56,7 +51,6 @@ link_directories(
   "${PROJECT_BINARY_DIR}/src/base"
   "${PROJECT_BINARY_DIR}/src/tree"
   "${PROJECT_BINARY_DIR}/src/reader"
-  "${PROJECT_BINARY_DIR}/src/bootstrap"
   "${PROJECT_BINARY_DIR}/src/network"
   "${PROJECT_BINARY_DIR}/src/solver"
   "${PROJECT_BINARY_DIR}/src/c_api"
@@ -71,7 +65,6 @@ add_subdirectory(scripts)
 add_subdirectory(src/base)
 add_subdirectory(src/tree)
 add_subdirectory(src/reader)
-add_subdirectory(src/bootstrap)
 add_subdirectory(src/network)
 add_subdirectory(src/solver)
 add_subdirectory(src/c_api)
