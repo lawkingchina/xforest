@@ -92,6 +92,24 @@ class RTree : public DTree {
 
 };
 
+//------------------------------------------------------------------------------
+// Class register
+//------------------------------------------------------------------------------
+CLASS_REGISTER_DEFINE_REGISTRY(xforest_dtree_registry, DTree);
+
+#define REGISTER_DTREE(format_name, rdtree_name)            \
+  CLASS_REGISTER_OBJECT_CREATOR(                            \
+      xforest_dtree_registry,                               \
+      DTree,                                                \
+      format_name,                                          \
+      dtree_name)
+
+#define CREATE_DTREE(format_name)                           \
+  CLASS_REGISTER_CREATE_OBJECT(                             \
+      xforest_dtree_registry,                               \
+      format_name)
+
+
 }  // xforest
 
 #endif  // XFOREST_TREE_DTREE_H_
