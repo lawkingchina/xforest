@@ -51,6 +51,18 @@ class DTree {
   }
   ~DTree() { }
 
+  // Sample for training data
+  void SetRowIdx(const std::vector<index_t>& idx) {
+    CHECK_EQ(idx.empty(), false);
+    rowIdx_.assign(idx.begin(), idx.end());
+  }
+
+  // Sample for feature
+  void SetColIdx(const std::vector<index_t>& idx) {
+    CHECK_EQ(idx.empty(), false);
+    colIdx_.assign(idx.begin(), idx.end());
+  }
+
  private:
   uint8 max_depth_;  // Maximal depth to grow a tree
   index_t min_samples_split_;  // Minimal samples to split a node
@@ -58,6 +70,9 @@ class DTree {
   index_t max_leaf_;  // Maximal number of leaf nodes
   real_t min_impurity_dec_;  // Minimal impurity decrease to split a node
   real_t min_impurity_;  // Minimal impurity to split a node
+
+  std::vector<index_t> rowIdx_;  // Data sample
+  std::vector<index_t> colIdx_;  // Feature sample
 
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
