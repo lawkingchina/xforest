@@ -256,6 +256,15 @@ class DTree {
   // Given data x, predict y 
   real_t Predict(const uint8* x);
 
+  // Serilize tree to string
+  void Serilize(std::string* str);
+
+  // Deserilize tree from string
+  void Deserilize(const std::string& str);
+
+  // Print decision to human-readable txt format
+  void PrintToTXT(std::string* str);
+
  private:
   uint8 max_depth_;  // Maximal depth to grow a tree (< 256)
   index_t min_samples_split_;  // Minimal samples to split a node
