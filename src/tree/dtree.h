@@ -248,6 +248,12 @@ class DTree {
     colIdx_.assign(idx.begin(), idx.end());
   }
 
+  // Build decision tree
+  void BuildTree();
+
+  // Given data x, predict y 
+  real_t Predict(const uint8* x);
+
  private:
   uint8 max_depth_;  // Maximal depth to grow a tree (< 256)
   index_t min_samples_split_;  // Minimal samples to split a node
