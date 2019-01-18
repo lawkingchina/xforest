@@ -22,6 +22,8 @@ This file defines the DTree class.
 #define XFOREST_TREE_DTREE_H_
 
 #include "src/base/common.h"
+#include "src/base/class_register.h"
+#include "src/solver/hyper_parameter.h"
 
 #include <queue>
 #include <vector>
@@ -35,8 +37,8 @@ struct MaxMin {
   real_t min_feat = kFloatMax;
 };
 
-struct Histogram;
-struct DTNode;
+class Histogram;
+class DTNode;
 
 // Tmp information during training
 class TInfo {
@@ -120,14 +122,14 @@ class DTNode {
   inline DTNode* LeftChild() {
     return l_child;
   }
-  inline void SetLeftChild() {
+  inline void SetLeftChild(DTNode* node) {
     l_child = node;
   }
   // Right child
   inline DTNode* RightChild() {
     return r_child;
   }
-  inline SetRightChild(DTNode* node) {
+  inline void SetRightChild(DTNode* node) {
     r_child = node;
   }
   // Best feature ID
@@ -141,7 +143,7 @@ class DTNode {
   inline uint8 BestBinVal() {
     return best_bin_val;
   }
-  inline SetBestBinVal(uint8 val) {
+  inline void SetBestBinVal(uint8 val) {
     best_bin_val = val;
   }
   // Left or Right
@@ -204,7 +206,7 @@ class DTNode {
   inline Histogram* Histo() {
     return info->histo;
   }
-  inline void SetHisto(Histogram* hiso) {
+  inline void SetHisto(Histogram* histo) {
     info->histo = histo;
   }
   // Data size

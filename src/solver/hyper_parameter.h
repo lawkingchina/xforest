@@ -37,7 +37,7 @@ struct HyperParam {
   // The maximum depth of the tree. 
   // If None, then nodes are expanded until all leaves are pure 
   // or until all leaves reach the end contiditon.
-  int max_depth = -1
+  int max_depth = -1;
   // integer, optional (default=2)
   // The minimum number of samples required to split an internal node.
   int min_samples_split = 2;
