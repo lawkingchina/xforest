@@ -77,8 +77,13 @@ class DTree {
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
-// Classification Tree
-class CTree : public DTree {
+// Binary Tree
+class BTree : public DTree {
+
+}
+
+// Multi-class Tree
+class MCTree : public DTree {
 
 };
 
