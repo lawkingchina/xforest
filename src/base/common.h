@@ -182,9 +182,6 @@ typedef uint32_t uint32;
 typedef uint64_t uint64;
 #endif
 
-typedef float real_t;
-typedef uint32 index_t;
-
 static const int32 kInt32Max = 0x7FFFFFFF;
 static const int32 kInt32Min = -kInt32Max - 1;
 static const int64 kInt64Max = 0x7FFFFFFFFFFFFFFFll;
@@ -198,5 +195,9 @@ static const float kFloatMin = std::numeric_limits<float>::min();
 /* To avoid dividing by zero */
 static const float kVerySmallNumber = 1e-15;
 static const double kVerySmallNumberDouble = 1e-15;
+
+/* Used by xforest */
+typedef float real_t;
+typedef uint32 index_t;
 
 #endif  // XFOREST_BASE_COMMON_H_

@@ -29,9 +29,6 @@ This file defines the DTree class.
 
 namespace xforest {
 
-typedef float real_t;
-typedef uint32 index_t;
-
 //--------------------------------------------------------
 // Find max and min value in every column data
 //--------------------------------------------------------
