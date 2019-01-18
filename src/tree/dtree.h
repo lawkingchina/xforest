@@ -277,6 +277,8 @@ class DTree {
   std::vector<index_t> colIdx_;  // Feature sample
 
   DTNode* root_ = nullptr; // root node
+  index_t leaf_size = 1;   // number of leaf nodes
+  uint8 tree_depth = 1;    // tree depth
 
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
