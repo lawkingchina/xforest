@@ -20,6 +20,8 @@ This file is the implementation of DTree class.
 
 #include "src/tree/dtree.h"
 
+#include <queue>
+
 namespace xforest {
 
 //------------------------------------------------------------------------------
@@ -35,6 +37,13 @@ void DTree::BuildTree() {
   root_->SetLevel(1);
   root_->SetStartPos(0);
   root_->SetEndPos(data_size_);
+  // Queue for tree growing
+  std::queue<DTNode*> queue;
+  queue.push(root_);
+  while (!queue.empty()) {
+  	DTNode* node = queue.front();
+
+  }
 }
 
 // Given data x, predict y 

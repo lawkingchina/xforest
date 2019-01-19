@@ -25,7 +25,6 @@ This file defines the DTree class.
 #include "src/base/class_register.h"
 #include "src/solver/hyper_parameter.h"
 
-#include <queue>
 #include <vector>
 
 namespace xforest {
@@ -223,9 +222,15 @@ class DTNode {
 class DTree {
  public:
   // ctor and dctor
-  explicit DTree(const HyperParam& hyper_param, 
+  explicit DTree(uint8* X, real_t* Y,
                  const uint8 num_class, 
-                 const index_t data_size) {
+                 const index_t data_size,
+                 const HyperParam& hyper_param) {
+    CHECK_NOTNULL(X);
+    CHECK_NOTNULL(Y);
+    CHECK_GE(num_class, 2);
+    CHECK_LE(num_class, 255);
+    CHECK_GT(data_size, 0);
     CHECK_GT(hyper_param.max_bin, 10);
     CHECK_LE(hyper_param.max_bin, 255);
     CHECK_GT(hyper_param.max_depth, 1);
@@ -233,9 +238,10 @@ class DTree {
     CHECK_GE(hyper_param.min_samples_split, 2);
     CHECK_GE(hyper_param.min_samples_leaf, 1);
     CHECK_GE(hyper_param.max_leaf_nodes, 2);
-    CHECK_GE(num_class, 2);
-    CHECK_LE(num_class, 255);
-    CHECK_GT(data_size, 0);
+    X_ = X;
+    Y_ = Y;
+    num_class_ = num_class;
+    data_size_ = data_size;
     max_bin_ = hyper_param.max_bin;
     max_depth_ = hyper_param.max_depth;
     min_samples_split_ = hyper_param.min_samples_split;
@@ -243,8 +249,6 @@ class DTree {
     max_leaf_ = hyper_param.max_leaf_nodes;
     min_impurity_dec_ = hyper_param.min_impurity_decrease;
     min_impurity_ = hyper_param.min_impurity_split;
-    num_class_ = num_class;
-    data_size_ = data_size;
   }
   ~DTree() { }
 
@@ -291,8 +295,11 @@ class DTree {
   index_t leaf_size = 1;   // number of leaf nodes
   uint8 tree_depth = 1;    // tree depth
 
-  uint8 num_class_;  // Number of classification
-  index_t data_size_; // Total data size for training data
+  uint8 num_class_ = 0;   // Number of classification
+  index_t data_size_ = 0; // Total data size for training data
+
+  uint8* X_ = nullptr;   // Training data X
+  real_t* Y_ = nullptr;  // Label y 
 
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
