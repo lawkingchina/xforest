@@ -30,6 +30,11 @@ namespace xforest {
 void DTree::BuildTree() {
   root_ = new DTNode();
   root_->Init(colIdx_.size(), max_bin_+1, num_class_);
+  // Make root as left node
+  root_->SetLeftOrRight('l');
+  root_->SetLevel(1);
+  root_->SetStartPos(0);
+  root_->SetEndPos(data_size_);
 }
 
 // Given data x, predict y 
