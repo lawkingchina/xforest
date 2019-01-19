@@ -42,7 +42,10 @@ void DTree::BuildTree() {
   queue.push(root_);
   while (!queue.empty()) {
   	DTNode* node = queue.front();
+  	if (IsLeaf(node) == false) {
 
+  	}
+  	queue.pop();
   }
 }
 
@@ -66,6 +69,12 @@ void DTree::Deserilize(const std::string& str) {
 // Print decision to human-readable txt format
 void DTree::PrintToTXT(std::string* str) {
 
+}
+
+// If current node is a leaf node?
+bool DTree::IsLeaf(const DTNode* node) {
+
+  return false;
 }
 
 //------------------------------------------------------------------------------

@@ -301,6 +301,9 @@ class DTree {
   uint8* X_ = nullptr;   // Training data X
   real_t* Y_ = nullptr;  // Label y 
 
+  // If current node is a leaf node
+  bool IsLeaf(const DTNode* node);
+
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
