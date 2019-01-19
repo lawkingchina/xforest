@@ -43,7 +43,8 @@ void DTree::BuildTree() {
   while (!queue.empty()) {
   	DTNode* node = queue.front();
   	if (IsLeaf(node) == false) {
-
+  	  FindPosition(node);
+  	  SplitData(node);
   	}
   	queue.pop();
   }
@@ -75,6 +76,11 @@ void DTree::PrintToTXT(std::string* str) {
 bool DTree::IsLeaf(const DTNode* node) {
 
   return false;
+}
+
+// Split current node
+void DTree::SplitData(DTNode* node) {
+  
 }
 
 //------------------------------------------------------------------------------

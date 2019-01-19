@@ -304,6 +304,10 @@ class DTree {
   // If current node is a leaf node
   bool IsLeaf(const DTNode* node);
 
+  virtual void FindPosition(DTNode* node) = 0;
+
+  void SplitData(DTNode* node);
+
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
