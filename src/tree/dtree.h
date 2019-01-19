@@ -224,11 +224,17 @@ class DTree {
  public:
   // ctor and dctor
   explicit DTree(const HyperParam& hyper_param) {
+    CHECK_GE(hyper_param.num_class, 2);
+    CHECK_LE(hyper_param.num_class, 255);
+    CHECK_GT(hyper_param.max_bin, 10);
+    CHECK_LE(hyper_param.max_bin, 255);
     CHECK_GT(hyper_param.max_depth, 1);
     CHECK_LE(hyper_param.max_depth, 255);
     CHECK_GE(hyper_param.min_samples_split, 2);
     CHECK_GE(hyper_param.min_samples_leaf, 1);
     CHECK_GE(hyper_param.max_leaf_nodes, 2);
+    num_class_ = hyper_param.num_class;
+    max_bin_ = hyper_param.max_bin;
     max_depth_ = hyper_param.max_depth;
     min_samples_split_ = hyper_param.min_samples_split;
     min_samples_leaf_ = hyper_param.min_samples_leaf;
@@ -266,6 +272,8 @@ class DTree {
   void PrintToTXT(std::string* str);
 
  private:
+  uint8 num_class_;  // Number of classification
+  uint8 max_bin_;    // Maximal histogram bin value
   uint8 max_depth_;  // Maximal depth to grow a tree (< 256)
   index_t min_samples_split_;  // Minimal samples to split a node
   index_t min_samples_leaf_;  // Minimal samples in a leaf node

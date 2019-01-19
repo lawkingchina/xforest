@@ -30,6 +30,10 @@ This file defines the basic hyper-parameters used by xForest.
 // the hyper parameters used by xForest.
 //------------------------------------------------------------------------------
 struct HyperParam {
+  // Number of classification (default=2)	
+  uint8 num_class = 2;
+  // Maximal histogram bin value (default=255)
+  uint8 max_bin = 255;
   // integer, optional (default=50)
   // The number of trees in the forest.	
   int n_estimators = 10;

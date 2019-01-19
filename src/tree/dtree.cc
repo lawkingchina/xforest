@@ -28,7 +28,8 @@ namespace xforest {
 
 // Build decision tree
 void DTree::BuildTree() {
-
+  root_ = new DTNode();
+  root_->Init(colIdx_.size(), max_bin_+1, num_class_);
 }
 
 // Given data x, predict y 
