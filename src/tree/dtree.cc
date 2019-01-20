@@ -150,13 +150,43 @@ void DTree::SplitData(DTNode* node) {
 //------------------------------------------------------------------------------
 // BTree class
 //------------------------------------------------------------------------------
+  
+// Get leaf value
+real_t BTree::LeafVal(const DTNode* node) {
+  return 0;	
+}
+
+// Find best split position for current node
+void BTree::FindPosition(DTNode* node) {
+  
+}
 
 //------------------------------------------------------------------------------
 // MCTree class
 //------------------------------------------------------------------------------
 
+// Get leaf value
+real_t MCTree::LeafVal(const DTNode* node) {
+  return 0;	
+}
+
+// Find best split position for current node
+void MCTree::FindPosition(DTNode* node) {
+  
+}
+
 //------------------------------------------------------------------------------
 // RTree class
 //------------------------------------------------------------------------------
+
+// Get leaf value
+real_t RTree::LeafVal(const DTNode* node) {
+  return 0;	
+}
+
+// Find best split position for current node
+void RTree::FindPosition(DTNode* node) {
+  
+}
 
 }  // namespace xforest

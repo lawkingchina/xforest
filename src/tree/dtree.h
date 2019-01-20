@@ -36,7 +36,15 @@ struct MaxMin {
   real_t min_feat = kFloatMax;
 };
 
-class Histogram;
+// Histogram bin data structure
+class Histogram {
+ public:
+  Histogram(const index_t num_feat, 
+            const index_t num_bin, 
+            const uint8 num_class = 0) {}
+  ~Histogram() {}
+};
+
 class DTNode;
 
 // Tmp information during training
@@ -222,11 +230,11 @@ class DTNode {
 class DTree {
  public:
   // ctor and dctor
-  explicit DTree(uint8* X, real_t* Y,
-                 const uint8 num_class,
-                 const index_t num_feat, 
-                 const index_t data_size,
-                 const HyperParam& hyper_param) {
+  DTree(uint8* X, real_t* Y,
+        const uint8 num_class,
+        const index_t num_feat, 
+        const index_t data_size,
+        const HyperParam& hyper_param) {
     CHECK_NOTNULL(X);
     CHECK_NOTNULL(Y);
     CHECK_GE(num_class, 2);
@@ -323,19 +331,99 @@ class DTree {
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
+// Histogram for binary classification
+class BHistogram : public Histogram {
+
+};
+
 // Binary Tree
+// Note that binary tree is a specific case of MCTree, but
+// we made careful optimization for this case.
 class BTree : public DTree {
+ public:
+  // ctor and dctor
+  BTree(uint8* X, real_t* Y,
+        const uint8 num_class,
+        const index_t num_feat, 
+        const index_t data_size,
+        const HyperParam& hyper_param) 
+   : DTree(X, Y, 
+     num_class, 
+     num_feat, 
+     data_size, 
+     hyper_param) {}
+  ~BTree() {}
+
+ private:
+  // Get leaf value
+  real_t LeafVal(const DTNode* node);
+
+  // Find best split position for current node
+  void FindPosition(DTNode* node);  
+
+  DISALLOW_COPY_AND_ASSIGN(BTree);
+};
+
+// Histogram for multi-classification
+class MCHistogram : public Histogram {
 
 };
 
 // Multi-class Tree
 class MCTree : public DTree {
+ public:
+  // ctor and dctor
+  MCTree(uint8* X, real_t* Y,
+        const uint8 num_class,
+        const index_t num_feat, 
+        const index_t data_size,
+        const HyperParam& hyper_param) 
+   : DTree(X, Y, 
+     num_class, 
+     num_feat, 
+     data_size, 
+     hyper_param) {}
+  ~MCTree() {}
+
+ private:
+  // Get leaf value
+  real_t LeafVal(const DTNode* node);
+
+  // Find best split position for current node
+  void FindPosition(DTNode* node);  
+
+  DISALLOW_COPY_AND_ASSIGN(MCTree);
+};
+
+// Histogram for regression
+class RHistogram : public Histogram {
 
 };
 
 // Regression Tree
 class RTree : public DTree {
+ public:
+  // ctor and dctor
+  RTree(uint8* X, real_t* Y,
+        const uint8 num_class,
+        const index_t num_feat, 
+        const index_t data_size,
+        const HyperParam& hyper_param) 
+   : DTree(X, Y, 
+     num_class, 
+     num_feat, 
+     data_size, 
+     hyper_param) {}
+  ~RTree() {}
 
+ private:
+  // Get leaf value
+  real_t LeafVal(const DTNode* node);
+
+  // Find best split position for current node
+  void FindPosition(DTNode* node);  
+
+  DISALLOW_COPY_AND_ASSIGN(RTree);
 };
 
 //------------------------------------------------------------------------------
