@@ -223,13 +223,15 @@ class DTree {
  public:
   // ctor and dctor
   explicit DTree(uint8* X, real_t* Y,
-                 const uint8 num_class, 
+                 const uint8 num_class,
+                 const index_t num_feat, 
                  const index_t data_size,
                  const HyperParam& hyper_param) {
     CHECK_NOTNULL(X);
     CHECK_NOTNULL(Y);
     CHECK_GE(num_class, 2);
     CHECK_LE(num_class, 255);
+    CHECK_GT(num_feat, 0);
     CHECK_GT(data_size, 0);
     CHECK_GT(hyper_param.max_bin, 10);
     CHECK_LE(hyper_param.max_bin, 255);
@@ -241,6 +243,7 @@ class DTree {
     X_ = X;
     Y_ = Y;
     num_class_ = num_class;
+    num_feat_ = num_feat;
     data_size_ = data_size;
     max_bin_ = hyper_param.max_bin;
     max_depth_ = hyper_param.max_depth;
@@ -280,26 +283,27 @@ class DTree {
   void PrintToTXT(std::string* str);
 
  private:
-  uint8 max_bin_;    // Maximal histogram bin value
-  uint8 max_depth_;  // Maximal depth to grow a tree (< 256)
-  index_t min_samples_split_;  // Minimal samples to split a node
-  index_t min_samples_leaf_;  // Minimal samples in a leaf node
-  index_t max_leaf_;  // Maximal number of leaf nodes
-  real_t min_impurity_dec_;  // Minimal impurity decrease to split a node
-  real_t min_impurity_;  // Minimal impurity to split a node
+  uint8 max_bin_;               // Maximal histogram bin value
+  uint8 max_depth_;             // Maximal depth to grow a tree (< 256)
+  index_t min_samples_split_;   // Minimal samples to split a node
+  index_t min_samples_leaf_;    // Minimal samples in a leaf node
+  index_t max_leaf_;            // Maximal number of leaf nodes
+  real_t min_impurity_dec_;     // Minimal impurity decrease to split a node
+  real_t min_impurity_;         // Minimal impurity to split a node
 
-  std::vector<index_t> rowIdx_;  // Data sample
-  std::vector<index_t> colIdx_;  // Feature sample
+  std::vector<index_t> rowIdx_;   // data sample
+  std::vector<index_t> colIdx_;   // feature sample
 
-  DTNode* root_ = nullptr;  // root node
-  index_t leaf_size_ = 1;   // number of leaf nodes
-  uint8 tree_depth_ = 1;    // tree depth
+  DTNode* root_ = nullptr;   // root node
+  index_t leaf_size_ = 1;    // number of leaf nodes
+  uint8 tree_depth_ = 1;     // tree depth
 
-  uint8 num_class_ = 0;   // Number of classification
-  index_t data_size_ = 0; // Total data size for training data
+  uint8 num_class_ = 0;    // Number of classification
+  index_t num_feat_;       // Number of feature
+  index_t data_size_ = 0;  // Total data size for training data
 
-  uint8* X_ = nullptr;   // Training data X
-  real_t* Y_ = nullptr;  // Label y 
+  uint8* X_ = nullptr;    // Training data X
+  real_t* Y_ = nullptr;   // Label y 
 
   // Get leaf value
   virtual real_t LeafVal(const DTNode* node) = 0;

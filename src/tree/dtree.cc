@@ -86,17 +86,17 @@ real_t DTree::Predict(const uint8* x) {
 
 // Serilize tree to string
 void DTree::Serilize(std::string* str) {
-
+  return;
 }
 
 // Deserilize tree from string
 void DTree::Deserilize(const std::string& str) {
-
+  return;
 }
 
 // Print decision to human-readable txt format
 void DTree::PrintToTXT(std::string* str) {
-
+  return;
 }
 
 // If current node is a leaf node?
@@ -105,6 +105,9 @@ bool DTree::IsLeaf(DTNode* node) {
   	  node->DataSize() < min_samples_split_) {
   	node->SetLeaf();
     node->SetLeafVal(LeafVal(node));
+    // Clear tmp info
+    node->Clear();
+    return true;
   }
   return false;
 }
@@ -117,8 +120,18 @@ void DTree::SplitData(DTNode* node) {
   uint8 best_bin_val = node->BestBinVal();
   uint8* ptr = X_ + best_feat_id;
   while (ptr_head < ptr_tail) {
-  	
+  	uint8 bin = *(ptr + rowIdx_[ptr_head] * num_feat_);
+  	if (bin <= best_bin_val) {
+  	  ptr_head++;
+  	} else {
+  	  // swap head and tail
+  	  rowIdx_[ptr_head] ^= rowIdx_[ptr_tail];
+  	  rowIdx_[ptr_tail] ^= rowIdx_[ptr_head];
+  	  rowIdx_[ptr_head] ^= rowIdx_[ptr_tail];
+  	  ptr_tail--;
+  	}
   }
+  node->SetMidPos(ptr_head-1);
 }
 
 //------------------------------------------------------------------------------
