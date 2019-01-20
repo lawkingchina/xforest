@@ -311,6 +311,9 @@ class DTree {
   // If current node is a leaf node
   bool IsLeaf(DTNode* node);
 
+  // Get a leaf node by given the data x
+  DTNode* GetLeaf(DTNode* node, const uint8* x);
+
   // Find best split position for current node
   virtual void FindPosition(DTNode* node) = 0;
 

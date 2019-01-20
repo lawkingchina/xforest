@@ -77,11 +77,37 @@ void DTree::BuildTree() {
   }
 }
 
+// If current node is a leaf node?
+bool DTree::IsLeaf(DTNode* node) {
+  if (node->Level() == max_depth_ ||
+  	  node->DataSize() < min_samples_split_) {
+  	node->SetLeaf();
+    node->SetLeafVal(LeafVal(node));
+    // Clear tmp info
+    node->Clear();
+    return true;
+  }
+  return false;
+}
+
+// Get a leaf node by given the data x
+DTNode* DTree::GetLeaf(DTNode* node, const uint8* x) {
+  if (node->IsLeaf()) {
+  	return node;
+  }
+  index_t id = node->BestFeatID();
+  uint8 val = node->BestBinVal();
+  if (x[id] <= val) {
+  	return GetLeaf(node->LeftChild(), x);
+  } else {
+  	return GetLeaf(node->RightChild(), x);
+  }
+}
+
 // Given data x, predict y 
 real_t DTree::Predict(const uint8* x) {
-  real_t y = 0;
-
-  return y;
+  DTNode* leaf_node = GetLeaf(root_, x);
+  return leaf_node->LeafVal();
 }
 
 // Serilize tree to string
@@ -97,19 +123,6 @@ void DTree::Deserilize(const std::string& str) {
 // Print decision to human-readable txt format
 void DTree::PrintToTXT(std::string* str) {
   return;
-}
-
-// If current node is a leaf node?
-bool DTree::IsLeaf(DTNode* node) {
-  if (node->Level() == max_depth_ ||
-  	  node->DataSize() < min_samples_split_) {
-  	node->SetLeaf();
-    node->SetLeafVal(LeafVal(node));
-    // Clear tmp info
-    node->Clear();
-    return true;
-  }
-  return false;
 }
 
 // Split current node
