@@ -104,112 +104,112 @@ class DTNode {
     delete info->parent->info;
   }
   // Is a leaf node?
-  inline bool IsLeaf() {
+  inline bool IsLeaf() const {
     return is_leaf;
   }
   inline void SetLeaf() {
     is_leaf = true;
   }
   // value of leaf
-  inline real_t LeafVal() {
+  inline real_t LeafVal() const {
     return leaf_val;
   }
   inline void SetLeafVal(real_t val) {
     leaf_val = val;
   }
   // Left child
-  inline DTNode* LeftChild() {
+  inline DTNode* LeftChild() const {
     return l_child;
   }
   inline void SetLeftChild(DTNode* node) {
     l_child = node;
   }
   // Right child
-  inline DTNode* RightChild() {
+  inline DTNode* RightChild() const {
     return r_child;
   }
   inline void SetRightChild(DTNode* node) {
     r_child = node;
   }
   // Best feature ID
-  inline index_t BestFeatID() {
+  inline index_t BestFeatID() const {
     return best_feat_id;
   }
   inline void SetBestFeatID(index_t id) {
     best_feat_id = id;
   }
   // Best bin value
-  inline uint8 BestBinVal() {
+  inline uint8 BestBinVal() const {
     return best_bin_val;
   }
   inline void SetBestBinVal(uint8 val) {
     best_bin_val = val;
   }
   // Left or Right
-  inline char LeftOrRight() {
+  inline char LeftOrRight() const {
     return info->l_or_r;
   }
   inline void SetLeftOrRight(char ch) {
     info->l_or_r = ch;
   }
   // Node level
-  inline uint8 Level() {
+  inline uint8 Level() const {
     return info->level;
   }
   inline void SetLevel(uint8 level) {
     info->level = level;
   }
   // Start position
-  inline index_t StartPos() {
+  inline index_t StartPos() const {
     return info->start_pos;
   }
   inline void SetStartPos(index_t pos) {
     info->start_pos = pos;
   }
   // End position
-  inline index_t EndPos() {
+  inline index_t EndPos() const {
     return info->end_pos;
   }
   inline void SetEndPos(index_t pos) {
     info->end_pos = pos;
   }
   // Mid position (split pos)
-  inline index_t MidPos() {
+  inline index_t MidPos() const {
     return info->mid_pos;
   }
   inline void SetMidPos(index_t pos) {
     info->mid_pos = pos;
   }
   // Best gini
-  inline real_t BestGini() {
+  inline real_t BestGini() const {
     return info->best_gini;
   }
   inline void SetBestGini(real_t gini) {
     info->best_gini = gini;
   }
   // Parent node
-  inline DTNode* Parent() {
+  inline DTNode* Parent() const {
     return info->parent;
   }
   inline void SetParent(DTNode* node) {
     info->parent = node;
   }
   // Brother node
-  inline DTNode* Brother() {
+  inline DTNode* Brother() const {
     return info->brother;
   }
   inline void SetBrother(DTNode* node) {
     info->brother = node;
   }
   // Histogram bin
-  inline Histogram* Histo() {
+  inline Histogram* Histo() const {
     return info->histo;
   }
   inline void SetHisto(Histogram* histo) {
     info->histo = histo;
   }
   // Data size
-  inline index_t DataSize() {
+  inline index_t DataSize() const {
     return info->end_pos-info->start_pos+1;
   }
 };
