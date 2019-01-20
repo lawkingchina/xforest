@@ -291,9 +291,9 @@ class DTree {
   std::vector<index_t> rowIdx_;  // Data sample
   std::vector<index_t> colIdx_;  // Feature sample
 
-  DTNode* root_ = nullptr; // root node
-  index_t leaf_size = 1;   // number of leaf nodes
-  uint8 tree_depth = 1;    // tree depth
+  DTNode* root_ = nullptr;  // root node
+  index_t leaf_size_ = 1;   // number of leaf nodes
+  uint8 tree_depth_ = 1;    // tree depth
 
   uint8 num_class_ = 0;   // Number of classification
   index_t data_size_ = 0; // Total data size for training data
@@ -301,11 +301,16 @@ class DTree {
   uint8* X_ = nullptr;   // Training data X
   real_t* Y_ = nullptr;  // Label y 
 
-  // If current node is a leaf node
-  bool IsLeaf(const DTNode* node);
+  // Get leaf value
+  virtual real_t LeafVal(const DTNode* node) = 0;
 
+  // If current node is a leaf node
+  bool IsLeaf(DTNode* node);
+
+  // Find best split position for current node
   virtual void FindPosition(DTNode* node) = 0;
 
+  // Split current node
   void SplitData(DTNode* node);
 
   DISALLOW_COPY_AND_ASSIGN(DTree);
