@@ -36,16 +36,6 @@ struct MaxMin {
   real_t min_feat = kFloatMax;
 };
 
-// Histogram bin data structure
-class Histogram {
- public:
-  // ctor and dctor
-  Histogram() {}
-  ~Histogram() {}
- private:
-  DISALLOW_COPY_AND_ASSIGN(Histogram);
-};
-
 class DTNode;
 
 // Tmp information during training
@@ -71,7 +61,7 @@ class TInfo {
   // Brother node
   DTNode* brother = nullptr;
   // Histogram bin
-  Histogram* histo = nullptr;
+  void* histo = nullptr;
  private:
   DISALLOW_COPY_AND_ASSIGN(TInfo);
 };
@@ -203,10 +193,10 @@ class DTNode {
     info->brother = node;
   }
   // Histogram bin
-  inline Histogram* Histo() const {
+  inline void* Histo() const {
     return info->histo;
   }
-  inline void SetHisto(Histogram* histo) {
+  inline void SetHisto(void* histo) {
     info->histo = histo;
   }
   // Data size
@@ -334,7 +324,7 @@ struct Count {
   index_t count_1 = 0;
 };
 
-class BHistogram : public Histogram {
+class BHistogram {
  public:
   BHistogram(const index_t num_feat,
              const uint8 num_bin) {
@@ -349,6 +339,7 @@ class BHistogram : public Histogram {
   index_t total_0 = 0;
   index_t total_1 = 0;
   std::vector<Count*> count;
+
  private:
   DISALLOW_COPY_AND_ASSIGN(BHistogram);
 };
@@ -366,6 +357,10 @@ class BTree : public DTree {
   // Get leaf value
   real_t LeafVal(const DTNode* node);
 
+  // Calculate gini value
+  real_t Gini(const real_t left_0, const real_t left_1,
+              const real_t right_0, const real_t right_1);
+
   // Find best split position for current node
   void FindPosition(DTNode* node);  
 
@@ -373,7 +368,7 @@ class BTree : public DTree {
 };
 
 // Histogram for multi-classification
-class MCHistogram : public Histogram {
+class MCHistogram {
  public:
   MCHistogram(const index_t num_feat,
               const index_t num_bin,
@@ -389,6 +384,7 @@ class MCHistogram : public Histogram {
   }
   index_t count_len = 0;
   index_t* count = nullptr;
+
  private:
   DISALLOW_COPY_AND_ASSIGN(MCHistogram);
 };
@@ -411,8 +407,13 @@ class MCTree : public DTree {
 };
 
 // Histogram for regression
-class RHistogram : public Histogram {
+class RHistogram {
+ public:
+  RHistogram(const index_t num_feat,
+             const index_t num_bin) {
 
+  }
+  ~RHistogram() {}
  private:
   DISALLOW_COPY_AND_ASSIGN(RHistogram);
 };

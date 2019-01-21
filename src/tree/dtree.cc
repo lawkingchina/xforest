@@ -21,6 +21,7 @@ This file is the implementation of DTree class.
 #include "src/tree/dtree.h"
 
 #include <queue>
+#include <numeric>
 
 namespace xforest {
 
@@ -28,9 +29,9 @@ namespace xforest {
 // Class register
 //------------------------------------------------------------------------------
 CLASS_REGISTER_IMPLEMENT_REGISTRY(xforest_dtree_registry, DTree);
-REGISTER_DTREE("bn", BTree);
-REGISTER_DTREE("mc", MCTree);
-REGISTER_DTREE("reg", RTree);
+REGISTER_DTREE("btree", BTree);
+REGISTER_DTREE("mctree", MCTree);
+REGISTER_DTREE("rtree", RTree);
 
 //------------------------------------------------------------------------------
 // DTree class
@@ -172,9 +173,93 @@ real_t BTree::LeafVal(const DTNode* node) {
   return count_0 > count_1 ? 0.0 : 1.0;
 }
 
+// Calculate gini value
+real_t BTree::Gini(const real_t left_0, 
+	               const real_t left_1,
+	               const real_t right_0,
+	               const real_t right_1) {
+  index_t all_left = left_0 + left_1;
+  index_t all_right = right_0 + right_1;
+  index_t all = all_right + all_left;
+  real_t gini_left = 1.0 - 
+    ((real_t)((left_0*left_0) + (left_1*left_1)) / 
+      (real_t)(all_left*all_left));
+  real_t gini_right = 1.0 - 
+    ((real_t)((right_0*right_0) + (right_1*right_1)) / 
+      (real_t)(all_right*all_right));
+  return ((real_t)all_left / all) * gini_left +
+         ((real_t)all_right / all) * gini_right;
+}
+
 // Find best split position for current node
 void BTree::FindPosition(DTNode* node) {
-  
+  BHistogram* histo = (BHistogram*)node->Histo();
+  histo = new BHistogram(num_feat_, max_bin_);
+  // Collect histogram
+  index_t total_0 = 0;
+  index_t total_1 = 0;
+  index_t len = node->DataSize();
+  index_t start_pos = node->StartPos();
+  index_t end_pos = node->EndPos();
+  index_t col_size = colIdx_.size();
+  // If node is left node or
+  // node is right but brother is leaf
+  if (node->LeftOrRight() == 'l' || 
+  	  node->Brother()->IsLeaf()) {
+  	for (index_t i = start_pos; i <= end_pos; ++i) {
+  	  index_t row_idx = rowIdx_[i];
+  	  uint8* ptr = X_ + row_idx * num_feat_;
+  	  if (Y_[row_idx] == 0) {
+  	  	total_0++;
+  	  	for (index_t j = 0; j < col_size; ++j) {
+  	  	  uint8 bin = *(ptr + colIdx_[j]);
+  	  	  histo->count[j][bin].count_0++;
+  	  	}
+  	  } else {
+  	  	for (index_t j = 0; j < col_size; ++j) {
+  	  	  uint8 bin = *(ptr + colIdx_[j]);
+  	  	  histo->count[j][bin].count_1++;
+  	  	}
+  	  }
+  	}
+  	total_1 = len - total_0;
+  } else {  // histo = parent_histo - brother_histo
+  	BHistogram* parent = (BHistogram*)node->Parent()->Histo();
+  	BHistogram* brother = (BHistogram*)node->Brother()->Histo();
+  	total_0 = parent->total_0 - brother->total_0;
+  	total_1 = parent->total_1 - brother->total_1;
+  	for (index_t i = 0; i < col_size; ++i) {
+  	  for (index_t j = 0; j <= max_bin_; ++j) {
+  	  	histo->count[i][j].count_0 = 
+  	  	  parent->count[i][j].count_0 - brother->count[i][j].count_0;
+  	  	histo->count[i][j].count_1 = 
+  	  	  parent->count[i][j].count_1 - brother->count[i][j].count_1;
+  	  }
+  	}
+  }
+  histo->total_0 = total_0;
+  histo->total_1 = total_1;
+  // Find best split position
+  for (index_t i = 0; i < col_size; ++i) {
+  	Count* count = histo->count[i];
+  	index_t left_0 = 0;
+  	index_t left_1 = 0;
+  	for (index_t j = 0; j <= max_bin_; ++j) {
+  	  left_0 += count[j].count_0;
+  	  left_1 += count[j].count_1;
+  	  index_t right_0 = total_0 - left_0;
+  	  index_t right_1 = total_1 - left_1;
+  	  real_t gini = Gini(left_0, left_1, right_0, right_1);
+  	  if (gini < node->BestGini()) {
+  	  	node->SetBestGini(gini);
+  	  	node->SetBestFeatID(colIdx_[j]);
+  	  	node->SetBestBinVal(i);
+  	  }
+  	}
+  }
+  if (node->LeftOrRight() == 'r') {
+  	node->ClearParent();
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -196,7 +281,83 @@ real_t MCTree::LeafVal(const DTNode* node) {
 
 // Find best split position for current node
 void MCTree::FindPosition(DTNode* node) {
-  
+  MCHistogram* histo = (MCHistogram*)node->Histo();
+  histo = new MCHistogram(num_feat_, max_bin_, num_class_);
+  index_t len = node->DataSize();
+  index_t start_pos = node->StartPos();
+  index_t end_pos = node->EndPos();
+  index_t* count = histo->count;
+  index_t col_size = colIdx_.size();
+  index_t cc = num_class_ * col_size;
+  // Collect histogram
+  if (node->LeftOrRight() == 'l' ||
+  	  node->Brother()->IsLeaf()) {
+  	for (index_t i = start_pos; i <= end_pos; ++i) {
+  	  index_t row_idx = rowIdx_[i];
+  	  int y = Y_[row_idx];
+  	  uint8* ptr = X_ + row_idx * num_feat_;
+  	  for (index_t j = 0; j < col_size; ++j) {
+  	  	count[num_class_*(*(ptr+colIdx_[j])*col_size+j)+y]++;
+  	  }
+  	}
+  } else {
+  	MCHistogram* histo_parent = (MCHistogram*)node->Parent()->Histo();
+  	index_t* count_parent = histo_parent->count;
+  	MCHistogram* histo_brother = (MCHistogram*)node->Brother()->Histo();
+  	index_t* count_brother = histo_brother->count;
+  	index_t count_len = histo->count_len;
+  	for (index_t i = 0; i < count_len; ++i) {
+  	  count[i] = count_parent[i] - count_brother[i];
+  	}
+  }
+  // Sum total count
+  std::vector<index_t> total_count(num_class_, 0);
+  for (index_t i = 0; i <= max_bin_; ++i) {
+  	index_t* ptr = count + i*cc;
+  	for (uint8 c = 0; c < num_class_; ++c) {
+  	  total_count[c] += *ptr;
+  	  ptr++;
+  	}
+  }
+  // Find best split position
+  for (index_t j = 0; j < col_size; ++j) {
+  	std::vector<index_t> left_count(num_class_, 0);
+  	std::vector<index_t> right_count(total_count);
+  	index_t* base_ptr = count + j*num_class_;
+  	for (index_t i = 0; i <= max_bin_; ++i) {
+  	  index_t* ptr = base_ptr + cc*i;
+  	  for (uint8 c = 0; c < num_class_; ++c) {
+  	  	left_count[c] += *ptr;
+  	  	right_count[c] -= *ptr;
+  	  	ptr++;
+  	  }
+  	  index_t left_sum = 
+  	    std::accumulate(left_count.begin(), left_count.end(), 0);
+  	  index_t right_sum = 
+  	    std::accumulate(right_count.begin(), right_count.end(), 0);
+  	  real_t real_left_sum = 0.0;
+  	  real_t real_right_sum = 0.0;
+  	  for (uint8 c = 0; c < num_class_; ++c) {
+  	  	real_t tmp = (real_t)left_count[c] / left_sum;
+  	  	real_left_sum += tmp*tmp;
+  	  	tmp = (real_t)right_count[c] / right_sum;
+  	  	real_right_sum += tmp*tmp;
+  	  }
+  	  real_t left_gini = 1.0 - real_left_sum;
+  	  left_gini *= (real_t)left_sum / len;
+  	  real_t right_gini = 1.0 - real_right_sum;
+  	  right_gini *= (real_t)right_sum / len;
+  	  real_t gini = left_gini + right_gini;
+  	  if (gini < node->BestGini()) {
+  	  	node->SetBestGini(gini);
+  	  	node->SetBestFeatID(colIdx_[j]);
+  	  	node->SetBestBinVal(i);
+  	  }
+  	}
+  }
+  if (node->LeftOrRight() == 'r') {
+  	node->ClearParent();
+  }
 }
 
 //------------------------------------------------------------------------------
