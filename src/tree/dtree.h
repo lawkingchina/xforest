@@ -286,7 +286,7 @@ class DTree {
   // Print decision to human-readable txt format
   void PrintToTXT(std::string* str);
 
- private:
+ protected:
   uint8 max_bin_;               // Maximal histogram bin value
   uint8 max_depth_;             // Maximal depth to grow a tree (< 256)
   index_t min_samples_split_;   // Minimal samples to split a node
@@ -324,6 +324,7 @@ class DTree {
   // Split current node
   void SplitData(DTNode* node);
 
+ private:
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
@@ -348,6 +349,8 @@ class BHistogram : public Histogram {
   index_t total_0 = 0;
   index_t total_1 = 0;
   std::vector<Count*> count;
+ private:
+  DISALLOW_COPY_AND_ASSIGN(BHistogram);
 };
 
 // Binary Tree
@@ -410,6 +413,8 @@ class MCTree : public DTree {
 // Histogram for regression
 class RHistogram : public Histogram {
 
+ private:
+  DISALLOW_COPY_AND_ASSIGN(RHistogram);
 };
 
 // Regression Tree

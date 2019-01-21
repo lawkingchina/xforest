@@ -158,7 +158,18 @@ void DTree::SplitData(DTNode* node) {
   
 // Get leaf value
 real_t BTree::LeafVal(const DTNode* node) {
-  return 0;	
+  index_t count_0 = 0;
+  index_t count_1 = 0;
+  index_t start_pos = node->StartPos();
+  index_t end_pos = node->EndPos();
+  index_t len = node->DataSize();
+  for (index_t i = start_pos; i <= end_pos; ++i) {
+  	if (Y_[rowIdx_[i]] == 0) {
+  	  count_0++;
+  	}
+  	count_1 = len - count_0;
+  }
+  return count_0 > count_1 ? 0.0 : 1.0;
 }
 
 // Find best split position for current node
@@ -172,7 +183,15 @@ void BTree::FindPosition(DTNode* node) {
 
 // Get leaf value
 real_t MCTree::LeafVal(const DTNode* node) {
-  return 0;	
+  std::vector<index_t> count(num_class_, 0);
+  std::vector<index_t>::iterator result;
+  index_t start_pos = node->StartPos();
+  index_t end_pos = node->EndPos();
+  for (index_t i = start_pos; i <= end_pos; ++i) {
+  	count[Y_[rowIdx_[i]]]++;
+  }
+  result = std::max_element(count.begin(), count.end());
+  return (real_t)std::distance(count.begin(), result);
 }
 
 // Find best split position for current node
