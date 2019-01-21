@@ -223,11 +223,15 @@ class DTNode {
 class DTree {
  public:
   // ctor and dctor
-  DTree(uint8* X, real_t* Y,
-        const uint8 num_class,
-        const index_t num_feat, 
-        const index_t data_size,
-        const HyperParam& hyper_param) {
+  DTree() {}
+  ~DTree() { }
+
+  // Initialize
+  void Init(uint8* X, real_t* Y,
+            const uint8 num_class,
+            const index_t num_feat, 
+            const index_t data_size,
+            const HyperParam& hyper_param) {
     CHECK_NOTNULL(X);
     CHECK_NOTNULL(Y);
     CHECK_GE(num_class, 2);
@@ -254,7 +258,6 @@ class DTree {
     min_impurity_dec_ = hyper_param.min_impurity_decrease;
     min_impurity_ = hyper_param.min_impurity_split;
   }
-  ~DTree() { }
 
   // Sample for training data
   void SetRowIdx(const std::vector<index_t>& idx) {
@@ -300,7 +303,7 @@ class DTree {
   uint8 tree_depth_ = 1;     // tree depth
 
   uint8 num_class_ = 0;    // Number of classification
-  index_t num_feat_;       // Number of feature
+  index_t num_feat_ = 0;   // Number of feature
   index_t data_size_ = 0;  // Total data size for training data
 
   uint8* X_ = nullptr;    // Training data X
@@ -353,16 +356,7 @@ class BHistogram : public Histogram {
 class BTree : public DTree {
  public:
   // ctor and dctor
-  BTree(uint8* X, real_t* Y,
-        const uint8 num_class,
-        const index_t num_feat, 
-        const index_t data_size,
-        const HyperParam& hyper_param) 
-   : DTree(X, Y, 
-     num_class, 
-     num_feat, 
-     data_size, 
-     hyper_param) {}
+  BTree() {}
   ~BTree() {}
 
  private:
@@ -400,16 +394,7 @@ class MCHistogram : public Histogram {
 class MCTree : public DTree {
  public:
   // ctor and dctor
-  MCTree(uint8* X, real_t* Y,
-        const uint8 num_class,
-        const index_t num_feat, 
-        const index_t data_size,
-        const HyperParam& hyper_param) 
-   : DTree(X, Y, 
-     num_class, 
-     num_feat, 
-     data_size, 
-     hyper_param) {}
+  MCTree() {}
   ~MCTree() {}
 
  private:
@@ -431,16 +416,7 @@ class RHistogram : public Histogram {
 class RTree : public DTree {
  public:
   // ctor and dctor
-  RTree(uint8* X, real_t* Y,
-        const uint8 num_class,
-        const index_t num_feat, 
-        const index_t data_size,
-        const HyperParam& hyper_param) 
-   : DTree(X, Y, 
-     num_class, 
-     num_feat, 
-     data_size, 
-     hyper_param) {}
+  RTree() {}
   ~RTree() {}
 
  private:
@@ -458,7 +434,7 @@ class RTree : public DTree {
 //------------------------------------------------------------------------------
 CLASS_REGISTER_DEFINE_REGISTRY(xforest_dtree_registry, DTree);
 
-#define REGISTER_DTREE(format_name, rdtree_name)            \
+#define REGISTER_DTREE(format_name, dtree_name)             \
   CLASS_REGISTER_OBJECT_CREATOR(                            \
       xforest_dtree_registry,                               \
       DTree,                                                \
@@ -469,7 +445,6 @@ CLASS_REGISTER_DEFINE_REGISTRY(xforest_dtree_registry, DTree);
   CLASS_REGISTER_CREATE_OBJECT(                             \
       xforest_dtree_registry,                               \
       format_name)
-
 
 }  // xforest
 

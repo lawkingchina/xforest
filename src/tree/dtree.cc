@@ -25,6 +25,14 @@ This file is the implementation of DTree class.
 namespace xforest {
 
 //------------------------------------------------------------------------------
+// Class register
+//------------------------------------------------------------------------------
+CLASS_REGISTER_IMPLEMENT_REGISTRY(xforest_dtree_registry, DTree);
+REGISTER_DTREE("bn", BTree);
+REGISTER_DTREE("mc", MCTree);
+REGISTER_DTREE("reg", RTree);
+
+//------------------------------------------------------------------------------
 // DTree class
 //------------------------------------------------------------------------------
 
