@@ -39,10 +39,11 @@ struct MaxMin {
 // Histogram bin data structure
 class Histogram {
  public:
-  Histogram(const index_t num_feat, 
-            const index_t num_bin, 
-            const uint8 num_class = 0) {}
+  // ctor and dctor
+  Histogram() {}
   ~Histogram() {}
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Histogram);
 };
 
 class DTNode;
@@ -51,9 +52,7 @@ class DTNode;
 class TInfo {
  public:
   // ctor and dctor
-  TInfo(const index_t num_feat,
-        const index_t num_bin,
-        const uint8 num_class) {}
+  TInfo() {}
   ~TInfo() {}
   // left or right
   char l_or_r;
@@ -97,12 +96,6 @@ class DTNode {
   uint8 best_bin_val = 0;
   // Tmp info used by training
   TInfo* info = nullptr;
-  // Initialize
-  inline void Init(const index_t num_feat,
-                   const index_t num_bin,
-                   const uint8 num_class) {
-    info = new TInfo(num_feat, num_bin, num_class);
-  }
   // Clear TInfo
   inline void Clear() { 
     delete info;
@@ -332,8 +325,26 @@ class DTree {
 };
 
 // Histogram for binary classification
-class BHistogram : public Histogram {
+struct Count {
+  index_t count_0 = 0;
+  index_t count_1 = 0;
+};
 
+class BHistogram : public Histogram {
+ public:
+  BHistogram(const index_t num_feat,
+             const uint8 num_bin) {
+    index_t len = num_feat * num_bin;
+    count.resize(len);
+  }
+  ~BHistogram() {
+    for (index_t i = 0; i < count.size(); ++i) {
+      delete [] count[i];
+    }
+  }
+  index_t total_0 = 0;
+  index_t total_1 = 0;
+  std::vector<Count*> count;
 };
 
 // Binary Tree
@@ -366,7 +377,23 @@ class BTree : public DTree {
 
 // Histogram for multi-classification
 class MCHistogram : public Histogram {
-
+ public:
+  MCHistogram(const index_t num_feat,
+              const index_t num_bin,
+              const uint8 num_class) {
+    count_len = num_feat * num_bin * num_class;
+    count = new index_t[count_len];
+    for (index_t i = 0; i < count_len; ++i) {
+      count[i] = 0;
+    }
+  }
+  ~MCHistogram() {
+    delete [] count;
+  }
+  index_t count_len = 0;
+  index_t* count = nullptr;
+ private:
+  DISALLOW_COPY_AND_ASSIGN(MCHistogram);
 };
 
 // Multi-class Tree

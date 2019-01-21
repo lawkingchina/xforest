@@ -31,7 +31,6 @@ namespace xforest {
 // Build decision tree
 void DTree::BuildTree() {
   root_ = new DTNode();
-  root_->Init(colIdx_.size(), max_bin_+1, num_class_);
   // Make root as left node
   root_->SetLeftOrRight('l');
   root_->SetLevel(1);
@@ -47,14 +46,12 @@ void DTree::BuildTree() {
   	  SplitData(node);
   	  // New left child
   	  DTNode* l_node = new DTNode();
-  	  l_node->Init(colIdx_.size(), max_bin_+1, num_class_);
   	  l_node->SetLeftOrRight('l');
   	  l_node->SetStartPos(node->StartPos());
   	  l_node->SetEndPos(node->MidPos());
   	  l_node->SetLevel(node->Level() + 1);
   	  // New right child
   	  DTNode* r_node = new DTNode();
-  	  r_node->Init(colIdx_.size(), max_bin_+1, num_class_);
   	  r_node->SetLeftOrRight('r');
   	  r_node->SetStartPos(node->MidPos() + 1);
   	  r_node->SetEndPos(node->EndPos());
