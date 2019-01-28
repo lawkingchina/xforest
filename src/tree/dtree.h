@@ -29,7 +29,9 @@ This file defines the DTree class.
 
 namespace xforest {
 
-// Find maximal and minimal value for each feature
+/*!
+ * \brief Find maximal and minimal value for each feature
+ */
 struct MaxMin {
   real_t gap = 0.0;
   real_t max_feat = kFloatMin;
