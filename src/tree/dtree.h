@@ -40,7 +40,9 @@ struct MaxMin {
 
 class DTNode;
 
-// Tmp information during training
+/*!
+ * \brief temp information during training
+ */
 class TInfo {
  public:
   // ctor and dctor
