@@ -45,10 +45,9 @@ class DTNode;
  */
 class TInfo {
  public:
-  // ctor and dctor
-  TInfo() {}
-  ~TInfo() {}
-  // left or right
+  /*!
+   * \brief left node or right node
+   */
   char l_or_r;
   // node layer
   uint8 level = 1;
