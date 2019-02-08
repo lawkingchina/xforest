@@ -49,21 +49,37 @@ class TInfo {
    * \brief left node or right node
    */
   char l_or_r;
-  // node layer
+  /*!
+   * \brief level of layer
+   */
   uint8 level = 1;
-  // start position
+  /*!
+   * \brief start position
+   */
   index_t start_pos = 0;
-  // end position
+  /*!
+   * \brief end position
+   */
   index_t end_pos = 0;
-  // mid position
+  /*!
+   * \brief mid split position
+   */
   index_t mid_pos = 0;
-  // best gini value
+  /*!
+   * \brief best gini value
+   */
   real_t best_gini = 1.0;
-  // parent node
+  /*!
+   * \brief parent node
+   */
   DTNode* parent = nullptr;
-  // Brother node
+  /*!
+   * \brief brother node
+   */
   DTNode* brother = nullptr;
-  // Histogram bin
+  /*!
+   * \brief histogram bin
+   */
   void* histo = nullptr;
  private:
   DISALLOW_COPY_AND_ASSIGN(TInfo);
