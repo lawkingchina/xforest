@@ -39,7 +39,7 @@ TEST(SocketCommunicator, MasterSide) {
   	  }
   	}
   	if (count == kNumWorker) {
-  	  	break;
+  	  break;
   	}
   }
   std::cout << "Master closed()" << std::endl;
