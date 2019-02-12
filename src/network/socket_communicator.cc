@@ -27,8 +27,8 @@ namespace xforest {
 
 // Initialize Communicator
 void SocketCommunicator::Initialize(int rank, /* master is rank_0 */
-  	                                int num_workers, 
-  	                                const std::string& master_addr) {
+                                    int num_workers, 
+                                    const std::string& master_addr) {
   CHECK_GE(rank, 0);
   CHECK_GT(num_workers, 0);
   rank_ = rank;
@@ -36,9 +36,9 @@ void SocketCommunicator::Initialize(int rank, /* master is rank_0 */
   is_master_ = rank_ == 0 ? true : false;
   master_addr_ = master_addr;
   if (is_master_) {
-  	InitMaster();
+    InitMaster();
   } else {
-  	InitWorker();
+    InitWorker();
   }
 }
 
@@ -89,7 +89,7 @@ void SocketCommunicator::Recv(int rank, char* data, int len) {
   TCPSocket* socket = sockets_[rank];
   int recieved_bytes = 0;
   while (recieved_bytes < len) {
-  	int max_len = len - recieved_bytes;
+    int max_len = len - recieved_bytes;
     int tmp = socket->Receive(data+recieved_bytes, max_len);
     CHECK_GE(tmp, 0);
     recieved_bytes += tmp;

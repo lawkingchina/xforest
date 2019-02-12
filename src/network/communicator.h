@@ -37,8 +37,8 @@ class Communicator {
 
   // Initialize Communicator
   virtual void Initialize(int rank, /* master is rank_0 */
-  	                      int num_workers,
-  	                      const std::string& master_addr) = 0;
+                          int num_workers,
+                          const std::string& master_addr) = 0;
 
   // Recv data
   virtual void Recv(int rank, char* data, int len) = 0;
