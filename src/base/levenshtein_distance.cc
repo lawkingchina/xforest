@@ -14,18 +14,17 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file is the implementation of StrSimilar class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file levenshtein_distance.cc
+ * \brief This file is the implementation of StrSimilar class.
+ */
 #include <algorithm>
 
 #include "src/base/levenshtein_distance.h"
 
 #define min(a,b) ((a<b)?a:b)
 
-// Find str in string list.
-// Return true if we can find str in target string list.
 bool StrSimilar::Find(const std::string& str,
                       const std::vector<std::string>& list) {
   CHECK(!str.empty());
@@ -38,8 +37,6 @@ bool StrSimilar::Find(const std::string& str,
   return false;
 }
 
-// Find the most similar string from string list.
-// Return the minimal levenshtein distance.
 int StrSimilar::FindSimilar(const std::string& str,
                             const std::vector<std::string>& list,
                             std::string& result) {
@@ -56,8 +53,6 @@ int StrSimilar::FindSimilar(const std::string& str,
   return min_dis;
 }
 
-// Calculate Levenshtein distance by using
-// dynamic programing (DP).
 int StrSimilar::ldistance(const std::string& source,
                           const std::string& target) {
   CHECK(!source.empty());

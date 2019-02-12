@@ -20,7 +20,6 @@
  * \brief This file defines several helper macros for registering class by a 
  * string name and creating them later per the registered name.
  */
-
 #ifndef XFOREST_BASE_CLASS_REGISTER_H_
 #define XFOREST_BASE_CLASS_REGISTER_H_
 

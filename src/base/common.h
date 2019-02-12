@@ -20,7 +20,6 @@
  * \brief This file provides the following basic facilities to 
  * make programming convenient.
  */
-
 #ifndef XFOREST_BASE_COMMON_H_
 #define XFOREST_BASE_COMMON_H_
 

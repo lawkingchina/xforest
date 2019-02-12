@@ -14,11 +14,12 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines the StrSimilar class, which can 
-be used to find similar strings.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file levenshtein_distance.cc
+ * \brief This file defines the StrSimilar class, which can 
+ * be used to find similar strings.
+ */
 #ifndef XFOREST_BASE_LEVEN_SHTEIN_DISTANCE_H_
 #define XFOREST_BASE_LEVEN_SHTEIN_DISTANCE_H_
 
@@ -27,46 +28,67 @@ be used to find similar strings.
 
 #include "src/base/common.h"
 
-//------------------------------------------------------------------------------
-// StrSimilar class is used to find the similar string from the
-// target string list. We can use this class like this:
-//
-//   vector<string> list;
-//   list.push_back("alex");
-//   list.push_back("apple");
-//   list.push_back("mac");
-//   StrSimilar ss;
-//   bool bo;
-//
-//   bo = ss.Find(std::string("alex"), list);  /* return true */
-//   bo = ss.Find(std::string("zz"), list);    /* return false */
-//
-//   std::string similar;
-//   int distance = ss.FindSimilar("alexx", list, result);
-//
-//   /* The distance will 1, which is the levenshtein distance
-//      between 'alexx' and 'alex'. Also, the result will be 'alex',
-//      which is the most similar string in the list compared
-//      with 'alexx'. */
-//------------------------------------------------------------------------------
+/*!
+ * \brief StrSimilar class is used to find the similar string from the
+ * target string list. We can use this class like this:
+ *
+ *    vector<string> list;
+ *    list.push_back("alex");
+ *    list.push_back("apple");
+ *    list.push_back("mac");
+ *    StrSimilar ss;
+ *    bool bo;
+ *
+ *    bo = ss.Find(std::string("alex"), list); 
+ *    bo = ss.Find(std::string("zz"), list);
+ *
+ *    std::string similar;
+ *    int distance = ss.FindSimilar("alexx", list, result);
+ *
+ * The distance will 1, which is the levenshtein distance
+ * between 'alexx' and 'alex'. Also, the result will be 'alex',
+ * which is the most similar string in the list compared
+ * with 'alexx'.
+ */
 class StrSimilar {
  public:
-  // Constructor and Destructor
+  /*!
+   * brief StrSimilar constructor
+   */
   StrSimilar() { }
+
+  /*!
+   * brief StrSimilar deconstructor
+   */
   ~StrSimilar() { }
 
-  // Return true (false) if str is (not) in target string list.
+  /*!
+   * \brief Find if str in target string list
+   * \param str data string
+   * \param list target data list
+   * \return true (false) if str is (not) in target string list.
+   */
   bool Find(const std::string& str,
             const std::vector<std::string>& list);
 
-  // Find the most similar string from string list.
-  // Return the minimal levenshtein distance.
+  /*!
+   * \brief Find the most similar string from string list.
+   * \param str data string
+   * \param list target data list
+   * \param result most similar string
+   * \return the minimal levenshtein distance.
+   */
   int FindSimilar(const std::string& str,
                   const std::vector<std::string>& list,
                   std::string& result);
 
  private:
-  // Levenshtein distance
+  /*!
+   * \brief Calculate levenshtein distance.
+   * \param source source string
+   * \param target target string
+   * \return levenshtein distance
+   */
   int ldistance(const std::string& source,
                 const std::string& target);
 

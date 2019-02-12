@@ -19,7 +19,6 @@
  * \file file_util.h
  * \brief This file contains facilitlies to control the file.
  */
-
 #ifndef XFOREST_BASE_FILE_UTIL_H_
 #define XFOREST_BASE_FILE_UTIL_H_
 

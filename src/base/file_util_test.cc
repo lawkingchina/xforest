@@ -19,7 +19,6 @@
  * \file file_util_test.cc
  * \brief This file tests file_util.h file.
  */
-
 #include "gtest/gtest.h"
 
 #include <vector>
