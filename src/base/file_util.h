@@ -14,9 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file contains facilitlies to control the file.
-*/
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file file_util.h
+ * \brief This file contains facilitlies to control the file.
+ */
 
 #ifndef XFOREST_BASE_FILE_UTIL_H_
 #define XFOREST_BASE_FILE_UTIL_H_
@@ -29,94 +31,29 @@ This file contains facilitlies to control the file.
 #include "src/base/stringprintf.h"
 #include "src/base/scoped_ptr.h"
 
-//------------------------------------------------------------------------------
-// Useage:
-//
-//    std::string filename = "test_file";
-//
-//    /* (1) Check whether a file exists */
-//    bool bo = FileExist(filename.c_str());
-//
-//    /* (2) Open file : 'r' for read, 'w' for write */
-//    FILE* file_r = OpenFileOrDie(filename.c_str(), "r");
-//    FILE* file_w = OpenFileOrDie(filename.c_str(), "w");
-//
-//    /* (3) Close file */
-//    Close(file_r);
-//    Close(file_w);
-//
-//    /* (4) Get file size */
-//    uint64 size_w = GetFileSize(file_w);
-//    uint64 size_r = GetFileSize(file_r);
-//
-//    /* (5) Get one line from file */
-//    FILE* file_r = OpenFileOrDie(filename.c_str(), "r");
-//    std::string str_line;
-//    GetLine(file_r, str_line);
-//
-//    /* (6) Write Binary data to disk file */
-//    FILE* file_w = OpenFileOrDie(filename.c_str(), "w");
-//    int number = 999;
-//    WriteDataToDisk(file_w, (char*)&number, sizeof(number));
-//    Close(file_w);
-//
-//    /* (7) Read binary data from disk file */
-//    FILE* file_r = OpenFileOrDie(filename.c_str(), "r");
-//    int number = 0;
-//    ReadDataFromDisk(file_r, (char*)&number, sizeof(number));
-//    CHECK_EQ(number, 999);
-//    Close(file_r);
-//
-//    /* (8) Delete file from disk */
-//    RemoveFile(filename.c_str());
-//
-//    /* (9) Print file size */
-//    uint64 size = GetFileSize(filename.c_str());
-//    cout << PrintSize(size) << endl;
-//
-//    /* (10) Write std::vector to disk file */
-//    FILE* file_w = OpenFileOrDie(filename.c_str(), "w");
-//    std::vector<int> vec(10, 100);
-//    WriteVectorToFile(file_w, vec);
-//
-//    /* (11) Read std::vector from disk file */
-//    FILE* file_r = OpenFileOrDie(filename.c_str(), "r");
-//    std::vector<int> vec;
-//    ReadVectorFromFile(file_r, vec);
-//
-//    /* (12) Write std::string to disk file */
-//    FILE* file_w = OpenFileOrDie(filename.c_str(), "w");
-//    std::string str("apple");
-//    WriteStringToFile(file_w, str);
-//
-//    /* (13) Read std::string from disk file */
-//    FILE* file_r = OpenFileOrDie(filename.c_str(), "r");
-//    std::string str;
-//    ReadStringFromFile(file_r, str);
-//
-//    /* (14) Generate hash value for file  */
-//    uint64 hash_1 = HashFile(filename, true);   /* for one block */
-//    uint64 hash_2 = HashFile(filename, false);  /* for the whole file */
-//
-//    /* (15) Read the whole file into in-memory buffer */
-//    char *buffer = nullptr;
-//    uint64 file_size = ReadFileToMemory(filename, &buffer);
-//------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
-// Basic operations for a file
-//------------------------------------------------------------------------------
+/*!
+ * Basic operations for a file
+ */
 
 const size_t KB = 1024.0;
 const size_t MB = 1024.0 * 1024.0;
 const size_t GB = 1024.0 * 1024.0 * 1024.0;
 
-// Max size of one line TXT data
+/*!
+ * \brief Max size of one line TXT data
+ */
 static const uint32 kMaxLineSize = 500 * 1024;  // 500 KB
-// Max chunk size of hash block 
+
+/*!
+ * \brief Max chunk size of hash block 
+ */
 static const uint32 kChunkSize = 1000 * 1024; // 1000 KB
 
-// Check whether the file exists.
+/*!
+ * \brief Check whether the file exists.
+ * \param filename name of file
+ * \return true for success and false for error.
+ */
 inline bool FileExist(const char* filename) {
   if (access(filename, F_OK) != -1) {
     return true;
@@ -125,8 +62,12 @@ inline bool FileExist(const char* filename) {
   return false;
 }
 
-// Open file using fopen() and return the file pointer.
-// Args_mode : "w" for write and "r" for read
+/*!
+ * \brief Open file using fopen() and return the file pointer.
+ * \param filename name of file
+ * \param mode 'w' for write and 'r' for read
+ * \return file pointer
+ */
 inline FILE* OpenFileOrDie(const char* filename, const char* mode) {
   CHECK_NOTNULL(filename);
   CHECK_NOTNULL(mode);
@@ -138,7 +79,10 @@ inline FILE* OpenFileOrDie(const char* filename, const char* mode) {
   return input_stream;
 }
 
-// Close file using fclose() by given the file pointer.
+/*!
+ * \brief Close file using fclose() by given the file pointer.
+ * \param FILE file pointer
+ */
 inline void Close(FILE *file) {
   CHECK_NOTNULL(file);
   if (fclose(file) == -1) {
@@ -146,7 +90,11 @@ inline void Close(FILE *file) {
   }
 }
 
-// Return the size (byte) of a target file.
+/*!
+ * \brief Return the size (byte) of a target file.
+ * \param FILE file pointer
+ * \return file size
+ */
 inline uint64 GetFileSize(FILE* file) {
   CHECK_NOTNULL(file);
   if (fseek(file, 0L, SEEK_END) != 0) {
@@ -162,7 +110,11 @@ inline uint64 GetFileSize(FILE* file) {
   return total_size;
 }
 
-// Get one line of data from file by given a file pointer.
+/*!
+ * \brief Get one line of data from file by given a file pointer.
+ * \param FILE file pointer
+ * \param str_line string of one line
+ */
 inline void GetLine(FILE* file, std::string& str_line) {
   CHECK_NOTNULL(file);
   scoped_array<char> line(new char[kMaxLineSize]);
@@ -182,8 +134,13 @@ inline void GetLine(FILE* file, std::string& str_line) {
   str_line.assign(line.get());
 }
 
-// Write a block of data from a buffer to disk file.
-// Return the size (byte) of data that we write to this file.
+/*!
+ * \brief Write a block of data from a buffer to disk file.
+ * \param FILE file pointer
+ * \param buf data buffer
+ * \param len length of data
+ * \return size (byte) of data that we write to this file
+ */
 inline size_t WriteDataToDisk(FILE* file, const char* buf, size_t len) {
   CHECK_NOTNULL(file);
   CHECK_NOTNULL(buf);
@@ -195,9 +152,14 @@ inline size_t WriteDataToDisk(FILE* file, const char* buf, size_t len) {
   return write_len;
 }
 
-// Read a block data from disk file to a buffer.
-// Return the data size (byte) we read from the file.
-// If we reach the end of the file, return 0.
+/*!
+ * \brief Read a block data from disk file to a buffer.
+ * \param FILE file pointer
+ * \param buf data buffer
+ * \param len length of data
+ * \return data size (byte) we read from the file. 
+ * If we reach the end of the file, return 0.
+ */
 inline size_t ReadDataFromDisk(FILE* file, char* buf, size_t len) {
   CHECK_NOTNULL(file);
   CHECK_NOTNULL(buf);
@@ -213,7 +175,10 @@ inline size_t ReadDataFromDisk(FILE* file, char* buf, size_t len) {
   return ret;
 }
 
-// Delete target file from disk.
+/*!
+ * \brief Delete target file from disk.
+ * \param filename name of file
+ */
 inline void RemoveFile(const char* filename) {
   CHECK_NOTNULL(filename);
   if (remove(filename) == -1) {
@@ -221,7 +186,11 @@ inline void RemoveFile(const char* filename) {
   }
 }
 
-// Format the file size by GB, MB, and KB
+/*!
+ * \brief Format the file size by GB, MB, and KB.
+ * \param file_size size of file
+ * \return format string
+ */
 inline std::string PrintSize(uint64 file_size) {
   std::string res;
   if (file_size > GB) {
@@ -237,8 +206,12 @@ inline std::string PrintSize(uint64 file_size) {
   return res;
 }
 
-// Read the whole file to a memory buffer.
-// Return size (byte) of current file.
+/*!
+ * \brief Read the whole file to a memory buffer.
+ * \param filename name of file
+ * \param buf data buffer
+ * \return size (byte) of current file
+ */
 inline uint64 ReadFileToMemory(const std::string& filename, char **buf) {
   CHECK(!filename.empty());
   FILE* file = OpenFileOrDie(filename.c_str(), "r");
@@ -254,11 +227,15 @@ inline uint64 ReadFileToMemory(const std::string& filename, char **buf) {
   return len;
 }
 
-//------------------------------------------------------------------------------
-// Serialize or Deserialize for std::vector and std::string
-//------------------------------------------------------------------------------
+/*!
+ * Serialize or Deserialize for std::vector and std::string
+ */
 
-// Write a std::vector to disk file.
+/*!
+ * \brief Write a std::vector to disk file.
+ * \param file_ptr file pointer
+ * \param vec data vector
+ */
 template <typename T>
 void WriteVectorToFile(FILE* file_ptr, const std::vector<T>& vec) {
   CHECK_NOTNULL(file_ptr);
@@ -275,7 +252,11 @@ void WriteVectorToFile(FILE* file_ptr, const std::vector<T>& vec) {
     sizeof(T)*len);
 }
 
-// Read a std::vector from disk file.
+/*!
+ * \brief Read a std::vector from disk file.
+ * \param file_ptr file pointer
+ * \param vec data vector
+ */
 template <typename T>
 void ReadVectorFromFile(FILE* file_ptr, std::vector<T>& vec) {
   CHECK_NOTNULL(file_ptr);
@@ -293,7 +274,11 @@ void ReadVectorFromFile(FILE* file_ptr, std::vector<T>& vec) {
     sizeof(T)*len);
 }
 
-// Write a std::string to disk file.
+/*!
+ * \brief Write a std::string to disk file.
+ * \param file_ptr file pointer
+ * \param str data string
+ */
 inline void WriteStringToFile(FILE* file_ptr, const std::string& str) {
   CHECK_NOTNULL(file_ptr);
   // We do not want to serialize an empty string
@@ -309,7 +294,11 @@ inline void WriteStringToFile(FILE* file_ptr, const std::string& str) {
     len);
 }
 
-// Read a std::string from disk file.
+/*!
+ * \brief Read a std::string from disk file.
+ * \param file_ptr file pointer
+ * \param str data string
+ */
 inline void ReadStringFromFile(FILE* file_ptr, std::string& str) {
   CHECK_NOTNULL(file_ptr);
   // First, read the length of vector
@@ -326,13 +315,18 @@ inline void ReadStringFromFile(FILE* file_ptr, std::string& str) {
     len);
 }
 
-//------------------------------------------------------------------------------
-// Tool function used by Reader class of xLearn
-//------------------------------------------------------------------------------
+/*!
+ * Tool function used by Reader class of xforest
+ */
 
-// Calculate the hash value of current txt file.
-// If one_block == true, we just read a small chunk of data.
-// If one_block == false, we read all the data from the file.
+/*!
+ * \brief Calculate the hash value of current txt file.
+ * \param filename name of file
+ * \param one_block, a flag:
+ *  If one_block == true, we just read a small chunk of data.
+ *  If one_block == false, we read all the data from the file.
+ * \return hash value
+ */
 inline uint64_t HashFile(const std::string& filename, bool one_block=false) {
   std::ifstream f(filename, std::ios::ate | std::ios::binary);
   if(f.bad()) { return 0; }

@@ -14,9 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file tests file_util.h file.
-*/
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file file_util_test.cc
+ * \brief This file tests file_util.h file.
+ */
 
 #include "gtest/gtest.h"
 

@@ -14,10 +14,12 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file provides the following basic facilities to 
-make programming convenient.
-*/
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file common.h
+ * \brief This file provides the following basic facilities to 
+ * make programming convenient.
+ */
 
 #ifndef XFOREST_BASE_COMMON_H_
 #define XFOREST_BASE_COMMON_H_
@@ -34,21 +36,21 @@ make programming convenient.
 
 #include "src/base/logging.h"
 
-//------------------------------------------------------------------------------
-// In cases when the program must quit immediately (e.g., due to
-// severe bugs), CHECK_xxxx macros invoke abort() to cause a core
-// dump.  To ensure the generation of the core dump, you might want to
-// set the following shell option:
-//
-//        ulimit -c unlimited
-//
-// Once the core dump is generated, we can check the check failure
-// using a debugger, for example, GDB:
-//
-//        gdb program_file core
-//
-// The GDB command 'where' will show you the stack trace.
-//------------------------------------------------------------------------------
+/*!
+ * In cases when the program must quit immediately (e.g., due to
+ * severe bugs), CHECK_xxxx macros invoke abort() to cause a core
+ * dump.  To ensure the generation of the core dump, you might want to
+ * set the following shell option:
+ *
+ *        ulimit -c unlimited
+ *
+ * Once the core dump is generated, we can check the check failure
+ * using a debugger, for example, GDB:
+ *
+ *        gdb program_file core
+ *
+ * The GDB command 'where' will show you the stack trace.
+ */
 
 #define CHECK(a) if (!(a)) {                              \
     LOG(ERROR) << "CHECK failed "                         \
@@ -132,31 +134,31 @@ make programming convenient.
     CHECK_GE((a), (b)-(margin));                          \
   } while (0)
 
-//------------------------------------------------------------------------------
-// This marcro is used to disallow copy constructor and assign operator in
-// class definition. For more details, please refer to Google coding style
-// document
-// [http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml
-// #Copy_Constructors]
-//
-// To use the macro, just put it in private section of class, illustrated as
-// the following example.
-//
-// class Foo {
-//  public :
-//    Foo();
-//  private :
-//    DISALLOW_COPY_AND_ASSIGN(Foo);
-// };
-//------------------------------------------------------------------------------
+/*!
+ * This marcro is used to disallow copy constructor and assign operator in
+ * class definition. For more details, please refer to Google coding style
+ * document
+ * [http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml
+ * #Copy_Constructors]
+ *
+ * To use the macro, just put it in private section of class, illustrated as
+ * the following example.
+ *
+ * class Foo {
+ *  public :
+ *    Foo();
+ *  private :
+ *    DISALLOW_COPY_AND_ASSIGN(Foo);
+ * };
+ */
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)                \
   TypeName(const TypeName&);                              \
   void operator=(const TypeName&)
 
-//------------------------------------------------------------------------------
-// Basis POD types.
-//------------------------------------------------------------------------------
+/*!
+ * Basis POD types.
+ */
 
 typedef unsigned int uint;
 
@@ -192,11 +194,9 @@ static const uint64 kUInt64Max = 0xFFFFFFFFFFFFFFFFull;
 static const float kFloatMax = std::numeric_limits<float>::max();
 static const float kFloatMin = std::numeric_limits<float>::min();
 
-/* To avoid dividing by zero */
 static const float kVerySmallNumber = 1e-15;
 static const double kVerySmallNumberDouble = 1e-15;
 
-/* Used by xforest */
 typedef float real_t;
 typedef uint32 index_t;
 

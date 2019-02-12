@@ -14,78 +14,12 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines several helper macros for registering class by a 
-string name and creating them later per the registered name.
-*/
-
-//------------------------------------------------------------------------------
-// The motivation is to help implement the factory class. C++ doesn't support
-// reflection so we defines several macros to do this.
-//
-// All macros defined here are NOT used by final user directly, they are used
-// to create register macros for a specific base class. Here is an example:
-//
-//   loss.h (the interface definition):
-//   #include "class_register.h"
-//   class Loss {
-//     ...
-//   };
-//
-//   CLASS_REGISTER_DEFINE_REGISTRY(loss_register, Loss);
-//
-//   #define REGISTER_LOSS(loss_name)
-//       CLASS_REGISTER_OBJECT_CREATOR(
-//           loss_register, Loss, #loss_name, loss_name)
-//
-//   #define CREATE_LOSS(loss_name_as_string)
-//       CLASS_REGISTER_CREATE_OBJECT(loss_register, loss_name_as_string)
-//
-//   logit_loss.cc (an implementation of Loss):
-//   #include "loss.h"
-//   class LogitLoss : public Loss {
-//     ...
-//   };
-//   REGISTER_LOSS(LogitLoss);
-//
-//   user.cc
-//   #include "loss.h"
-//   Loss* loss = CREATE_LOSS("LogitLoss");
-//
-// Another usage is to register by class by an arbitrary string instead of its
-// class name, and register a default class when no registerd name is matched.
-// Here is an example:
-//
-//   file_impl.h (the interface definition):
-//   class FileImpl {
-//     ...
-//   };
-//
-//   CLASS_REGISTER_DEFINE_REGISTRY(file_impl_register, FileImpl);
-//
-//   #define REGISTER_DEFAULT_FILE_IMPL(file_impl_name)
-//       CLASS_REGISTER_DEFAULT_OBJECT_CREATOR(
-//          file_impl_register, FileImpl, file_impl_name)
-//
-//   #define REGISTER_FILE_IMPL(path_prefix_as_string, file_impl_name)
-//       CLASS_REGISTER_OBJECT_CREATOR(
-//         file_impl_register, FileImpl, path_prefix_as_string, file_impl_name)
-//
-//   #define CREATE_FILE_IMPL(path_prefix_as_string)
-//      CLASS_REGISTER_CREATE_OBJECT(file_impl_register, path_prefix_as_string)
-//
-//   local_file.cc (an implementation of FileImpl):
-//   #include "file.h"
-//   class LocalFileImpl : public FileImpl {
-//     ...
-//   };
-//   REGISTER_DEFAULT_FILE_IMPL(LocalFileImpl);
-//   REGISTER_FILE_IMPL("/local", LocalFileImpl);
-//
-//   file_user.cc (the final user of all registered file implementations):
-//   #include "file_impl.h"
-//   FileImpl* file_impl = CREATE_FILE_IMPL("/local");
-//------------------------------------------------------------------------------
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file class_register.h
+ * \brief This file defines several helper macros for registering class by a 
+ * string name and creating them later per the registered name.
+ */
 
 #ifndef XFOREST_BASE_CLASS_REGISTER_H_
 #define XFOREST_BASE_CLASS_REGISTER_H_
@@ -93,15 +27,83 @@ string name and creating them later per the registered name.
 #include <map>
 #include <string>
 
-//------------------------------------------------------------------------------
-// The first parameter, register_name, should be unique globally.
-// Another approach for this is to define a template for base class. It would
-// make the code more readable, but the only issue of using template is that
-// each base class could have only one register then. It doesn't sound very
-// likely that a user wants to have multiple registers for one base class,
-// but we keep it as a possibility.
-// We would switch to using template class if necessary.
-//------------------------------------------------------------------------------
+/*!
+ * The motivation is to help implement the factory class. C++ doesn't support
+ * reflection so we defines several macros to do this.
+ *
+ * All macros defined here are NOT used by final user directly, they are used
+ * to create register macros for a specific base class. Here is an example:
+ *
+ *   loss.h (the interface definition):
+ *   #include "class_register.h"
+ *   class Loss {
+ *     ...
+ *   };
+ *
+ *   CLASS_REGISTER_DEFINE_REGISTRY(loss_register, Loss);
+ *
+ *   #define REGISTER_LOSS(loss_name)
+ *       CLASS_REGISTER_OBJECT_CREATOR(
+ *           loss_register, Loss, #loss_name, loss_name)
+ *
+ *   #define CREATE_LOSS(loss_name_as_string)
+ *       CLASS_REGISTER_CREATE_OBJECT(loss_register, loss_name_as_string)
+ *
+ *   logit_loss.cc (an implementation of Loss):
+ *   #include "loss.h"
+ *   class LogitLoss : public Loss {
+ *     ...
+ *   };
+ *   REGISTER_LOSS(LogitLoss);
+ *
+ *   user.cc
+ *   #include "loss.h"
+ *   Loss* loss = CREATE_LOSS("LogitLoss");
+ *
+ * Another usage is to register by class by an arbitrary string instead of its
+ * class name, and register a default class when no registerd name is matched.
+ * Here is an example:
+ *
+ *   file_impl.h (the interface definition):
+ *   class FileImpl {
+ *     ...
+ *   };
+ *
+ *   CLASS_REGISTER_DEFINE_REGISTRY(file_impl_register, FileImpl);
+ *
+ *   #define REGISTER_DEFAULT_FILE_IMPL(file_impl_name)
+ *       CLASS_REGISTER_DEFAULT_OBJECT_CREATOR(
+ *          file_impl_register, FileImpl, file_impl_name)
+ *
+ *   #define REGISTER_FILE_IMPL(path_prefix_as_string, file_impl_name)
+ *       CLASS_REGISTER_OBJECT_CREATOR(
+ *         file_impl_register, FileImpl, path_prefix_as_string, file_impl_name)
+ *
+ *   #define CREATE_FILE_IMPL(path_prefix_as_string)
+ *      CLASS_REGISTER_CREATE_OBJECT(file_impl_register, path_prefix_as_string)
+ *
+ *   local_file.cc (an implementation of FileImpl):
+ *   #include "file.h"
+ *   class LocalFileImpl : public FileImpl {
+ *     ...
+ *   };
+ *   REGISTER_DEFAULT_FILE_IMPL(LocalFileImpl);
+ *   REGISTER_FILE_IMPL("/local", LocalFileImpl);
+ *
+ *   file_user.cc (the final user of all registered file implementations):
+ *   #include "file_impl.h"
+ *   FileImpl* file_impl = CREATE_FILE_IMPL("/local");
+ */
+
+/*!
+ * The first parameter, register_name, should be unique globally.
+ * Another approach for this is to define a template for base class. It would
+ * make the code more readable, but the only issue of using template is that
+ * each base class could have only one register then. It doesn't sound very
+ * likely that a user wants to have multiple registers for one base class,
+ * but we keep it as a possibility.
+ * We would switch to using template class if necessary.
+ */
 #define CLASS_REGISTER_DEFINE_REGISTRY(register_name, base_class_name)       \
   class ObjectCreatorRegistry_##register_name {                              \
    public:                                                                   \
