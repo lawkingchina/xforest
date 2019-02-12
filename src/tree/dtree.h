@@ -85,7 +85,9 @@ class TInfo {
   DISALLOW_COPY_AND_ASSIGN(TInfo);
 };
 
-// Decision tree node
+/*!
+ * \brief Decision tree node
+ */
 class DTNode {
  public:
   // ctor and dctor

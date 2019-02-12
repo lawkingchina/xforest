@@ -25,8 +25,6 @@ This file is the implementation of SocketCommunicator class.
 
 namespace xforest {
 
-const int kTimeOut = 5;  // 5 minutes for timeout
-
 // Initialize Communicator
 void SocketCommunicator::Initialize(int rank, /* master is rank_0 */
   	                                int num_workers, 
@@ -103,7 +101,7 @@ void SocketCommunicator::Send(int rank, const char* data, int len) {
   TCPSocket* socket = sockets_[rank];
   int sent_bytes = 0;
   while (sent_bytes < len) {
-  	int max_len = len - sent_bytes;
+    int max_len = len - sent_bytes;
     int tmp = socket->Send(data+sent_bytes, max_len);
     CHECK_GE(tmp, 0);
     sent_bytes += tmp;
