@@ -14,18 +14,15 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file is the implementation of logging facilities.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file logging.cc
+ * \brief TThis file is the implementation of logging facilities.
+ */
 #include "src/base/logging.h"
 
 #include <stdlib.h>
 #include <time.h>
-
-//------------------------------------------------------------------------------
-// Logger
-//------------------------------------------------------------------------------
 
 std::ofstream Logger::info_log_file_;
 std::ofstream Logger::warn_log_file_;
@@ -39,7 +36,6 @@ void InitializeLogger(const std::string& info_log_filename,
   Logger::erro_log_file_.open(erro_log_filename.c_str());
 }
 
-/*static*/
 std::ostream& Logger::GetStream(LogSeverity severity) {
   return (severity == INFO) ?
       (info_log_file_.is_open() ? info_log_file_ : std::cout) :
@@ -48,7 +44,6 @@ std::ostream& Logger::GetStream(LogSeverity severity) {
          (erro_log_file_.is_open() ? erro_log_file_ : std::cerr));
 }
 
-/*static*/
 std::ostream& Logger::Start(LogSeverity severity,
                             const std::string& file,
                             int line,
