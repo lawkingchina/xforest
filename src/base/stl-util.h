@@ -14,15 +14,18 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file contains facilities that enhance the STL.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file stl-util.h
+ * \brief This file contains facilities that enhance the STL.
+ */
 #ifndef XFOREST_BASE_STL_UTIL_H_
 #define XFOREST_BASE_STL_UTIL_H_
 
-// Delete elements (in pointer type) in a STL container like
-// vector, list, and deque.
+/*!
+ * \brief Delete elements (in pointer type) in a STL container like
+ * vector, list, and deque.
+ */
 template <class Container>
 void STLDeleteElementsAndClear(Container* c) {
   for (typename Container::iterator iter = c->begin();
@@ -34,8 +37,10 @@ void STLDeleteElementsAndClear(Container* c) {
   c->clear();
 }
 
-// Delete elements (in pointer type) in a STL associative container
-// like map and unordered_map.
+/*!
+ * \brief Delete elements (in pointer type) in a STL associative container
+ * like map and unordered_map.
+ */
 template <class AssocContainer>
 void STLDeleteValuesAndClear(AssocContainer* c) {
   for (typename AssocContainer::iterator iter = c->begin();
