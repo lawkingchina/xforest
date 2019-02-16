@@ -14,17 +14,20 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file is the implementation of StringSplit utilities.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file split_string.cc 
+ * \brief This file provides StringSplit utilities.
+ */
 #include "src/base/split_string.h"
 
 #include "src/base/common.h"
 
-// In most cases, delim contains only one character. In this case, we
-// use CalculateReserveForVector to count the number of elements should
-// be reserved in result vector, and thus optimize SplitStringUsing.
+/*!
+ * \brief In most cases, delim contains only one character. In this case, we
+ * use CalculateReserveForVector to count the number of elements should
+ * be reserved in result vector, and thus optimize SplitStringUsing.
+ */
 static int CalculateReserveForVector(const std::string& full, const char* delim) {
   int count = 0;
   if (delim[0] != '\0' && delim[1] == '\0') {
