@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file tests thread_pool.h file.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file thread_pool_test.cc
+ * \brief This file tests thread_pool.h file.
+ */
 #include "gtest/gtest.h"
 
 #include "src/base/thread_pool.h"
