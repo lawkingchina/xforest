@@ -16,7 +16,7 @@
 
 /*!
  *  Copyright (c) 2018 by Contributors
- * \file levenshtein_distance.cc
+ * \file levenshtein_distance.h
  * \brief This file defines the StrSimilar class, which can 
  * be used to find similar strings.
  */

@@ -16,7 +16,7 @@
 
 /*!
  *  Copyright (c) 2018 by Contributors
- * \file timer.h
+ * \file timer.cc
  * \brief This file defines the Timer class.
  */
 #include "src/base/timer.h"

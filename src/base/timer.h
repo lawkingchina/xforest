@@ -59,7 +59,7 @@ class Timer {
    * \breif Code end
    */
   float toc();
-  
+
   /*!
    * \breif Get the time duration
    */ 
