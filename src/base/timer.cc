@@ -14,36 +14,45 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file is the implementation of the Timer class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file timer.h
+ * \brief This file defines the Timer class.
+ */
 #include "src/base/timer.h"
 
 Timer::Timer() {
   reset();
 }
 
-// Reset code start
+/*!
+ * \breif Reset code start
+ */
 void Timer::reset() {
   begin = std::chrono::high_resolution_clock::now();
   duration =
      std::chrono::duration_cast<std::chrono::milliseconds>(begin-begin);
 }
 
-// Code start
+/*!
+ * \breif Code start
+ */
 void Timer::tic() {
   begin = std::chrono::high_resolution_clock::now();
 }
 
-// Code end
+/*!
+ * \breif Code end
+ */
 float Timer::toc() {
   duration += std::chrono::duration_cast<std::chrono::milliseconds>
               (std::chrono::high_resolution_clock::now()-begin);
   return get();
 }
 
-// Get the time duration (seconds)
+/*!
+ * \breif Get the time duration (seconds)
+ */
 float Timer::get() {
   return (float)duration.count() / 1000;
 }

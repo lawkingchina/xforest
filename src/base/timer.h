@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines the Timer class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file timer.h
+ * \brief This file defines the Timer class.
+ */
 #ifndef XFOREST_BASE_TIMER_H_
 #define XFOREST_BASE_TIMER_H_
 
@@ -25,33 +26,48 @@ This file defines the Timer class.
 
 #include "src/base/common.h"
 
-//------------------------------------------------------------------------------
-// We can use the Timer class like this:
-//
-//   Timer timer();
-//   timer.tic();
-//
-//     .... /* code we want to evaluate */
-//
-//   float time = timer.toc();  // (sec)
-//
-// This class can be used to evaluate multi-thread code.
-//------------------------------------------------------------------------------
+/*!
+ * \breif We can use the Timer class like this:
+ *
+ *   Timer timer();
+ *   timer.tic();
+ *
+ *     .... // code we want to evaluate
+ *
+ *   float time = timer.toc();  // (sec)
+ *
+ * This class can be used to evaluate multi-thread code.
+ */
 class Timer {
  public:
-    Timer();
-    // Reset start time
-    void reset();
-    // Code start
-    void tic();
-    // Code end
-    float toc();
-    // Get the time duration
-    float get();
+  /*!
+   * \breif constructor
+   */
+  Timer();
+
+  /*!
+   * \breif Reset start time
+   */
+  void reset();
+
+  /*!
+   * \breif Code start
+   */
+  void tic();
+
+  /*!
+   * \breif Code end
+   */
+  float toc();
+  
+  /*!
+   * \breif Get the time duration
+   */ 
+  float get();
 
  protected:
-    std::chrono::high_resolution_clock::time_point begin;
-    std::chrono::milliseconds duration;
+  std::chrono::high_resolution_clock::time_point begin;
+  std::chrono::milliseconds duration;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(Timer);
