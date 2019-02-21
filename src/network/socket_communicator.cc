@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file is the implementation of SocketCommunicator class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file socket_communicator.h
+ * \brief Implementation of Communicator class with TCP socket.
+ */
 #include <thread>
 
 #include "src/network/socket_communicator.h"
@@ -25,87 +26,180 @@ This file is the implementation of SocketCommunicator class.
 
 namespace xforest {
 
-// Initialize Communicator
-void SocketCommunicator::Initialize(int rank, /* master is rank_0 */
-                                    int num_workers, 
-                                    const std::string& master_addr) {
-  CHECK_GE(rank, 0);
-  CHECK_GT(num_workers, 0);
-  rank_ = rank;
-  num_workers_ = num_workers;
-  is_master_ = rank_ == 0 ? true : false;
-  master_addr_ = master_addr;
-  if (is_master_) {
-    InitMaster();
+const int kTimeOut = 5;  // 5 minutes for socket timeout
+const int kMaxConnection = 1024;  // 1024 maximal socket connection
+const int kMaxBuffer = 200 * 1024 * 1024;  // 200 MB bufferfor each message
+
+bool SocketCommunicator::Initialize(bool is_sender,
+                                    const char* ip,
+                                    int port,
+                                    int num_sender,
+                                    int queue_size) {
+  if (is_sender) {
+    is_sender_ = true;
+    return InitSender(ip, port);
   } else {
-    InitWorker();
+    is_sender_ = false;
+    return InitReceiver(ip, port, num_sender, queue_size);
   }
 }
 
-// Initialize master node
-void SocketCommunicator::InitMaster() {
-  // server socket + worker socket
-  sockets_.resize(num_workers_ + 1);
-  std::vector<std::string> ip_and_port;
-  SplitStringUsing(master_addr_, ":", &ip_and_port);
-  CHECK_EQ(2, ip_and_port.size());
-  sockets_[0] = new TCPSocket();
-  TCPSocket* server = sockets_[0]; // server socket
-  server->SetTimeout(kTimeOut * 60 * 1000); // millsec
+bool SocketCommunicator::InitSender(const char* ip, int port) {
+  // Sender only has a client socket
+  socket_.resize(1);
+  socket_[0] = new TCPSocket();
+  TCPSocket* client = socket_[0];
+  // Connect to server
+  if (client->Connect(ip, port)) {
+    LOG(INFO) << "Connected to " << ip << ":" << port;
+    return true;
+  } else {
+    LOG(ERROR) << "Cannot connect to " << ip << ":" << port;
+    return false;
+  }
+}
+
+bool SocketCommunicator::InitReceiver(const char* ip, 
+                                      int port, 
+                                      int num_sender, 
+                                      int queue_size) {
+  CHECK(num_sender >= 1);
+  CHECK(queue_size > 0);
+  // Init message queue
+  num_sender_ = num_sender;
+  queue_size_ = queue_size;
+  queue_ = new MessageQueue(queue_size_, num_sender_);
+  // Init socket, and socket_[0] is the server socket
+  socket_.resize(num_sender+1);
+  thread_.resize(num_sender);
+  socket_[0] = new TCPSocket();
+  TCPSocket* server = socket_[0];
+  server->SetTimeout(kTimeOut * 60 * 1000);  // millsec
   // Bind socket
-  CHECK(server->Bind(ip_and_port[0].c_str(),
-                  atoi(ip_and_port[1].c_str())));
-  // Listen socket
-  CHECK(server->Listen(1024));
-  LOG(INFO) << "Wait worker connect ...";
-  // Accept all workers
+  if (server->Bind(ip, port) == false) {
+    LOG(ERROR) << "Cannot bind to " << ip << ":" << port;
+    return false;
+  }
+  LOG(INFO) << "Bind to " << ip << ":" << port;
+  // Listen
+  if (server->Listen(kMaxConnection) == false) {
+    LOG(ERROR) << "Cannot listen on " << ip << ":" << port;
+    return false;
+  }
+  LOG(INFO) << "Listen on " << ip << ":" << port << ", wait sender connect ...";
+  // Accept all sender sockets
   std::string accept_ip;
-  uint16 accept_port;
-  for (int i = 1; i <= num_workers_; ++i) {
-    sockets_[i] = new TCPSocket();
-    CHECK(server->Accept(sockets_[i], &accept_ip, &accept_port));
-    LOG(INFO) << "master " << ip_and_port[0] << ":" << ip_and_port[1]
-              << " accepts worker " << accept_ip << ":" << accept_port;
+  int accept_port;
+  for (int i = 1; i <= num_sender_; ++i) {
+    socket_[i] = new TCPSocket();
+    if (server->Accept(socket_[i], &accept_ip, &accept_port) == false) {
+      LOG(ERROR) << "Error on accept socket.";
+      return false;
+    }
+    // new thread for the socket
+    thread_[i-1] = new std::thread(MsgHandler, socket_[i], queue_);
+    LOG(INFO) << "Accept new sender: " << accept_ip << ":" << accept_port;
+  }
+
+  return true;
+}
+
+void SocketCommunicator::MsgHandler(TCPSocket* socket, MessageQueue* queue) {
+  char* buffer = new char[kMaxBuffer];
+  for (;;) {
+    // First recv the size 
+    int received_bytes = 0;
+    int data_size = 0;
+    while (received_bytes < sizeof(int)) {
+      int max_len = sizeof(int) - received_bytes;
+      int tmp = socket->Receive((char*)(&data_size)+received_bytes, max_len);
+      received_bytes += tmp;
+    }
+    if (data_size == -1) {
+      LOG(INFO) << "Socket finish job";
+      break;
+    }
+    // Then recv the data
+    received_bytes = 0;
+    while (received_bytes < data_size) {
+      int max_len = data_size - received_bytes;
+      int tmp = socket->Receive(buffer, max_len);
+      received_bytes += tmp;
+    }
+    queue->Add(buffer, data_size);
+  }
+  delete [] buffer;
+}
+
+void SocketCommunicator::Finalize() {
+  if (is_sender_) {
+    FinalizeSender();
+  } else {
+    FinalizeReceiver();
   }
 }
 
-// Initialize worker node
-void SocketCommunicator::InitWorker() {
-  // Only a client socket
-  sockets_.resize(1);
-  std::vector<std::string> ip_and_port;
-  SplitStringUsing(master_addr_, ":", &ip_and_port);
-  CHECK_EQ(2, ip_and_port.size());
-  sockets_[0] = new TCPSocket();
-  TCPSocket* client = sockets_[0];
-  client->Connect(ip_and_port[0].c_str(), 
-  	         atoi(ip_and_port[1].c_str()));
-  LOG(INFO) << "Connect to master node " 
-            << ip_and_port[0] << ":" << ip_and_port[1];
-}
-
-// Recv data
-void SocketCommunicator::Recv(int rank, char* data, int len) {
-  TCPSocket* socket = sockets_[rank];
-  int recieved_bytes = 0;
-  while (recieved_bytes < len) {
-    int max_len = len - recieved_bytes;
-    int tmp = socket->Receive(data+recieved_bytes, max_len);
-    CHECK_GE(tmp, 0);
-    recieved_bytes += tmp;
+void SocketCommunicator::FinalizeSender() {
+  // We send a size = -1 signal to notify
+  // receiver to finish its job
+  if (socket_[0] != nullptr) {
+    int size = -1;
+    int sent_bytes = 0;
+    while (sent_bytes < sizeof(int)) {
+      int max_len = sizeof(int) - sent_bytes;
+      int tmp = socket_[0]->Send((char*)(&size)+sent_bytes, max_len);
+      sent_bytes += tmp;
+    }
+    socket_[0]->Close();
+    delete socket_[0];
+    socket_[0] = nullptr;
   }
 }
 
-// Send data
-void SocketCommunicator::Send(int rank, const char* data, int len) {
-  TCPSocket* socket = sockets_[rank];
+void SocketCommunicator::FinalizeReceiver() {
+  for (int i = 0; i <= num_sender_; ++i) {
+    if (socket_[i] != nullptr) {
+      socket_[i]->Close();
+      delete socket_[i];
+      socket_[i] = nullptr;
+    }
+  }
+  for (int i = 0; i < num_sender_; ++i) {
+    thread_[i]->join();
+  }
+}
+
+int SocketCommunicator::Send(char* src, int size) {
+  if (!is_sender_) {
+    LOG(ERROR) << "Receiver cannot invoke send() API.";
+    return -1;
+  }
+  TCPSocket* client = socket_[0];
+  // First sent the size of data
   int sent_bytes = 0;
-  while (sent_bytes < len) {
-    int max_len = len - sent_bytes;
-    int tmp = socket->Send(data+sent_bytes, max_len);
-    CHECK_GE(tmp, 0);
+  while (sent_bytes < sizeof(int)) {
+    int max_len = sizeof(int) - sent_bytes;
+    int tmp = client->Send((char*)(&size)+sent_bytes, max_len);
     sent_bytes += tmp;
   }
+  // Then send the data
+  sent_bytes = 0;
+  while (sent_bytes < size) {
+    int max_len = size - sent_bytes;
+    int tmp = client->Send(src+sent_bytes, max_len);
+    sent_bytes += tmp;
+  }
+
+  return size + sizeof(int);
+}
+
+int SocketCommunicator::Receive(char* dest, int max_size) {
+  if (is_sender_) {
+    LOG(ERROR) << "Sender cannot invoke Receive() API.";
+    return -1;
+  }
+  // Get message from the message queue
+  return queue_->Remove(dest, max_size);
 }
 
 }  // namespace xforest

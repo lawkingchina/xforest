@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines the SocketCommunicator class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file socket_communicator.h
+ * \brief Implementation of Communicator class with TCP socket.
+ */
 #ifndef XFOREST_NETWORK_SOCKET_COMMUNICATOR_H_
 #define XFOREST_NETWORK_SOCKET_COMMUNICATOR_H_
 
@@ -30,38 +31,121 @@ This file defines the SocketCommunicator class.
 
 namespace xforest {
 
-//------------------------------------------------------------------------------
-// Socket warpper for Communicator
-//------------------------------------------------------------------------------	
+/*!
+ * \brief Implementation of Communicator class with TCP socket.
+ */
 class SocketCommunicator : public Communicator {
  public:
-  SocketCommunicator() {}
-  ~SocketCommunicator() {}
+  /*!
+   * \brief Initialize Communicator
+   * \param is_sender true for sender and false for receiver
+   * \param ip ip address
+   * \param port end port
+   * (e.g. "168.123.2.43:50051"). For Receiver, this address identifies
+   * the local listening endpoint (e.g. "0.0.0.0:50051").
+   * \param num_sender number of senders, only used for receiver.
+   * \param queue_size the size of message queue, only used for receiver.
+   * \return true for success and false for error
+   */
+  bool Initialize(bool is_sender,
+                  const char* ip,
+                  int port,
+                  int num_sender = 0,
+                  int queue_size = 0);
+  /*!
+   * \brief Send message to receiver node
+   * \param src data pointer
+   * \param size data size
+   * \return bytes send
+   *   > 0 : bytes send
+   *   - 1 : error
+   */
+  int Send(char* src, int size);
 
-  // Initialize Communicator
-  virtual void Initialize(int rank, /* master is rank_0 */
-                          int num_workers, 
-                          const std::string& master_addr);
+  /*!
+   * \brief Receive mesesage from sender node, we
+   * actually reading data from local message queue.
+   * \param dest destination data pointer
+   * \param max_size maximal data size
+   * \return bytes received
+   *   > 0 : bytes received
+   *   - 1 : error
+   */
+  int Receive(char* dest, int max_size);
 
-  // Recv data
-  virtual void Recv(int rank, char* data, int len);
-
-  // Send data
-  virtual void Send(int rank, const char* data, int len);
+  /*!
+   * \brief Finalize the SocketCommunicator class
+   */
+  void Finalize();
 
  private:
-  void InitMaster();  // Initialize master node
-  void InitWorker();  // Initialize worker node
+  /*!
+   * \brief Is a sender or reciever node?
+   */
+  bool is_sender_;
 
-  int rank_;          // rank of local machine
-  int num_workers_;   // total number of workers 
-  bool is_master_;    // Node is master node
-  bool is_init_;      // Communicator is intialized
-  std::string master_addr_; // Address of master node
+  /*!
+   * \brief number of sender
+   */
+  int num_sender_;
 
-  std::vector<TCPSocket*> sockets_;  // sockets
+  /*!
+   * \brief maximal size of message queue
+   */ 
+  int queue_size_;
 
-  DISALLOW_COPY_AND_ASSIGN(SocketCommunicator);
+  /*!
+   * \brief socket list
+   */ 
+  std::vector<TCPSocket*> socket_;
+
+  /*!
+   * \brief Thread pool for socket connection
+   */ 
+  std::vector<std::thread*> thread_;
+
+  /*!
+   * \brief Message queue for communicator
+   */ 
+  MessageQueue* queue_;
+
+  /*!
+   * \brief Initalize sender node
+   * \param ip receiver ip address
+   * \param port receiver port
+   * \return true for success and false for error
+   */ 
+  bool InitSender(const char* ip, int port);
+
+  /*!
+   * \brief Initialize receiver node
+   * \param ip receiver ip address
+   * \param port receiver port
+   * \param num_sender number of sender
+   * \param queue_size size of message queue
+   * \return true for success and false for error
+   */ 
+  bool InitReceiver(const char* ip, 
+                    int port, 
+                    int num_sender,
+                    int queue_size);
+
+  /*!
+   * \brief Finalize sender node
+   */ 
+  void FinalizeSender();
+
+  /*!
+   * \brief Finalize receiver node
+   */ 
+  void FinalizeReceiver();
+
+  /*!
+   * \brief Process received message in independent threads
+   * \param socket new accpeted socket
+   * \param queue message queue
+   */ 
+  static void MsgHandler(TCPSocket* socket, MessageQueue* queue);
 };
 
 }  // namespace xforest
