@@ -16,7 +16,7 @@
 
 /*!
  *  Copyright (c) 2018 by Contributors
- * \file communicator.h
+ * \file tcp_socket.h
  * \brief This file defines the TCPSocket class.
  */
 #ifndef XFOREST_NETWORK_TCP_SOCKET_H_
