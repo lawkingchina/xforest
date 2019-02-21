@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines the Communicator class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file communicator.h
+ * \brief Communicator for distributed training of xforest
+ */
 #ifndef XFOREST_NETWORK_COMMUNICATOR_H_
 #define XFOREST_NETWORK_COMMUNICATOR_H_
 
@@ -25,26 +26,62 @@ This file defines the Communicator class.
 
 namespace xforest {
 
-//------------------------------------------------------------------------------
-// An network basic communication warpper.
-// Will warp low level communication method, e.g., mpi, socket, and so on.
-//------------------------------------------------------------------------------	
+/*!
+ * \brief Communicator for distributed training.
+ *
+ * Communicator is a set of interface for network communication, which
+ * can be implemented by real network libraries, such as grpc, mpi, as well
+ * as raw socket. There has two types of Communicator, one is Sender 
+ * (is_sender = true), and another is Receiver. For Sender, it can send binary 
+ * data to remote Receiver node. For Receiver, it can listen on a specified 
+ * endpoint and receive the binary data sent from Sender node. Note that, a 
+ * receiver node can recv messages from multiple senders concurrently.
+ */
 class Communicator {
  public:
-  // ctor and dctor
-  Communicator() {}
-  ~Communicator() {}
+  virtual ~Communicator() {}
 
-  // Initialize Communicator
-  virtual void Initialize(int rank, /* master is rank_0 */
-                          int num_workers,
-                          const std::string& master_addr) = 0;
+  /*!
+   * \brief Initialize Communicator
+   * \param is_sender true for sender and false for receiver
+   * \param ip ip address
+   * \param port end port
+   * (e.g. "168.123.2.43:50051"). For Receiver, this address identifies
+   * the local listening endpoint (e.g. "0.0.0.0:50051").
+   * \param num_sender number of senders, only used for receiver.
+   * \param queue_size the size of message queue, only used for receiver.
+   * \return true for success and false for error
+   */
+  virtual bool Initialize(bool is_sender,
+                          const char* ip,
+                          int port,
+                          int num_sender = 0,
+                          int queue_size = 0) = 0;
+  /*!
+   * \brief Send message to receiver node
+   * \param src data pointer
+   * \param size data size
+   * \return bytes send
+   *   > 0 : bytes send
+   *   - 1 : error
+   */
+  virtual int Send(char* src, int size) = 0;
 
-  // Recv data
-  virtual void Recv(int rank, char* data, int len) = 0;
+  /*!
+   * \brief Receive mesesage from sender node, we
+   * actually reading data from local message queue.
+   * \param dest destination data pointer
+   * \param max_size maximal data size
+   * \return bytes received
+   *   > 0 : bytes received
+   *   - 1 : error
+   */
+  virtual int Receive(char* dest, int max_size) = 0;
 
-  // Send data
-  virtual void Send(int rank, const char* data, int len) = 0;
+  /*!
+   * \brief Finalize the Communicator class
+   */
+  virtual void Finalize() = 0;
 };
 
 }  // namespace xforest
