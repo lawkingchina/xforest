@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines the TCPSocket class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file communicator.h
+ * \brief This file defines the TCPSocket class.
+ */
 #ifndef XFOREST_NETWORK_TCPSOCKET_H_
 #define XFOREST_NETWORK_TCPSOCKET_H_
 
@@ -28,67 +29,112 @@ This file defines the TCPSocket class.
 
 namespace xforest {
 
-typedef int SOCKET;
-
-//------------------------------------------------------------------------------
-// TCPSocket is a simple wrapper around a socket. It supports
-// only TCP connections.
-//------------------------------------------------------------------------------
+/*!
+ * \brief TCPSocket is a simple wrapper around a socket. 
+ * It supports only TCP connections.
+ */
 class TCPSocket {
  public:
-  // ctor and dctor
+  /*!
+   * \brief TCPSocket constructor
+   */
   TCPSocket();
-  explicit TCPSocket(SOCKET socket);
+
+  /*!
+   * \brief TCPSocket deconstructor
+   */  
   ~TCPSocket();
 
-  // Return value of following functions:
-  //  true for success and false for failure
-  // connect to a given server address
-  bool Connect(const char * ip, uint16 port);
+  /*!
+   * \brief Connect to a given server address
+   * \param ip ip address
+   * \param port end port
+   * \return true for success and false for failure
+   */
+  bool Connect(const char * ip, int port);
 
-  // bind on the given IP ans PORT
-  bool Bind(const char * ip, uint16 port);
+  /*!
+   * \brief Bind on the given IP and PORT
+   * \param ip ip address
+   * \param port end port
+   * \return true for success and false for failure
+   */
+  bool Bind(const char * ip, int port);
 
-  // listen
+  /*!
+   * \brief listen for remote connection
+   * \param max_connection maximal connection
+   * \return true for success and false for failure
+   */
   bool Listen(int max_connection);
 
-  // wait for a new connection
-  // new SOCKET, IP and PORT will be stored to socket, 
-  // ip_client and port_client
+  /*!
+   * \brief wait doe a new connection
+   * \param socket new SOCKET will be stored to socket
+   * \param ip_client new IP will be stored to ip_client
+   * \param port_client new PORT will be stored to port_client
+   * \return true for success and false for failure
+   */
   bool Accept(TCPSocket * socket,
               std::string * ip_client,
-              uint16 * port_client);
+              int * port_client);
 
-  // SetBlocking() is needed refering to this example of epoll:
-  // http://www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html
+  /*!
+   * \brief SetBlocking() is needed refering to this example of epoll:
+   * http://www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html
+   * \param flag flag for blocking
+   * \return true for success and false for failure
+   */
   bool SetBlocking(bool flag);
 
-  // Set timeout for socket
+  /*!
+   * \brief Set timeout for socket
+   * \param timeout millsec timeout
+   */
   void SetTimeout(int timeout);
 
-  // Shut down one or both halves of the connection.
-  // If ways is SHUT_RD, further receives are disallowed.
-  // If ways is SHUT_WR, further sends are disallowed.
-  // If ways is SHUT_RDWR, further sends and receives are disallowed.
+  /*!
+   * \brief Shut down one or both halves of the connection.
+   * \param ways ways for shutdown
+   * If ways is SHUT_RD, further receives are disallowed.
+   * If ways is SHUT_WR, further sends are disallowed.
+   * If ways is SHUT_RDWR, further sends and receives are disallowed.
+   * \return true for success and false for failure
+   */
   bool ShutDown(int ways);
 
-  // close socket
+  /*!
+   * \brief close socket.
+   */
   void Close();
 
-  // send/receive data:
-  // return number of bytes read or written if OK, -1 on error
-  // caller is responsible for checking that all data has been sent/received,
-  // if not, extra send/receive should be invoked
+  /*!
+   * \brief Send data.
+   * \param data data for sending
+   * \param len_data length of data
+   * \return return number of bytes sent if OK, -1 on error
+   */  
   int Send(const char * data, int len_data);
+
+  /*!
+   * \brief Receive data.
+   * \param buffer buffer for receving
+   * \param size_buffer size of buffer
+   * \return return number of bytes received if OK, -1 on error
+   */ 
   int Receive(char * buffer, int size_buffer);
 
-  // return socket's file descriptor
+  /*!
+   * \brief Get socket's file descriptor
+   * \return socket's file descriptor
+   */ 
   int Socket() const;
 
  private:
-  SOCKET socket_;
-
-  DISALLOW_COPY_AND_ASSIGN(TCPSocket);
+  /*!
+   * \brief socket's file descriptor
+   */ 
+  int socket_;  
 };
 
 }  // namespace xforest

@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file is the implementation of TCPSocket class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file tcp_socket.cc
+ * \brief This file defines the TCPSocket class.
+ */
 #include "src/network/tcp_socket.h"
 
 #include <arpa/inet.h>
@@ -32,28 +33,19 @@ namespace xforest {
 typedef struct sockaddr_in SAI;
 typedef struct sockaddr SA;
 
-// ctor
 TCPSocket::TCPSocket() {
   // init socket
-  socket_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  socket_ = socket(AF_INET, SOCK_STREAM, 0);
   if (socket_ < 0) {
     LOG(FATAL) << "Can't create new socket.";
   }
 }
 
-TCPSocket::TCPSocket(SOCKET socket) {
-  socket_ = socket;
-  if (socket_ < 0) {
-    LOG(FATAL) << "Passed socket error.";
-  }
-}
-
-// dctor
 TCPSocket::~TCPSocket() {
   Close();
 }
 
-bool TCPSocket::Connect(const char * ip, uint16 port) {
+bool TCPSocket::Connect(const char * ip, int port) {
   SAI sa_server;
   sa_server.sin_family      = AF_INET;
   sa_server.sin_port        = htons(port);
@@ -68,11 +60,7 @@ bool TCPSocket::Connect(const char * ip, uint16 port) {
   return false;
 }
 
-bool TCPSocket::Bind(const char * ip, uint16 port) {
-  // Avoid TIME_WAIT for last connection
-  const int on = 1;
-  setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
-
+bool TCPSocket::Bind(const char * ip, int port) {
   SAI sa_server;
   sa_server.sin_family      = AF_INET;
   sa_server.sin_port        = htons(port);
@@ -96,7 +84,7 @@ bool TCPSocket::Listen(int max_connection) {
   return false;
 }
 
-bool TCPSocket::Accept(TCPSocket * socket, std::string * ip, uint16 * port) {
+bool TCPSocket::Accept(TCPSocket * socket, std::string * ip, int * port) {
   int sock_client;
   SAI sa_client;
   socklen_t len = sizeof(sa_client);
@@ -112,7 +100,7 @@ bool TCPSocket::Accept(TCPSocket * socket, std::string * ip, uint16 * port) {
                                      &sa_client.sin_addr,
                                      tmp,
                                      sizeof(tmp));
-  CHECK_NOTNULL(ip_client);
+  CHECK(ip_client != nullptr);
   ip->assign(ip_client);
   *port = ntohs(sa_client.sin_port);
   socket->socket_ = sock_client;
@@ -153,7 +141,7 @@ bool TCPSocket::ShutDown(int ways) {
 
 void TCPSocket::Close() {
   if (socket_ >= 0) {
-    CHECK_EQ(0, close(socket_));
+    CHECK(0 == close(socket_));
     socket_ = -1;
   }
 }
