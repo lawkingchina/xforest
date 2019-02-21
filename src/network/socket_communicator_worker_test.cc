@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file tests the SocketCommunicator class.
-*/
-
+/*!
+ *  Copyright (c) 2018 by Contributors
+ * \file socket_communicator_worker_test.cc
+ * \brief This file tests the SocketCommunicator class.
+ */
 #include "src/network/socket_communicator.h"
 
 #include <unistd.h>

@@ -19,8 +19,8 @@
  * \file communicator.h
  * \brief This file defines the TCPSocket class.
  */
-#ifndef XFOREST_NETWORK_TCPSOCKET_H_
-#define XFOREST_NETWORK_TCPSOCKET_H_
+#ifndef XFOREST_NETWORK_TCP_SOCKET_H_
+#define XFOREST_NETWORK_TCP_SOCKET_H_
 
 #include <sys/socket.h>
 #include <string>
@@ -139,4 +139,4 @@ class TCPSocket {
 
 }  // namespace xforest
 
-#endif  // XFOREST_NETWORK_TCPSOCKET_H_
+#endif  // XFOREST_NETWORK_TCP_SOCKET_H_
