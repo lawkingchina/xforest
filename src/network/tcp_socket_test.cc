@@ -42,7 +42,7 @@ TEST(TCPSocket, SendRecieve) {
     TCPSocket server;
     TCPSocket client;
     string cl_ip;
-    uint16 cl_port;
+    int cl_port;
     char serbuff[10];
     memset(serbuff, '\0', 10);
     server.SetTimeout(5 * 60 * 1000);
@@ -52,7 +52,7 @@ TEST(TCPSocket, SendRecieve) {
     ASSERT_TRUE(server.Accept(&client, &cl_ip, &cl_port));
 
     // Small block
-    for (int i = 0; i < 99999; ++i) {
+    for (int i = 0; i < 9999; ++i) {
       int tmp;
       int recieved_bytes = 0;
       while (recieved_bytes < 10) {
@@ -101,7 +101,7 @@ TEST(TCPSocket, SendRecieve) {
     memset(clibuff, '\0', 10);
 
     // Small block
-    for (int i = 0; i < 99999; ++i) {
+    for (int i = 0; i < 9999; ++i) {
       int tmp;
       int sent_bytes = 0;
       while (sent_bytes < 10) {
