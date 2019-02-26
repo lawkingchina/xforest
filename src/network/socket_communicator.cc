@@ -169,7 +169,7 @@ void SocketCommunicator::FinalizeReceiver() {
   }
 }
 
-int SocketCommunicator::Send(char* src, int size) {
+int SocketCommunicator::Send(const char* src, int size) {
   if (!is_sender_) {
     LOG(ERROR) << "Receiver cannot invoke send() API.";
     return -1;

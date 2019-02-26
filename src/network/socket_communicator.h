@@ -24,10 +24,12 @@
 
 #include <vector>
 #include <string>
+#include <thread>
 
 #include "src/base/scoped_ptr.h"
 #include "src/network/communicator.h"
 #include "src/network/tcp_socket.h"
+#include "src/network/msg_queue.h"
 
 namespace xforest {
 
@@ -60,7 +62,7 @@ class SocketCommunicator : public Communicator {
    *   > 0 : bytes send
    *   - 1 : error
    */
-  int Send(char* src, int size);
+  int Send(const char* src, int size);
 
   /*!
    * \brief Receive mesesage from sender node, we

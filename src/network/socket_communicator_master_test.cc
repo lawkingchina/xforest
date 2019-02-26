@@ -24,24 +24,26 @@
 #include "src/base/common.h"
 #include "gtest/gtest.h"
 
+#define IS_RECEIVER false
+
 const int kNumWorker = 2;
+const int kBuffSize = 100 * 1024;  // 100 KB
 
 TEST(SocketCommunicator, MasterSide) {
   xforest::SocketCommunicator master;
-  master.Initialize(0, kNumWorker, "127.0.0.1:12334");
+  master.Initialize(IS_RECEIVER, "127.0.0.1", 50051, kNumWorker, kBuffSize);
   char* buffer = new char[5];
   int count = 0;
   for (;;) {
-  	for (int rank = 1; rank <= kNumWorker; ++rank) {
-  	  master.Recv(rank, buffer, 5);
-  	  std::cout << "Recv " << rank << ":" << buffer << std::endl;
-  	  if (strcmp(buffer, "endIO") == 0) {
-  	  	count++;
-  	  }
+  	master.Receive(buffer, 5);
+  	std::cout << "Recv " << ":" << buffer << std::endl;
+  	if (strcmp(buffer, "endIO") == 0) {
+  	  count++;
   	}
   	if (count == kNumWorker) {
   	  break;
   	}
   }
+  master.Finalize();
   std::cout << "Master closed()" << std::endl;
 }

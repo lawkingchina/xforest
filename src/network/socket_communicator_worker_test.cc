@@ -27,7 +27,7 @@
 #include "src/base/common.h"
 #include "gtest/gtest.h"
 
-const int kNumWorker = 2;
+#define IS_SENDER true
 
 const char* str_1 = "11111";
 const char* str_2 = "22222";
@@ -36,13 +36,13 @@ const char* str_end = "endIO";
 
 static void SendMsg(xforest::SocketCommunicator& worker, int rank) {
   sleep(1);
-  worker.Send(0, str_1, 5);
+  worker.Send(str_1, 5);
   sleep(1);
-  worker.Send(0, str_2, 5);
+  worker.Send(str_2, 5);
   sleep(1);
-  worker.Send(0, str_3, 5);
+  worker.Send(str_3, 5);
   sleep(1);
-  worker.Send(0, str_end, 5);
+  worker.Send(str_end, 5);
 }
 
 TEST(SocketCommunicator, WorkerSide) {
@@ -50,13 +50,14 @@ TEST(SocketCommunicator, WorkerSide) {
   int pid = fork();
   if (pid > 0) {  // worker 1
     xforest::SocketCommunicator worker_1;
-    worker_1.Initialize(1, kNumWorker, "127.0.0.1:12334");
+    worker_1.Initialize(IS_SENDER, "127.0.0.1", 50051);
     SendMsg(worker_1, 1);
+    worker_1.Finalize();
   } else {  // worker 2
   	xforest::SocketCommunicator worker_2;
-    worker_2.Initialize(2, kNumWorker, "127.0.0.1:12334");
+    worker_2.Initialize(IS_SENDER, "127.0.0.1", 50051);
     SendMsg(worker_2, 2);
+    worker_2.Finalize();
   }
-  sleep(2);
   wait(0);
 }

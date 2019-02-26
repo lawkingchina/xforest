@@ -65,7 +65,7 @@ class Communicator {
    *   > 0 : bytes send
    *   - 1 : error
    */
-  virtual int Send(char* src, int size) = 0;
+  virtual int Send(const char* src, int size) = 0;
 
   /*!
    * \brief Receive mesesage from sender node, we
