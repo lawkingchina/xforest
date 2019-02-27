@@ -2,6 +2,5 @@
 
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](./LICENCE)
 ![Project Status](https://img.shields.io/badge/version-0.1.0-green.svg)
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
 
 xForest is coming soon ...
