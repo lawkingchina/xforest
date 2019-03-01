@@ -33,7 +33,6 @@
 /*!
  * Basic operations for a file
  */
-
 const size_t KB = 1024.0;
 const size_t MB = 1024.0 * 1024.0;
 const size_t GB = 1024.0 * 1024.0 * 1024.0;
@@ -226,9 +225,7 @@ inline uint64 ReadFileToMemory(const std::string& filename, char **buf) {
   return len;
 }
 
-/*!
- * Serialize or Deserialize for std::vector and std::string
- */
+/////////////// Serialize or Deserialize for std::vector and std::string ///////////////
 
 /*!
  * \brief Write a std::vector to disk file.
@@ -314,9 +311,7 @@ inline void ReadStringFromFile(FILE* file_ptr, std::string& str) {
     len);
 }
 
-/*!
- * Tool function used by Reader class of xforest
- */
+/////////////// Tool function used by Reader class of xforest ///////////////
 
 /*!
  * \brief Calculate the hash value of current txt file.

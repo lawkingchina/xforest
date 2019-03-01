@@ -66,7 +66,13 @@ class Timer {
   float get();
 
  protected:
+  /*!
+   * \breif begining time point
+   */ 
   std::chrono::high_resolution_clock::time_point begin;
+  /*!
+   * \breif time duration
+   */ 
   std::chrono::milliseconds duration;
 
  private:

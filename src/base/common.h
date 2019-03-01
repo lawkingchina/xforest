@@ -50,7 +50,6 @@
  *
  * The GDB command 'where' will show you the stack trace.
  */
-
 #define CHECK(a) if (!(a)) {                              \
     LOG(ERROR) << "CHECK failed "                         \
                << __FILE__ << ":" << __LINE__ << "\n"     \
@@ -150,7 +149,6 @@
  *    DISALLOW_COPY_AND_ASSIGN(Foo);
  * };
  */
-
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)                \
   TypeName(const TypeName&);                              \
   void operator=(const TypeName&)
@@ -158,7 +156,6 @@
 /*!
  * Basis POD types.
  */
-
 typedef unsigned int uint;
 
 #ifdef _MSC_VER
