@@ -30,7 +30,10 @@ This file defines the DTree class.
 namespace xforest {
 
 /*!
- * \brief Find maximal and minimal value for each feature
+ * \brief Find maximal and minimal value for each feature.
+ * For Histogram decision tree, we need to map original feature
+ * value to 8-bit bin value, hence here we need to make a record
+ * of the maximal and minimal value for each feature.
  */
 struct MaxMin {
   real_t gap = 0.0;
@@ -38,191 +41,272 @@ struct MaxMin {
   real_t min_feat = kFloatMax;
 };
 
-class DTNode;
-
 /*!
- * \brief temp information during training
+ * \brief Temp information during training. 
+ * This information will not be used for inference, 
+ * and we can delete this structure on-the-fly.
  */
-class TInfo {
- public:
+struct TInfo {
   /*!
-   * \brief left node or right node
+   * \brief Left node ('l') or right node ('r').
    */
   char l_or_r;
   /*!
-   * \brief level of layer
+   * \brief Level of layer for current node.
+   * Note that the maximal level is 255.
    */
   uint8 level = 1;
   /*!
-   * \brief start position
+   * \brief Start position (index) of the data 
+   * allocated to current node
    */
   index_t start_pos = 0;
   /*!
-   * \brief end position
+   * \brief End position (index) of the data
+   * allocated to current node
    */
   index_t end_pos = 0;
   /*!
-   * \brief mid split position
+   * \brief Split position (index) of the data
+   * allocated to current node
    */
   index_t mid_pos = 0;
   /*!
-   * \brief best gini value
+   * \brief Best gini value we calculated for current node
    */
   real_t best_gini = 1.0;
   /*!
-   * \brief parent node
+   * \brief Parent node of current node, which will be used
+   * for calculating histogram value of current node.
    */
-  DTNode* parent = nullptr;
+  void* parent = nullptr;
   /*!
-   * \brief brother node
+   * \brief Brother node of current node, which will be used
+   * for calculating histogram value of current node.
    */
-  DTNode* brother = nullptr;
+  void* brother = nullptr;
   /*!
-   * \brief histogram bin
+   * \brief Histigram bin data structure.
    */
   void* histo = nullptr;
- private:
-  DISALLOW_COPY_AND_ASSIGN(TInfo);
 };
 
 /*!
- * \brief Decision tree node
+ * \brief Decision tree node class, which will maintain
+ * the information used in both training and inference.
  */
 class DTNode {
  public:
-  // ctor and dctor
-  DTNode() {}
-  ~DTNode() {}
-  // If current node is a leaf node?
+  /*!
+   * If current node is a leaf node?
+   */ 
   bool is_leaf = false;
-  // leaf node value
-  real_t leaf_val = -1.0;
-  // left child
+  /*!
+   * Pointer of the left child node.
+   */
   DTNode* l_child = nullptr;
-  // right child
+  /*!
+   * Pointer of the right child node.
+   */
   DTNode* r_child = nullptr;
-  // best feature id
+  /*!
+   * Best split feature id of current node.
+   */
   index_t best_feat_id = 0;
-  // best bin value
+  /*!
+   * Best split histigram bin value ([0, 255]) of current node.
+   */
   uint8 best_bin_val = 0;
-  // Tmp info used by training
+  /*!
+   * Temp information used by training process.
+   */
   TInfo* info = nullptr;
-  // Clear TInfo
+  /*!
+   * Clear temp information on-the-fly.
+   */
   inline void Clear() { 
     delete info;
   }
-  // Clear parent info
+  /*!
+   * Clear parent information when we calculated 
+   * current histogram value.
+   */
   inline void ClearParent() {
     delete info->parent->info;
   }
-  // Is a leaf node?
+  /*!
+   * Is current node is a leaf node?
+   */
   inline bool IsLeaf() const {
     return is_leaf;
   }
+  /*!
+   * Set is_leaf to true.
+   */
   inline void SetLeaf() {
     is_leaf = true;
   }
-  // value of leaf
-  inline real_t LeafVal() const {
-    return leaf_val;
-  }
-  inline void SetLeafVal(real_t val) {
-    leaf_val = val;
-  }
-  // Left child
+  /*!
+   * Get left child node.
+   */
   inline DTNode* LeftChild() const {
     return l_child;
   }
+  /*!
+   * Set left child node.
+   */
   inline void SetLeftChild(DTNode* node) {
     l_child = node;
   }
-  // Right child
+  /*!
+   * Get right child node.
+   */
   inline DTNode* RightChild() const {
     return r_child;
   }
+  /*!
+   * Set right child node.
+   */
   inline void SetRightChild(DTNode* node) {
     r_child = node;
   }
-  // Best feature ID
+  /*!
+   * Get best split feature id.
+   */
   inline index_t BestFeatID() const {
     return best_feat_id;
   }
+  /*!
+   * Set best split feature id.
+   */
   inline void SetBestFeatID(index_t id) {
     best_feat_id = id;
   }
-  // Best bin value
+  /*!
+   * Get best split histogram value.
+   */
   inline uint8 BestBinVal() const {
     return best_bin_val;
   }
+  /*!
+   * Set best split histogram value.
+   */
   inline void SetBestBinVal(uint8 val) {
     best_bin_val = val;
   }
-  // Left or Right
+  /*!
+   * Is current node a left or Right node?
+   */
   inline char LeftOrRight() const {
     return info->l_or_r;
   }
+  /*!
+   * Set 'l' (left) or 'r' (right) to current node.
+   */
   inline void SetLeftOrRight(char ch) {
     info->l_or_r = ch;
   }
-  // Node level
+  /*!
+   * Get node level (maximal level is 255).
+   */
   inline uint8 Level() const {
     return info->level;
   }
+  /*!
+   * Set node level (maximal level is 255).
+   */
   inline void SetLevel(uint8 level) {
     info->level = level;
   }
-  // Start position
+  /*!
+   * Get start position (index) of data allocated to current node.
+   */
   inline index_t StartPos() const {
     return info->start_pos;
   }
+  /*!
+   * Set start position (index) of data allocated to current node.
+   */
   inline void SetStartPos(index_t pos) {
     info->start_pos = pos;
   }
-  // End position
+  /*!
+   * Get end position (index) of data allocated to cuurent node.
+   */
   inline index_t EndPos() const {
     return info->end_pos;
   }
+  /*!
+   * Set end position (index) of data allocated to current node.
+   */
   inline void SetEndPos(index_t pos) {
     info->end_pos = pos;
   }
-  // Mid position (split pos)
+  /*!
+   * Get best split position (index) of data allocated to current node.
+   */
   inline index_t MidPos() const {
     return info->mid_pos;
   }
+  /*!
+   * Set best split pisition (index) of data allocated to current node.
+   */
   inline void SetMidPos(index_t pos) {
     info->mid_pos = pos;
   }
-  // Best gini
+  /*!
+   * Get best gini value calculated by current node.
+   */
   inline real_t BestGini() const {
     return info->best_gini;
   }
+  /*!
+   * Set best gini value calculated by current node.
+   */
   inline void SetBestGini(real_t gini) {
     info->best_gini = gini;
   }
-  // Parent node
+  /*!
+   * Get parent node of current node.
+   */
   inline DTNode* Parent() const {
     return info->parent;
   }
+  /*!
+   * Set parent node of current node.
+   */
   inline void SetParent(DTNode* node) {
     info->parent = node;
   }
-  // Brother node
+  /*!
+   * Get brother node of current node.
+   */
   inline DTNode* Brother() const {
     return info->brother;
   }
+  /*!
+   * Set brother node of current node.
+   */
   inline void SetBrother(DTNode* node) {
     info->brother = node;
   }
-  // Histogram bin
+  /*!
+   * Get histogram bin of current node.
+   */
   inline void* Histo() const {
     return info->histo;
   }
+  /*!
+   * Set histogram bin of current node. 
+   */
   inline void SetHisto(void* histo) {
     info->histo = histo;
   }
-  // Data size
+  /*!
+   * Get data size allocated for current node.
+   */
   inline index_t DataSize() const {
-    return info->end_pos-info->start_pos+1;
+    return info->end_pos - info->start_pos + 1;
   }
 };
 
