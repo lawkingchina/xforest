@@ -127,17 +127,14 @@ class MessageQueue {
    * \brief Pointer to the queue 
    */
   char* queue_;
-
   /*! 
    * \brief Size of the queue in bytes 
    */
   int queue_size_;
-
   /*! 
    * \brief Free size of the queue 
    */
   int free_size_;
-
   /*! 
    * \brief Location in queue_ for where to write the next element 
    * Note that we do not need read_pointer since all messages were indexed
@@ -145,37 +142,30 @@ class MessageQueue {
    * denotes where we should read
    */
   int write_pointer_;
-
   /*! 
    * \brief Used to check all producers will no longer produce anything 
    */
   int num_producers_;
-
   /*! 
    * \brief Messages in the queue 
    */
   std::queue<MessagePosition> message_positions_;
-
   /*! 
    * \brief Store finished producer id 
    */
   std::set<int /* producer_id */> finished_producers_;
-
   /*! 
    * \brief Condition when consumer should wait 
    */
   std::condition_variable cond_not_full_;
-
   /*! 
    * \brief Condition when producer should wait 
    */
   std::condition_variable cond_not_empty_;
-
   /*! 
    * \brief Signal for exit wait 
    */
   std::atomic<bool> exit_flag_{false};
-
   /*! 
    * \brief Protect all above data and conditions 
    */

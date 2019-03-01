@@ -85,27 +85,22 @@ class SocketCommunicator : public Communicator {
    * \brief Is a sender or reciever node?
    */
   bool is_sender_;
-
   /*!
    * \brief number of sender
    */
   int num_sender_;
-
   /*!
    * \brief maximal size of message queue
    */ 
   int queue_size_;
-
   /*!
    * \brief socket list
    */ 
   std::vector<TCPSocket*> socket_;
-
   /*!
    * \brief Thread pool for socket connection
    */ 
   std::vector<std::thread*> thread_;
-
   /*!
    * \brief Message queue for communicator
    */ 
