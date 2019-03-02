@@ -399,7 +399,7 @@ class DTree {
   /*!
    * \breif Given data x, predict label y 
    * \param x pointer of data example
-   * \returns predicted value y
+   * \return predicted value y
    */
   real_t Predict(const uint8* x);
 
@@ -491,19 +491,38 @@ class DTree {
    */
   real_t* Y_ = nullptr;
 
-  // Get leaf value
+  /*!
+   * \breif Get leaf value.
+   * \param node tree node
+   * \return leaf value
+   */
   virtual real_t LeafVal(const DTNode* node) = 0;
 
-  // Find best split position for current node
+  /*!
+   * \breif Find best split position for current node.
+   * \param node tree node
+   */
   virtual void FindPosition(DTNode* node) = 0;
 
-  // If current node is a leaf node
+  /*!
+   * \breif If current node is a leaf node.
+   * \param node tree node
+   * \return true for Yes and false for No
+   */
   bool IsLeaf(DTNode* node);
 
-  // Get a leaf node by given the data x
+  /*!
+   * \breif Get a leaf node by given the data example.
+   * \param node tree node
+   * \param x data example
+   * \return leaf node
+   */
   DTNode* GetLeaf(DTNode* node, const uint8* x);
 
-  // Split current node
+  /*!
+   * \breif Split current node.
+   * \param tree node
+   */
   void SplitData(DTNode* node);
 
  private:
