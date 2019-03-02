@@ -312,9 +312,11 @@ class DTNode {
 };
 
 /*!
- * \breif The DTree class is an abstract class, which will be implemented
- * by real decision tree, such as BTree (for binary classification), 
+ * \breif The DTree class is an abstract class, which could be 
+ * implemented by real decision tree, such as BTree (for binary classification), 
  * MCTree (for multi-class classificaition), and RTree (for regression).
+ * Note that binary classification is a special case of multi-class classification,
+ * howerver we can make special performance optimization for binary tree.
  */
 class DTree {
  public:
@@ -329,13 +331,20 @@ class DTree {
   virtual ~DTree() { }
 
   /*!
-   * \brief Initialize Decision Tree
+   * \brief Initialize decision tree.
+   * \param X pointer of dataset
+   * \param Y pointer of label
+   * \param num_class number of classification
+   * \param num_feat number of feature
+   * \param data_size size of dataset
+   * \param hyper_param hyper-parameter used by decision tree
    */
-  void Init(uint8* X, real_t* Y,
-            const uint8 num_class,
-            const index_t num_feat, 
-            const index_t data_size,
-            const HyperParam& hyper_param) {
+  void Initialize(const uint8* X, 
+                  const real_t* Y,
+                  const uint8 num_class,
+                  const index_t num_feat, 
+                  const index_t data_size,
+                  const HyperParam& hyper_param) {
     CHECK_NOTNULL(X);
     CHECK_NOTNULL(Y);
     CHECK_GE(num_class, 2);
@@ -363,31 +372,53 @@ class DTree {
     min_impurity_ = hyper_param.min_impurity_split;
   }
 
-  // Sample for training data
-  void SetRowIdx(const std::vector<index_t>& idx) {
+  /*!
+   * \brief Sample index for training data.
+   * \param idx sampled index vector
+   */
+  inline void SetRowIdx(const std::vector<index_t>& idx) {
     CHECK_EQ(idx.empty(), false);
     rowIdx_.assign(idx.begin(), idx.end());
   }
 
-  // Sample for feature
-  void SetColIdx(const std::vector<index_t>& idx) {
+  /*!
+   * \breif Sample index for feature.
+   * \param idx sampled index vector
+   */
+  inline void SetColIdx(const std::vector<index_t>& idx) {
     CHECK_EQ(idx.empty(), false);
     colIdx_.assign(idx.begin(), idx.end());
   }
 
-  // Build decision tree
+  /*!
+   * \ brief Build decision tree using leaf-wise growing 
+   * or using level-wise growing.
+   */
   void BuildTree();
 
-  // Given data x, predict y 
+  /*!
+   * \breif Given data x, predict label y 
+   * \param x pointer of data example
+   * \returns predicted value y
+   */
   real_t Predict(const uint8* x);
 
-  // Serilize tree to string
+  /*!
+   * \breif Serilize a decision tree to binary string.
+   * \param str pointer of bianry string
+   */
   void Serilize(std::string* str);
 
-  // Deserilize tree from string
+  /*!
+   * \breif Deserilize a decision tree from bianry string.
+   * \param str binary string
+   */
   void Deserilize(const std::string& str);
 
-  // Print decision to human-readable txt format
+  /*!
+   * \breif Print decision tree to human-readable txt format.
+   * \param str TXT string
+   */
   void PrintToTXT(std::string* str);
 
  protected:
