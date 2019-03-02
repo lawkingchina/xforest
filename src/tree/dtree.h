@@ -422,27 +422,74 @@ class DTree {
   void PrintToTXT(std::string* str);
 
  protected:
-  uint8 max_bin_;               // Maximal histogram bin value
-  uint8 max_depth_;             // Maximal depth to grow a tree (< 256)
-  index_t min_samples_split_;   // Minimal samples to split a node
-  index_t min_samples_leaf_;    // Minimal samples in a leaf node
-  index_t max_leaf_;            // Maximal number of leaf nodes
-  real_t min_impurity_dec_;     // Minimal impurity decrease to split a node
-  real_t min_impurity_;         // Minimal impurity to split a node
-
-  std::vector<index_t> rowIdx_;   // data sample
-  std::vector<index_t> colIdx_;   // feature sample
-
-  DTNode* root_ = nullptr;   // root node
-  index_t leaf_size_ = 1;    // number of leaf nodes
-  uint8 tree_depth_ = 1;     // tree depth
-
-  uint8 num_class_ = 0;    // Number of classification
-  index_t num_feat_ = 0;   // Number of feature
-  index_t data_size_ = 0;  // Total data size for training data
-
-  uint8* X_ = nullptr;    // Training data X
-  real_t* Y_ = nullptr;   // Label y 
+  /*!
+   * \breif Maximal histogram bin value, range from (0, 255].
+   */
+  uint8 max_bin_;
+  /*!
+   * \breif Maximal depth to grow a tree, range from (0, 255].
+   */
+  uint8 max_depth_;
+  /*!
+   * \breif Minimal samples to split a node.
+   */
+  index_t min_samples_split_;
+  /*!
+   * \breif Minimal samples required in a node.
+   */
+  index_t min_samples_leaf_;
+  /*!
+   * \breif Maximal number of leaf nodes.
+   */
+  index_t max_leaf_;
+  /*!
+   * \breif Minimal impurity decrease required to split a node.
+   */
+  real_t min_impurity_dec_;
+  /*!
+   * \breif Minimal impurity required to split a node.
+   */
+  real_t min_impurity_;
+  /*!
+   * \breif Sampled index of dataset.
+   */
+  std::vector<index_t> rowIdx_;
+  /*!
+   * \breif Sampled index of featrue.
+   */
+  std::vector<index_t> colIdx_;
+  /*!
+   * \breif Pointer of root node.
+   */
+  DTNode* root_ = nullptr;
+  /*!
+   * \breif Number of leaf nodes.
+   */
+  index_t leaf_size_ = 1;
+  /*!
+   * \breif Depth of decision tree.
+   */
+  uint8 tree_depth_ = 1;
+  /*!
+   * \breif Number of classification.
+   */
+  uint8 num_class_ = 0;
+  /*!
+   * \breif Number of feature.
+   */
+  index_t num_feat_ = 0;
+  /*!
+   * \breif Size of dataset.
+   */
+  index_t data_size_ = 0;
+  /*!
+   * \breif Pointer of dataset.
+   */
+  uint8* X_ = nullptr;
+  /*!
+   * \breif Pointer of label.
+   */
+  real_t* Y_ = nullptr;
 
   // Get leaf value
   virtual real_t LeafVal(const DTNode* node) = 0;
