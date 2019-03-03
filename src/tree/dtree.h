@@ -391,7 +391,7 @@ class DTree {
   }
 
   /*!
-   * \ brief Build decision tree using leaf-wise growing 
+   * \brief Build decision tree using leaf-wise growing 
    * or using level-wise growing.
    */
   void BuildTree();
@@ -528,6 +528,12 @@ class DTree {
  private:
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
+
+
+
+
+
+
 
 // Histogram for binary classification
 struct Count {
