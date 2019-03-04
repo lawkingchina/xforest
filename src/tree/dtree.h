@@ -313,10 +313,8 @@ class DTNode {
 
 /*!
  * \breif The DTree class is an abstract class, which could be 
- * implemented by real decision tree, such as BTree (for binary classification), 
- * MCTree (for multi-class classificaition), and RTree (for regression).
- * Note that binary classification is a special case of multi-class classification,
- * howerver we can make special performance optimization for binary tree.
+ * implemented by real decision tree, such as BTree (for classification), 
+ * and RTree (for regression).
  */
 class DTree {
  public:
