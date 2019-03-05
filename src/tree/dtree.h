@@ -313,7 +313,7 @@ class DTNode {
 
 /*!
  * \breif The DTree class is an abstract class, which could be 
- * implemented by real decision tree, such as BTree (for classification), 
+ * implemented by real decision tree, such as CTree (for classification), 
  * and RTree (for regression).
  */
 class DTree {
@@ -527,42 +527,8 @@ class DTree {
   DISALLOW_COPY_AND_ASSIGN(DTree);
 };
 
-
-
-
-
-
-
-// Histogram for binary classification
-struct Count {
-  index_t count_0 = 0;
-  index_t count_1 = 0;
-};
-
-class BHistogram {
- public:
-  BHistogram(const index_t num_feat,
-             const uint8 num_bin) {
-    index_t len = num_feat * num_bin;
-    count.resize(len);
-  }
-  ~BHistogram() {
-    for (index_t i = 0; i < count.size(); ++i) {
-      delete [] count[i];
-    }
-  }
-  index_t total_0 = 0;
-  index_t total_1 = 0;
-  std::vector<Count*> count;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(BHistogram);
-};
-
-// Binary Tree
-// Note that binary tree is a specific case of MCTree, but
-// we made careful optimization for this case.
-class BTree : public DTree {
+// Classification Tree
+class CDTree : public DTree {
  public:
   // ctor and dctor
   BTree() {}
