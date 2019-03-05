@@ -77,12 +77,12 @@ struct TInfo {
    */
   real_t best_gini = 1.0;
   /*!
-   * \brief Parent node of current node, which will be used
+   * \brief Parent node (DTNode) of current node, which will be used
    * for calculating histogram value of current node.
    */
   void* parent = nullptr;
   /*!
-   * \brief Brother node of current node, which will be used
+   * \brief Brother node (DTNode) of current node, which will be used
    * for calculating histogram value of current node.
    */
   void* brother = nullptr;
