@@ -31,9 +31,9 @@
 #include "src/base/stringprintf.h"
 
 /*！
- * \brief Get system host name
- * \return host name
- */
+* \brief Get system host name
+* \return host name
+*/
 std::string get_host_name() {
   struct utsname buf;
   if (0 != uname(&buf)) {
