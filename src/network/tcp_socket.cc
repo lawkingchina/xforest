@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file tcp_socket.cc
- * \brief This file defines the TCPSocket class.
- */
+*  Copyright (c) 2018 by Contributors
+* \file tcp_socket.cc
+* \brief This file defines the TCPSocket class.
+*/
 #include "src/network/tcp_socket.h"
 
 #include <arpa/inet.h>

@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file split_string.h
- * \brief This file provides StringSplit utilities.
- */
+*  Copyright (c) 2018 by Contributors
+* \file split_string.h
+* \brief This file provides StringSplit utilities.
+*/
 #ifndef XFOREST_BASE_SPLIT_STRING_H_
 #define XFOREST_BASE_SPLIT_STRING_H_
 
@@ -27,29 +27,29 @@
 #include <vector>
 
 /*!
- * \brief Subdivide string |full| into substrings according to delimitors
- * given in |delim|.  |delim| should pointing to a string including
- * one or more characters.  Each character is considerred a possible
- * delimitor. For example:
- *
- *   vector<string> substrings;
- *   SplitStringUsing("apple orange\tbanana", "\t ", &substrings);
- *
- * results in three substrings:
- *
- *   substrings.size() == 3
- *   substrings[0] == "apple"
- *   substrings[1] == "orange"
- *   substrings[2] == "banana"
- */
+* \brief Subdivide string |full| into substrings according to delimitors
+* given in |delim|.  |delim| should pointing to a string including
+* one or more characters.  Each character is considerred a possible
+* delimitor. For example:
+*
+*   vector<string> substrings;
+*   SplitStringUsing("apple orange\tbanana", "\t ", &substrings);
+*
+* results in three substrings:
+*
+*   substrings.size() == 3
+*   substrings[0] == "apple"
+*   substrings[1] == "orange"
+*   substrings[2] == "banana"
+*/
 void SplitStringUsing(const std::string& full,
                       const char* delim,
                       std::vector<std::string>* result);
 
 /*!
- * \brief This function has the same semnatic as SplitStringUsing.  Results
- * are saved in an STL set container.
- */
+* \brief This function has the same semnatic as SplitStringUsing.  Results
+* are saved in an STL set container.
+*/
 void SplitStringToSetUsing(const std::string& full,
                            const char* delim,
                            std::set<std::string>* result);

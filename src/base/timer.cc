@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file timer.cc
- * \brief This file defines the Timer class.
- */
+*  Copyright (c) 2018 by Contributors
+* \file timer.cc
+* \brief This file defines the Timer class.
+*/
 #include "src/base/timer.h"
 
 Timer::Timer() {
@@ -26,8 +26,8 @@ Timer::Timer() {
 }
 
 /*!
- * \breif Reset code start
- */
+* \breif Reset code start
+*/
 void Timer::reset() {
   begin = std::chrono::high_resolution_clock::now();
   duration =
@@ -35,15 +35,15 @@ void Timer::reset() {
 }
 
 /*!
- * \breif Code start
- */
+* \breif Code start
+*/
 void Timer::tic() {
   begin = std::chrono::high_resolution_clock::now();
 }
 
 /*!
- * \breif Code end
- */
+* \breif Code end
+*/
 float Timer::toc() {
   duration += std::chrono::duration_cast<std::chrono::milliseconds>
               (std::chrono::high_resolution_clock::now()-begin);
@@ -51,8 +51,8 @@ float Timer::toc() {
 }
 
 /*!
- * \breif Get the time duration (seconds)
- */
+* \breif Get the time duration (seconds)
+*/
 float Timer::get() {
   return (float)duration.count() / 1000;
 }

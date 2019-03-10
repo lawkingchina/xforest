@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file msg_queue_test.cc
- * \brief This file tests the MessageQueue class.
- */
+*  Copyright (c) 2018 by Contributors
+* \file msg_queue_test.cc
+* \brief This file tests the MessageQueue class.
+*/
 #include "src/network/msg_queue.h"
 
 #include <string>

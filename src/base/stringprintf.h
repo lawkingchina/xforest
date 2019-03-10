@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file stringprintf.h
- * \brief This file provides stringprintf utilities.
- */
+*  Copyright (c) 2018 by Contributors
+* \file stringprintf.h
+* \brief This file provides stringprintf utilities.
+*/
 #ifndef XFOREST_BASE_STRING_PRINTF_H_
 #define XFOREST_BASE_STRING_PRINTF_H_
 
@@ -31,21 +31,21 @@
 //------------------------------------------------------------------------------
 
 /*!
- * \brief For example:
- * std::string str = StringPrintf("%d", 1);    // str = "1"
- */
+* \brief For example:
+* std::string str = StringPrintf("%d", 1);    // str = "1"
+*/
 std::string StringPrintf(const char* format, ...);
 
 /*!
- * \brief For example:
- * SStringPrintf(&str, "%d", 2);               // str = "2"
- */
+* \brief For example:
+* SStringPrintf(&str, "%d", 2);               // str = "2"
+*/
 void SStringPrintf(std::string* dst, const char* format, ...);
 
 /*!
- * \brief For example:
- * StringAppendF(&str, "%d", 3);               // str = "23"
- */
+* \brief For example:
+* StringAppendF(&str, "%d", 3);               // str = "23"
+*/
 void StringAppendF(std::string* dst, const char* format, ...);
 
 #endif   // XFOREST_BASE_STRING_PRINTF_H_

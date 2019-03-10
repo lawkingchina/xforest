@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file logging.cc
- * \brief TThis file is the implementation of logging facilities.
- */
+*  Copyright (c) 2018 by Contributors
+* \file logging.cc
+* \brief TThis file is the implementation of logging facilities.
+*/
 #include "src/base/logging.h"
 
 #include <stdlib.h>

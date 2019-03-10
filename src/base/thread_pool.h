@@ -15,11 +15,11 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file thread_pool.h
- * \brief This file provides a simple implementation of the 
- * thread pool that used by xforest.
- */
+*  Copyright (c) 2018 by Contributors
+* \file thread_pool.h
+* \brief This file provides a simple implementation of the 
+* thread pool that used by xforest.
+*/
 #ifndef XFOREST_BASE_THREAD_POOL_H_
 #define XFOREST_BASE_THREAD_POOL_H_
 
@@ -37,56 +37,50 @@
 #include "src/base/common.h"
 
 /*!
- * \brief Simple ThreadPool that creates N threads upon its creation,
- * and pulls from a queue to get new jobs.
- * Basic Usage:
- *
- *   // Create thread pool with 4 threads
- *   ThreadPool pool(4);  
- *   // Enqueue and store future
- *   auto result = pool.enqueue([](int answer) { return answer; }, 42);
- *   // Get result from future
- *   std::cout << result.get() << std::endl;
- *  
- * This class requires a number of c++11 features be present in your compiler.
- */
+* \brief Simple ThreadPool that creates N threads upon its creation,
+* and pulls from a queue to get new jobs.
+* Basic Usage:
+*
+*   // Create thread pool with 4 threads
+*   ThreadPool pool(4);  
+*   // Enqueue and store future
+*   auto result = pool.enqueue([](int answer) { return answer; }, 42);
+*   // Get result from future
+*   std::cout << result.get() << std::endl;
+*  
+* This class requires a number of c++11 features be present in your compiler.
+*/
 class ThreadPool {
  public:
   /*!
-   * \breif Constructor and Destructor
-   */
+  * \breif Constructor and Destructor
+  */
   ThreadPool(size_t);
   ~ThreadPool();
 
   /*! 
-   * \brief Add task to current queue
-   */
+  * \brief Add task to current queue
+  */
   template<class F, class... Args>
   auto enqueue(F&& f, Args&&... args)
     -> std::future<typename std::result_of<F(Args...)>::type>;
 
   /*!
-   * \brief Sync threads
-   */
+  * \brief Sync threads
+  */
   void Sync(int wait_count);
 
   /*!
-   * \breif Return the number of threads
-   */
+  * \breif Return the number of threads
+  */
   size_t ThreadNumber();
 
 private:
-    /*!
-     * \breif need to keep track of threads so we can join them
-     */
+    /*! \breif need to keep track of threads so we can join them */
     std::vector<std::thread> workers;
-    /*!
-     * \breif the task queue
-     */
+    /*! \breif the task queue */
     std::queue<std::function<void()>> tasks;
-    /*!
-     * \brief synchronization
-     */
+    /*! \brief synchronization */
     std::mutex queue_mutex;
     std::condition_variable condition;
     std::mutex sync_mutex;
@@ -96,8 +90,8 @@ private:
 };
 
 /*!
- * \breif The constructor just launches some amount of workers
- */
+* \breif The constructor just launches some amount of workers
+*/
 inline ThreadPool::ThreadPool(size_t threads)
     : stop(false) {
   for(size_t i = 0; i<threads; ++i)
@@ -128,8 +122,8 @@ inline ThreadPool::ThreadPool(size_t threads)
 }
 
 /*!
- * \breif Add new work item to the pool
- */
+* \breif Add new work item to the pool
+*/
 template<class F, class... Args>
 auto ThreadPool::enqueue(F&& f, Args&&... args)
     -> std::future<typename std::result_of<F(Args...)>::type> {
@@ -151,8 +145,8 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
 }
 
 /*!
- * \breif Wait all thread to finish their jobs
- */
+* \breif Wait all thread to finish their jobs
+*/
 inline void ThreadPool::Sync(int wait_count) {
   std::unique_lock<std::mutex> lock(sync_mutex);
   this->sync_condition.wait(lock, [&]() {
@@ -162,15 +156,15 @@ inline void ThreadPool::Sync(int wait_count) {
 }
 
 /*!
- * \brief Return the number of threads
- */
+* \brief Return the number of threads
+*/
 inline size_t ThreadPool::ThreadNumber() {
   return workers.size();
 }
 
 /*!
- * \breif The destructor joins all threads
- */
+* \breif The destructor joins all threads
+*/
 inline ThreadPool::~ThreadPool() {
   {
     std::unique_lock<std::mutex> lock(queue_mutex);
@@ -183,8 +177,8 @@ inline ThreadPool::~ThreadPool() {
 }
 
 /*!
- * \breif Get start index used in multi-thread training
- */
+* \breif Get start index used in multi-thread training
+*/
 inline size_t getStart(size_t count, size_t total, size_t id) {
   size_t gap = count / total;
   size_t start_id = id * gap;
@@ -192,8 +186,8 @@ inline size_t getStart(size_t count, size_t total, size_t id) {
 }
 
 /*!
- * \breif Get end index used in multi-thread training
- */
+* \breif Get end index used in multi-thread training
+*/
 inline size_t getEnd(size_t count, size_t total, size_t id) {
   size_t gap = count / total;
   size_t remain = count % total;

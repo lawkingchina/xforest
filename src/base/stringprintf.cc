@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file stringprintf.cc
- * \brief This file provides stringprintf utilities.
- */
+*  Copyright (c) 2018 by Contributors
+* \file stringprintf.cc
+* \brief This file provides stringprintf utilities.
+*/
 #include "src/base/stringprintf.h"
 
 #include <stdarg.h>

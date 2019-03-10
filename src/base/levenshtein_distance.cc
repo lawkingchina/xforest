@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file levenshtein_distance.cc
- * \brief This file is the implementation of StrSimilar class.
- */
+*  Copyright (c) 2018 by Contributors
+* \file levenshtein_distance.cc
+* \brief This file is the implementation of StrSimilar class.
+*/
 #include <algorithm>
 
 #include "src/base/levenshtein_distance.h"

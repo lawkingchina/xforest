@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file tcp_socket_test.cc
- * \brief This file tests the TCPSocket class.
- */
+*  Copyright (c) 2018 by Contributors
+* \file tcp_socket_test.cc
+* \brief This file tests the TCPSocket class.
+*/
 #include "src/network/tcp_socket.h"
 
 #include <string.h>

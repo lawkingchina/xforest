@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file socket_communicator.h
- * \brief Implementation of Communicator class with TCP socket.
- */
+*  Copyright (c) 2018 by Contributors
+* \file socket_communicator.h
+* \brief Implementation of Communicator class with TCP socket.
+*/
 #include <thread>
 
 #include "src/network/socket_communicator.h"

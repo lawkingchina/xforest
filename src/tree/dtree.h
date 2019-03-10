@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file dtree.h
- * \brief This file defines the DTree class.
- */
+*  Copyright (c) 2018 by Contributors
+* \file dtree.h
+* \brief This file defines the DTree class.
+*/
 #ifndef XFOREST_TREE_DTREE_H_
 #define XFOREST_TREE_DTREE_H_
 

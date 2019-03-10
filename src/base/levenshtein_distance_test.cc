@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file levenshtein_distance_test.cc
- * \brief This file tests levenshtein_distance.h file.
- */
+*  Copyright (c) 2018 by Contributors
+* \file levenshtein_distance_test.cc
+* \brief This file tests levenshtein_distance.h file.
+*/
 #include "gtest/gtest.h"
 
 #include <vector>

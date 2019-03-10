@@ -15,10 +15,10 @@
 //------------------------------------------------------------------------------
 
 /*!
- *  Copyright (c) 2018 by Contributors
- * \file system.h
- * \brief This file defines several system functions.
- */
+*  Copyright (c) 2018 by Contributors
+* \file system.h
+* \brief This file defines several system functions.
+*/
 #ifndef XFOREST_BASE_SYSTEM_H_
 #define XFOREST_BASE_SYSTEM_H_
 
@@ -43,18 +43,18 @@ std::string get_host_name() {
 }
 
 /*!
- * \brief Get system username
- * \return user name
- */
+* \brief Get system username
+* \return user name
+*/
 std::string get_user_name() {
   const char* username = getenv("USER");
   return username != NULL ? username : getenv("USERNAME");
 }
 
 /*!
- * \brief Get current system time
- * \return time string
- */
+* \brief Get current system time
+* \return time string
+*/
 std::string print_current_time() {
   time_t current_time = time(NULL);
   struct tm broken_down_time;
@@ -69,10 +69,10 @@ std::string print_current_time() {
 }
 
 /*!
- * \brief The log filename = base + host_name + username + 
- *                           date_time + process_id
- * \return log filename
- */
+* \brief The log filename = base + host_name + username + 
+*                           date_time + process_id
+* \return log filename
+*/
 std::string get_log_file(const std::string& file_base) {
   CHECK(!file_base.empty());
   std::string filename_prefix;
