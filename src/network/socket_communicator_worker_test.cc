@@ -48,16 +48,14 @@ TEST(SocketCommunicator, WorkerSide) {
     for (int i = 0; i < 999999; ++i) {
       SendMsg(worker_1, 1);
     }
-    //worker_1.Finalize();
-    std::cout << "worker 1 finish\n";
+    worker_1.Finalize();
   } else {  // worker 2
   	xforest::SocketCommunicator worker_2;
     worker_2.Initialize(IS_SENDER, "127.0.0.1", 50051);
     for (int i = 0; i < 999999; ++i) {
       SendMsg(worker_2, 1);
     }
-    //worker_2.Finalize();
-    std::cout << "worker 2 finish\n";
+    worker_2.Finalize();
   }
   wait(0);
 }

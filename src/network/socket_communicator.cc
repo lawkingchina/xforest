@@ -164,9 +164,6 @@ void SocketCommunicator::FinalizeReceiver() {
       socket_[i] = nullptr;
     }
   }
-  for (int i = 0; i < num_sender_; ++i) {
-    thread_[i]->join();
-  }
 }
 
 int SocketCommunicator::Send(const char* src, int size) {
