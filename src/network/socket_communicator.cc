@@ -115,7 +115,7 @@ void SocketCommunicator::MsgHandler(TCPSocket* socket, MessageQueue* queue) {
       int tmp = socket->Receive((char*)(&data_size)+received_bytes, max_len);
       received_bytes += tmp;
     }
-    if (data_size == -1) {
+    if (data_size <= 0) {
       LOG(INFO) << "Socket finish job";
       break;
     }

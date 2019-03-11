@@ -33,16 +33,11 @@ TEST(SocketCommunicator, MasterSide) {
   xforest::SocketCommunicator master;
   master.Initialize(IS_RECEIVER, "127.0.0.1", 50051, kNumWorker, kBuffSize);
   char* buffer = new char[5];
-  int count = 0;
-  for (;;) {
-  	master.Receive(buffer, 5);
-  	std::cout << "Recv " << ":" << buffer << std::endl;
-  	if (strcmp(buffer, "endIO") == 0) {
-  	  count++;
-  	}
-  	if (count == kNumWorker) {
-  	  break;
-  	}
+  for (int i = 0; i < 99999*2; ++i) {
+    master.Receive(buffer, 5);
+    if (i % 10000 == 0) {
+      std::cout << "recv " << i << " msg: " << buffer << std::endl;
+    }
   }
   master.Finalize();
   std::cout << "Master closed()" << std::endl;

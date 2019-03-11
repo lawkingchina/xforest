@@ -32,32 +32,32 @@
 const char* str_1 = "11111";
 const char* str_2 = "22222";
 const char* str_3 = "33333";
-const char* str_end = "endIO";
 
 static void SendMsg(xforest::SocketCommunicator& worker, int rank) {
-  sleep(1);
   worker.Send(str_1, 5);
-  sleep(1);
   worker.Send(str_2, 5);
-  sleep(1);
   worker.Send(str_3, 5);
-  sleep(1);
-  worker.Send(str_end, 5);
 }
 
 TEST(SocketCommunicator, WorkerSide) {
-  sleep(3); // wait master node
+  sleep(2); // wait master node
   int pid = fork();
   if (pid > 0) {  // worker 1
     xforest::SocketCommunicator worker_1;
     worker_1.Initialize(IS_SENDER, "127.0.0.1", 50051);
-    SendMsg(worker_1, 1);
-    worker_1.Finalize();
+    for (int i = 0; i < 999999; ++i) {
+      SendMsg(worker_1, 1);
+    }
+    //worker_1.Finalize();
+    std::cout << "worker 1 finish\n";
   } else {  // worker 2
   	xforest::SocketCommunicator worker_2;
     worker_2.Initialize(IS_SENDER, "127.0.0.1", 50051);
-    SendMsg(worker_2, 2);
-    worker_2.Finalize();
+    for (int i = 0; i < 999999; ++i) {
+      SendMsg(worker_2, 1);
+    }
+    //worker_2.Finalize();
+    std::cout << "worker 2 finish\n";
   }
   wait(0);
 }
