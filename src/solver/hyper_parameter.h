@@ -65,11 +65,6 @@ struct HyperParam {
   */
   int min_samples_split = 2;
   /*!
-  * \brief The minimum fraction of samples required to split an internal node (default=0.0).
-  * ceil(min_fraction_split * n_samples) are the minimum number of samples for each node. 
-  */
-  float min_fraction_split = 0.0;
-  /*!
   * \brief The minimum number of samples required to be at a leaf node (default=1). 
   * A split point at any depth will only be considered if it leaves at least 
   * min_samples_leaf training samples in each of the left and right branches. 
@@ -77,35 +72,27 @@ struct HyperParam {
   */
   int min_samples_leaf = 1;
   /*!
-  * \brief The minimum fraction of samples required to be at a leaf node (default=0.0). 
-  * A split point at any depth will only be considered if it leaves at least 
-  * ceil(min_fraction_leaf * n_samples) training samples in each of the left and right branches. 
-  * This may have the effect of smoothing the model, especially in regression.
+  * \brief The number of features to consider when looking for 
+  * the best split (default=1).
   */
-  float min_fraction_leaf = 0.0;
-
-
-  
-  // The number of features to consider when looking for the best split.
-  // If int, then consider max_features features at each split.
-  // -1 means use all features
-  int max_features = -1;
-  // If float, then max_features is a fraction and int(max_features * n_features) 
-  // features are considered at each split.
-  float max_fraction_features = 1.0;
-  // If “auto”, then max_features=n_features.
-  // If “sqrt”, then max_features=sqrt(n_features).
-  // If “log2”, then max_features=log2(n_features).
-  // If None, then max_features=n_features.
-  std::string max_string_features = "auto";
-  // int or None, optional (default=None, -1)
-  // Grow trees with max_leaf_nodes in best-first fashion. 
-  // Best nodes are defined as relative reduction in impurity. 
-  // If None then unlimited number of leaf nodes.
+  int max_features = 1;
+  /*!
+  * \brief Grow trees with max_leaf_nodes (default=-1).
+  * If max_leaf_nodes = -1, then unlimited number of leaf nodes.
+  */
   int max_leaf_nodes = -1;
-  // float, optional (default=0.0)
-  // A node will be split if this split induces a decrease of the 
-  // impurity greater than or equal to this value.
+  /*!
+  * A node will be split if this split induces a decrease of the impurity
+  * greater than or equal to this value (default=0). The weighted impurity 
+  * decrease equation is the following:
+  *
+  *   N_t / N * (impurity - N_t_R / N_t * right_impurity
+  *                       - N_t_L / N_t * left_impurity)
+  *
+  * where N is the total number of samples, N_t is the number of samples at 
+  * current node, N_t_L is the number of samples in the left child, and N_t_R
+  * is the number of samples in the right child.
+  */
   real_t min_impurity_decrease = 0.0;
   // float, (default=1e-7)
   // Threshold for early stopping in tree growth. A node will split 
