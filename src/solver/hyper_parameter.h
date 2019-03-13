@@ -82,7 +82,7 @@ struct HyperParam {
   */
   int max_leaf_nodes = -1;
   /*!
-  * A node will be split if this split induces a decrease of the impurity
+  * \brief A node will be split if this split induces a decrease of the impurity
   * greater than or equal to this value (default=0). The weighted impurity 
   * decrease equation is the following:
   *
@@ -94,19 +94,24 @@ struct HyperParam {
   * is the number of samples in the right child.
   */
   real_t min_impurity_decrease = 0.0;
-  // float, (default=1e-7)
-  // Threshold for early stopping in tree growth. A node will split 
-  // if its impurity is above the threshold, otherwise it is a leaf.
-  real_t min_impurity_split=1e-7;
-  // boolean, optional (default=True)
-  // Whether bootstrap samples are used when building trees.
+  /*!
+  * Threshold for early stopping in tree growth (default = 1e-7). 
+  * A node will split if its impurity is above the threshold, otherwise
+  * it is a leaf.
+  */
+  real_t min_impurity_split = 1e-7;
+  /*!
+  * Wether bootstrap samples are used when building trees (default=true).
+  */
   bool bootstrap = true;
-  // int or None, optional (default=None, -1)
-  // The number of jobs to run in parallel for both fit and predict.
-  // -1 means using all processors.
+  /*!
+  * The number of jobs to run in parallel for both fit and predict (default=-1).
+  * -1 means using all processors.
+  */
   int n_jobs = -1;
-  // int, optional (default=1231)
-  // random_state is the seed used by the random number generator.
+  /*!
+  * \breif random_state is the seed used by the random number generator (default=1231).
+  */
   int random_state = 1231;
 };
 
