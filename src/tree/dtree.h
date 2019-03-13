@@ -31,11 +31,11 @@
 namespace xforest {
 
 /*!
- * \brief Find maximal and minimal value for each feature.
- * For Histogram decision tree, we need to map original feature
- * value to 8-bit bin value, hence here we need to make a record
- * of the maximal and minimal value for each feature.
- */
+* \brief Find maximal and minimal value for each feature.
+* For Histogram decision tree, we need to map original feature
+* value to 8-bit bin value, hence here we need to find the
+* of the maximal and minimal value for each feature.
+*/
 struct MaxMin {
   real_t gap = 0.0;
   real_t max_feat = kFloatMin;
@@ -43,59 +43,48 @@ struct MaxMin {
 };
 
 /*!
- * \brief Temp information during training. 
- * This information will not be used for inference, 
- * and we can delete this structure on-the-fly.
- */
+* \brief Temp information during training. 
+* This information will not be used for inference and 
+* we can delete it on-the-fly.
+*/
 struct TInfo {
   /*!
-   * \brief Left node ('l') or right node ('r').
-   */
+  * \brief Deconstructor.
+  * Note that the parent and histo field will be cleared
+  * by other functions.
+  */
+  ~TInfo() { 
+    delete histo; 
+  }
+  /*! \brief Left node ('l') or right node ('r') */
   char l_or_r;
-  /*!
-   * \brief Level of layer for current node.
-   * Note that the maximal level is 255.
-   */
+  /*! \brief depth of current node. */
   uint8 level = 1;
-  /*!
-   * \brief Start position (index) of the data 
-   * allocated to current node
-   */
+  /*! \brief Start index allocated for current node. */
   index_t start_pos = 0;
-  /*!
-   * \brief End position (index) of the data
-   * allocated to current node
-   */
+  /*! \brief End index allocated for current node. */
   index_t end_pos = 0;
-  /*!
-   * \brief Split position (index) of the data
-   * allocated to current node
-   */
+  /*! \brief Split index allocated for current node. */
   index_t mid_pos = 0;
+  /*! \brief lowest impurity calculated for current node. */
+  real_t lowest_impurity = 1.0;
   /*!
-   * \brief Best gini value we calculated for current node
-   */
-  real_t best_gini = 1.0;
-  /*!
-   * \brief Parent node (DTNode) of current node, which will be used
-   * for calculating histogram value of current node.
-   */
+  * \brief Parent node of current node, which will be used
+  * for calculating histogram value of current node.
+  */
   void* parent = nullptr;
   /*!
-   * \brief Brother node (DTNode) of current node, which will be used
-   * for calculating histogram value of current node.
-   */
+  * \brief Brother node of current node, which will be used
+  * for calculating histogram value of current node.
+  */
   void* brother = nullptr;
-  /*!
-   * \brief Histigram bin data structure.
-   */
+  /*! \brief Histigram bin data structure. */
   void* histo = nullptr;
 };
 
 /*!
- * \brief Decision tree node class, which will maintain
- * the information used in both training and inference.
- */
+* \brief Decision tree node class.
+*/
 class DTNode {
  public:
   /*!
@@ -527,6 +516,36 @@ class DTree {
 
  private:
   DISALLOW_COPY_AND_ASSIGN(DTree);
+};
+
+/*!
+* Histogram bin data structure.
+*/
+struct Histogram {
+  /*!
+  * \brief Constructor
+  * \param num_feat number of feature
+  * \param num_bin number of histigram bin
+  * \param num_class number of classification
+  */
+  Histogram(const uint32 num_feat, 
+            const uint8 num_bin,
+            const uint8 num_class) {
+    count_len = num_feat * num_bin * num_class;
+    count = new uint32_t[count_len];
+    for (uint32_t i = 0; i < count_len; ++i) {
+      count[i] = 0;
+    }
+  }
+
+  /*!
+  * \breif Destructor
+  */
+  ~Histogram() {
+    delete [] count;
+  }
+  uint32_t count_len = 0;
+  uint32_t* count = nullptr;
 };
 
 // Classification Tree
