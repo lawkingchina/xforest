@@ -14,10 +14,11 @@
 // limitations under the License.
 //------------------------------------------------------------------------------
 
-/*
-This file defines the basic hyper-parameters used by xForest.
+/*!
+*  Copyright (c) 2018 by Contributors
+* \file hyper_parameter.h
+* \brief This file defines the basic hyper-parameters used by xForest.
 */
-
 #ifndef XFOREST_SOLVER_HYPER_PARAMETER_H_
 #define XFOREST_SOLVER_HYPER_PARAMETER_H_
 
@@ -25,38 +26,66 @@ This file defines the basic hyper-parameters used by xForest.
 
 #include "src/base/common.h"
 
-//------------------------------------------------------------------------------
-// We use a single data structure - HyperParam to handle all of
-// the hyper parameters used by xForest.
-//------------------------------------------------------------------------------
+/*!
+* \brief HyperParam handles all of the hyper parameters used by xforest.
+*/
 struct HyperParam {
-  // Maximal histogram bin value (default=255)
+  /*!
+  * \brief xforest uses histogram-based decision tree algorithm, and
+  * max_bin defines the maximul size of histogram bin (default=255).
+  */
   uint8 max_bin = 255;
-  // integer, optional (default=50)
-  // The number of trees in the forest.	
-  int n_estimators = 10;
-  // integer or None, optional (default=None, -1)
-  // The maximum depth of the tree. 
-  // If None, then nodes are expanded until all leaves are pure 
-  // or until all leaves reach the end contiditon.
+  /*!
+  * \brief The number of trees in the forest (default=100).
+  */
+  int n_estimators = 100;
+  /*!
+  * \brief The function to measure the quality of a split for classifier (default=gini). 
+  * Supported criterion are "gini" for the gini impurity and "entropy"
+  * for the information gain. We also support "mix" which means we build
+  * trees using both "gini" and "entropy" criterion in a random manner.
+  */
+  std::string classifier_criterion = "gini";
+  /*!
+  * \brief The function to measure the quality of a split for regressor (default=mse).
+  * Supported criterion are "mse" for the mean squared error, which is equal
+  * to variance reduction as feature selection criterion, and "mae" for mean
+  * absolute error. We also support "mix" which means we build trees using both
+  * "mse" and "mae" criterion in a random manner.
+  */
+  std::string regressor_criterion = "mse";
+  /*!
+  * \brief The maximul depth of the tree (default=-1).
+  * If max_depth = -1, then nodes are expanded until all leaves are pure or
+  * until all leaves contain less than min_samples_split samples. 
+  */
   int max_depth = -1;
-  // integer, optional (default=2)
-  // The minimum number of samples required to split an internal node.
+  /*!
+  * \brief The minimum number of samples required to split an internal node (default=2).
+  */
   int min_samples_split = 2;
-  // float, optional (default=1.0)
-  // A fraction and ceil(min_samples_split * n_samples) are the minimum 
-  // number of samples for each split.
-  float min_fraction_split = 1.0;
-  // int, optional (default=1)
-  // The minimum number of samples required to be at a leaf node. 
-  // A split point at any depth will only be considered if it leaves at least 
-  // min_samples_leaf training samples in each of the left and right branches. 
-  // This may have the effect of smoothing the model, especially in regression.
+  /*!
+  * \brief The minimum fraction of samples required to split an internal node (default=0.0).
+  * ceil(min_fraction_split * n_samples) are the minimum number of samples for each node. 
+  */
+  float min_fraction_split = 0.0;
+  /*!
+  * \brief The minimum number of samples required to be at a leaf node (default=1). 
+  * A split point at any depth will only be considered if it leaves at least 
+  * min_samples_leaf training samples in each of the left and right branches. 
+  * This may have the effect of smoothing the model, especially in regression.
+  */
   int min_samples_leaf = 1;
-  // float, optional (default=1.0)
-  // A fraction and ceil(min_samples_leaf * n_samples) are the minimum 
-  // number of samples for each node.
-  float min_fraction_leaf = 1.0;
+  /*!
+  * \brief The minimum fraction of samples required to be at a leaf node (default=0.0). 
+  * A split point at any depth will only be considered if it leaves at least 
+  * ceil(min_fraction_leaf * n_samples) training samples in each of the left and right branches. 
+  * This may have the effect of smoothing the model, especially in regression.
+  */
+  float min_fraction_leaf = 0.0;
+
+
+  
   // The number of features to consider when looking for the best split.
   // If int, then consider max_features features at each split.
   // -1 means use all features
