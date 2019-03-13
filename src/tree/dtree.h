@@ -87,214 +87,216 @@ struct TInfo {
 */
 class DTNode {
  public:
-  /*!
-   * \brief If current node is a leaf node?
-   */ 
+  /*! \brief Wether current node is a leaf node? */ 
   bool is_leaf = false;
-  /*!
-   * \brief Pointer of the left child node.
-   */
+  /*! \brief Leaf node value. */ 
+  real_t leaf_val = -1.0;
+  /*! \brief Pointer of the left child node. */
   DTNode* l_child = nullptr;
-  /*!
-   * \brief Pointer of the right child node.
-   */
+  /*! \brief Pointer of the right child node. */
   DTNode* r_child = nullptr;
-  /*!
-   * \brief Best split feature id of current node.
-   */
+  /*! \brief Best split feature id of current node. */
   index_t best_feat_id = 0;
-  /*!
-   * \brief Best split histigram bin value ([0, 255]) of current node.
-   */
+  /*! \brief Best split value of current node. */
   uint8 best_bin_val = 0;
-  /*!
-   * \brief Temp information used by training process.
-   */
+  /*! \brief Temp information used by training process. */
   TInfo* info = nullptr;
   /*!
-   * \brief Clear temp information on-the-fly.
-   */
+  * \brief Clear temp information on-the-fly.
+  */
   inline void Clear() { 
     delete info;
   }
   /*!
-   * \brief Clear parent information when we calculated 
-   * current histogram value.
-   */
+  * \brief Clear parent information after calculating
+  * histogram value.
+  */
   inline void ClearParent() {
     delete info->parent->info;
   }
   /*!
-   * \brief Is current node is a leaf node?
-   */
+  * \brief Wether current node is a leaf node?
+  */
   inline bool IsLeaf() const {
     return is_leaf;
   }
   /*!
-   * \brief Set is_leaf to true.
-   */
+  * \brief Set is_leaf to true.
+  */
   inline void SetLeaf() {
     is_leaf = true;
   }
   /*!
-   * \brief Get left child node.
-   */
+  * \brief Get leaf value.
+  */
+  inline real_t LeafVal() {
+    return leaf_val;
+  }
+  /*!
+  * \brief Set leaf value.
+  */
+  inline void SetLeafVal(real_t val) {
+    leaf_val = val;
+  }
+  /*!
+  * \brief Get left child node.
+  */
   inline DTNode* LeftChild() const {
     return l_child;
   }
   /*!
-   * \brief Set left child node.
-   */
+  * \brief Set left child node.
+  */
   inline void SetLeftChild(DTNode* node) {
     l_child = node;
   }
   /*!
-   * \brief Get right child node.
-   */
+  * \brief Get right child node.
+  */
   inline DTNode* RightChild() const {
     return r_child;
   }
   /*!
-   * \brief Set right child node.
-   */
+  * \brief Set right child node.
+  */
   inline void SetRightChild(DTNode* node) {
     r_child = node;
   }
   /*!
-   * \brief Get best split feature id.
-   */
+  * \brief Get best split feature id.
+  */
   inline index_t BestFeatID() const {
     return best_feat_id;
   }
   /*!
-   * \brief Set best split feature id.
-   */
+  * \brief Set best split feature id.
+  */
   inline void SetBestFeatID(index_t id) {
     best_feat_id = id;
   }
   /*!
-   * \brief Get best split histogram value.
-   */
+  * \brief Get best split histogram value.
+  */
   inline uint8 BestBinVal() const {
     return best_bin_val;
   }
   /*!
-   * \brief Set best split histogram value.
-   */
+  * \brief Set best split histogram value.
+  */
   inline void SetBestBinVal(uint8 val) {
     best_bin_val = val;
   }
   /*!
-   * \brief Is current node a left or Right node?
-   */
+  * \brief Wether current node is a left or a Right node.
+  */
   inline char LeftOrRight() const {
     return info->l_or_r;
   }
   /*!
-   * \brief Set 'l' (left) or 'r' (right) to current node.
-   */
+  * \brief Set 'l' (left) or 'r' (right) to current node.
+  */
   inline void SetLeftOrRight(char ch) {
     info->l_or_r = ch;
   }
   /*!
-   * \brief Get node level (maximal level is 255).
-   */
+  * \brief Get node level (maximal level is 255).
+  */
   inline uint8 Level() const {
     return info->level;
   }
   /*!
-   * \brief Set node level (maximal level is 255).
-   */
+  * \brief Set node level (maximal level is 255).
+  */
   inline void SetLevel(uint8 level) {
     info->level = level;
   }
   /*!
-   * \brief Get start position (index) of data allocated to current node.
-   */
+  * \brief Get start index of data allocated for current node.
+  */
   inline index_t StartPos() const {
     return info->start_pos;
   }
   /*!
-   * \brief Set start position (index) of data allocated to current node.
-   */
+  * \brief Set start index of data allocated to current node.
+  */
   inline void SetStartPos(index_t pos) {
     info->start_pos = pos;
   }
   /*!
-   * \brief Get end position (index) of data allocated to cuurent node.
-   */
+  * \brief Get end index for cuurent node.
+  */
   inline index_t EndPos() const {
     return info->end_pos;
   }
   /*!
-   * \brief Set end position (index) of data allocated to current node.
-   */
+  * \brief Set end index for current node.
+  */
   inline void SetEndPos(index_t pos) {
     info->end_pos = pos;
   }
   /*!
-   * \brief Get best split position (index) of data allocated to current node.
-   */
+  * \brief Get best split index to current node.
+  */
   inline index_t MidPos() const {
     return info->mid_pos;
   }
   /*!
-   * \brief Set best split pisition (index) of data allocated to current node.
-   */
+  * \brief Set best split index to current node.
+  */
   inline void SetMidPos(index_t pos) {
     info->mid_pos = pos;
   }
   /*!
-   * \brief Get best gini value calculated by current node.
-   */
-  inline real_t BestGini() const {
-    return info->best_gini;
+  * \brief Get lowest impurtity calculated by current node.
+  */
+  inline real_t LowestImpurity() const {
+    return info->lowest_impurity;
   }
   /*!
-   * \brief Set best gini value calculated by current node.
-   */
-  inline void SetBestGini(real_t gini) {
-    info->best_gini = gini;
+  * \brief Set best gini value calculated by current node.
+  */
+  inline void SetLowestImpurity(real_t value) {
+    info->lowest_impurity = value;
   }
   /*!
-   * \brief Get parent node of current node.
-   */
+  * \brief Get parent node of current node.
+  */
   inline DTNode* Parent() const {
     return info->parent;
   }
   /*!
-   * \brief Set parent node of current node.
-   */
-  inline void SetParent(DTNode* node) {
+  * \brief Set parent node of current node.
+  */
+  inline void SetParent(void* node) {
     info->parent = node;
   }
   /*!
-   * \brief Get brother node of current node.
-   */
+  * \brief Get brother node of current node.
+  */
   inline DTNode* Brother() const {
     return info->brother;
   }
   /*!
-   * \brief Set brother node of current node.
-   */
-  inline void SetBrother(DTNode* node) {
+  * \brief Set brother node of current node.
+  */
+  inline void SetBrother(void* node) {
     info->brother = node;
   }
   /*!
-   * \brief Get histogram bin of current node.
-   */
+  * \brief Get histogram bin of current node.
+  */
   inline void* Histo() const {
     return info->histo;
   }
   /*!
-   * \brief Set histogram bin of current node. 
-   */
+  * \brief Set histogram bin of current node. 
+  */
   inline void SetHisto(void* histo) {
     info->histo = histo;
   }
   /*!
-   * \brief Get data size allocated for current node.
-   */
+  * \brief Get data size allocated for current node.
+  */
   inline index_t DataSize() const {
     return info->end_pos - info->start_pos + 1;
   }
