@@ -261,7 +261,7 @@ class DTNode {
   /*!
   * \brief Get parent node of current node.
   */
-  inline DTNode* Parent() const {
+  inline void* Parent() const {
     return info->parent;
   }
   /*!
@@ -273,7 +273,7 @@ class DTNode {
   /*!
   * \brief Get brother node of current node.
   */
-  inline DTNode* Brother() const {
+  inline void* Brother() const {
     return info->brother;
   }
   /*!
@@ -303,12 +303,10 @@ class DTNode {
 };
 
 /*!
- * \breif The DTree class is an abstract class, which could be 
- * implemented by real decision tree, such as BCTree (for binary classification) 
- * MCTree (for multi-classification), and RTree (for regression). Note that binary
- * classification is a special case of multi-classificaiton, while we can make 
- * careful design and optimization for it.  
- */
+* \breif The DTree class is an abstract class, which could be 
+* implemented by real decision tree, such as CDtree (classification tree), 
+* and RDtree (Regression tree). 
+*/
 class DTree {
  public:
   /*!
